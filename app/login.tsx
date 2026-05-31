@@ -1,6 +1,5 @@
 "use client";
 
-import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -14,17 +13,22 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const result = await signIn("credentials", {
-      username,
-      password,
-      redirect: false,
-    });
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
 
-    if (result?.error) {
-      setError("ID 또는 비밀번호가 틀렸습니다");
+      if (res.ok) {
+        router.push("/dashboard");
+      } else {
+        setError("ID 또는 비밀번호가 틀렸습니다");
+      }
+    } catch {
+      setError("로그인 중 오류가 발생했습니다");
+    } finally {
       setLoading(false);
-    } else if (result?.ok) {
-      router.push("/dashboard");
     }
   };
 
