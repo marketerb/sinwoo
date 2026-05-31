@@ -36,13 +36,13 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-96">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">신우아이앤씨</h1>
-          <p className="text-gray-600 text-sm mt-2">관리자 로그인</p>
+          <h1 className="text-3xl font-bold text-black">신우아이앤씨</h1>
+          <p className="text-gray-700 text-sm mt-2">관리자 로그인</p>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">ID</label>
+            <label className="block text-sm font-medium text-black mb-2">ID</label>
             <input
               type="text"
               value={username}
@@ -54,7 +54,7 @@ export default function Login() {
           </div>
 
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">비밀번호</label>
+            <label className="block text-sm font-medium text-black mb-2">비밀번호</label>
             <input
               type="password"
               value={password}
