@@ -6,11 +6,9 @@ import { useState, useEffect } from "react";
 export default function Home() {
   const [portfolios, setPortfolios] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     fetchPortfolios();
-    setupIntersectionObserver();
   }, []);
 
   async function fetchPortfolios() {
@@ -26,25 +24,6 @@ export default function Home() {
       setLoading(false);
     }
   }
-
-  function setupIntersectionObserver() {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisibleSections((prev) => new Set(prev).add(entry.target.id));
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    document.querySelectorAll("section[id]").forEach((section) => {
-      observer.observe(section);
-    });
-  }
-
-  const isVisible = (id: string) => visibleSections.has(id);
 
   const projectNames = [
     { title: "보라매 파르크힐", location: "서울" },
@@ -62,55 +41,30 @@ export default function Home() {
       {/* 1. HERO */}
       <section
         id="home"
-        className="relative min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white flex items-center justify-center px-4 pt-16 overflow-hidden"
+        className="relative h-screen bg-cover bg-center flex items-center justify-center px-4"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1200 600%22%3E%3Crect fill=%22%23667eea%22 width=%221200%22 height=%22600%22/%3E%3C/svg%3E")',
+        }}
       >
-        {/* Animated background */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-400 rounded-full blur-3xl"></div>
-        </div>
-
-        <div className="max-w-5xl mx-auto text-center relative z-10">
-          <h1
-            className={`text-6xl md:text-7xl font-bold mb-8 leading-tight transition-all duration-1000 ${
-              isVisible("home")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-8"
-            }`}
-          >
+        <div className="max-w-5xl mx-auto text-center text-white">
+          <h1 className="text-6xl md:text-7xl font-bold mb-6 leading-tight">
             부동산의 가치를<br />
-            <span className="bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-              설계하고
-            </span>
-            <br />
-            완성합니다
+            설계하고 완성합니다
           </h1>
-          <p
-            className={`text-lg md:text-xl text-slate-300 mb-12 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-200 ${
-              isVisible("home")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-8"
-            }`}
-          >
-            개발 컨설팅부터 분양대행, 투자자문, PM까지<br />
+          <p className="text-lg md:text-xl text-gray-200 mb-12 max-w-2xl mx-auto">
             사업의 시작과 끝을 책임지는 부동산 전문 파트너
           </p>
-          <div
-            className={`flex flex-col sm:flex-row gap-4 justify-center transition-all duration-1000 delay-300 ${
-              isVisible("home")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-8"
-            }`}
-          >
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="#portfolio"
-              className="px-10 py-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-all hover:shadow-lg hover:shadow-blue-500/50 text-lg"
+              className="px-10 py-4 bg-purple-600 text-white font-bold rounded-lg hover:bg-purple-700 transition-all text-lg"
             >
-              포트폴리오 보기
+              포트폴리오
             </a>
             <a
               href="#contact"
-              className="px-10 py-4 border-2 border-blue-400 text-blue-300 font-bold rounded-lg hover:bg-blue-600/20 transition-all text-lg"
+              className="px-10 py-4 border-2 border-white text-white font-bold rounded-lg hover:bg-white/20 transition-all text-lg"
             >
               문의하기
             </a>
@@ -119,233 +73,128 @@ export default function Home() {
       </section>
 
       {/* 2. COMPANY */}
-      <section
-        id="about"
-        className={`py-32 px-4 bg-white transition-all duration-1000 ${
-          isVisible("about") ? "opacity-100" : "opacity-0"
-        }`}
-      >
+      <section id="about" className="py-24 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
-              회사소개
-            </h2>
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-              10년 이상의 경험으로 프로젝트의 가능성을 현실로 만듭니다
-            </p>
-          </div>
-
-          {/* Key Metrics */}
-          <div className="grid md:grid-cols-4 gap-6 mb-20">
-            {[
-              { num: "10+", label: "Years Experience", desc: "다년간의 실전 경험" },
-              { num: "30+", label: "Projects", desc: "성공한 프로젝트" },
-              { num: "∞", label: "Network", desc: "전국 파트너 네트워크" },
-              { num: "100%", label: "Satisfaction", desc: "고객 중심 서비스" },
-            ].map((metric, idx) => (
-              <div
-                key={idx}
-                className={`bg-slate-50 border border-slate-200 rounded-xl p-8 text-center hover:shadow-lg transition-all duration-500 delay-${idx * 100} ${
-                  isVisible("about") ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                }`}
-              >
-                <div className="text-5xl font-bold text-blue-600 mb-3">
-                  {metric.num}
+          <div className="grid md:grid-cols-2 gap-16 items-center mb-24">
+            <div>
+              <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+                대표사업
+              </h2>
+              <p className="text-lg text-gray-700 leading-relaxed mb-8">
+                부동산 개발, 분양대행, 투자자문, PM까지<br />
+                10년 이상의 경험으로 프로젝트의 가능성을 현실로 만듭니다.
+              </p>
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                  <div className="text-4xl font-bold text-purple-600">10+</div>
+                  <div className="text-gray-700">Years Experience</div>
                 </div>
-                <p className="text-slate-900 font-semibold mb-1">{metric.label}</p>
-                <p className="text-slate-600 text-sm">{metric.desc}</p>
+                <div className="flex items-center gap-4">
+                  <div className="text-4xl font-bold text-purple-600">30+</div>
+                  <div className="text-gray-700">Completed Projects</div>
+                </div>
               </div>
-            ))}
-          </div>
-
-          <p className="text-center text-slate-700 leading-relaxed max-w-3xl mx-auto text-lg">
-            시장분석, 개발기획, 투자자문, 분양마케팅, 프로젝트 관리까지<br />
-            <span className="font-semibold">사업 전 과정에 대한 통합 솔루션</span>을 제공합니다.
-          </p>
-        </div>
-      </section>
-
-      {/* 3. CORE VALUES */}
-      <section
-        id="values"
-        className={`py-32 px-4 bg-slate-50 transition-all duration-1000 ${
-          isVisible("values") ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-5xl md:text-6xl font-bold text-center text-slate-900 mb-20">
-            핵심 가치
-          </h2>
-          <div className="grid md:grid-cols-4 gap-8">
-            {[
-              { icon: "👤", title: "사람 중심", desc: "고객과 직원을 소중히" },
-              { icon: "🤝", title: "함께 성장", desc: "고객의 성공이 우리의 성장" },
-              { icon: "🔗", title: "전문가 네트워크", desc: "업계 최고 수준의 팀" },
-              { icon: "📈", title: "시장 선도", desc: "혁신적 솔루션 제시" },
-            ].map((value, idx) => (
-              <div
-                key={idx}
-                className={`text-center transition-all duration-700 delay-${idx * 100} ${
-                  isVisible("values") ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                }`}
-              >
-                <div className="text-6xl mb-4">{value.icon}</div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-2">
-                  {value.title}
-                </h3>
-                <p className="text-slate-600">{value.desc}</p>
-              </div>
-            ))}
+            </div>
+            <div className="bg-gradient-to-br from-purple-500 to-purple-700 h-96 rounded-xl"></div>
           </div>
         </div>
       </section>
 
-      {/* 4. BUSINESS */}
-      <section
-        id="business"
-        className={`py-32 px-4 bg-white transition-all duration-1000 ${
-          isVisible("business") ? "opacity-100" : "opacity-0"
-        }`}
-      >
+      {/* 3. BUSINESS */}
+      <section id="business" className="py-24 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-5xl md:text-6xl font-bold text-center text-slate-900 mb-20">
-            사업 영역
+          <h2 className="text-5xl md:text-6xl font-bold text-center text-gray-900 mb-20">
+            사업영역
           </h2>
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-12">
             {[
               {
                 icon: "🏗️",
                 title: "분양대행",
-                desc: "신뢰할 수 있는 분양정보와 전문적인 마케팅으로 최단 시간 내 분양 성공",
+                desc: "신뢰할 수 있는 분양정보와 전문적인 마케팅",
               },
               {
                 icon: "💡",
                 title: "개발 컨설팅",
-                desc: "시장분석과 사업성 검토를 통해 최적화된 개발 전략 제시",
+                desc: "시장분석과 사업성 검토를 통한 최적화된 전략",
               },
               {
                 icon: "💰",
                 title: "투자자문",
-                desc: "장기적이고 수익성 높은 포트폴리오 구성을 위한 전문가 자문",
+                desc: "수익성 높은 포트폴리오 구성을 위한 자문",
               },
               {
                 icon: "📋",
                 title: "개발 PM",
-                desc: "기획부터 완공까지 전 과정의 프로젝트 관리로 성공 보장",
+                desc: "기획부터 완공까지 전 과정의 통합 관리",
               },
             ].map((business, idx) => (
-              <div
-                key={idx}
-                className={`bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 p-10 rounded-xl hover:shadow-lg transition-all duration-500 delay-${idx * 100} ${
-                  isVisible("business")
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-8"
-                }`}
-              >
+              <div key={idx} className="bg-white p-10 rounded-xl shadow-md">
                 <div className="text-5xl mb-4">{business.icon}</div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-3">
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">
                   {business.title}
                 </h3>
-                <p className="text-slate-700 leading-relaxed">{business.desc}</p>
+                <p className="text-gray-700">{business.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 5. PROCESS */}
-      <section id="process" className="py-32 px-4 bg-slate-50">
+      {/* 4. PORTFOLIO */}
+      <section id="portfolio" className="py-24 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-5xl md:text-6xl font-bold text-center text-slate-900 mb-20">
-            사업 프로세스
-          </h2>
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            {[
-              "시장조사",
-              "사업성 검토",
-              "전략수립",
-              "마케팅기획",
-              "분양운영",
-              "사후관리",
-            ].map((step, idx) => (
-              <div key={idx} className="flex flex-col items-center flex-1">
-                <div className="w-14 h-14 bg-blue-600 text-white rounded-full flex items-center justify-center text-xl font-bold mb-4 hover:bg-blue-700 transition-colors">
-                  {idx + 1}
-                </div>
-                <p className="font-semibold text-slate-900 text-center text-sm md:text-base">
-                  {step}
-                </p>
-                {idx < 5 && (
-                  <div className="hidden md:block w-8 h-0.5 bg-blue-300 mt-4 mx-2"></div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 6. PORTFOLIO */}
-      <section
-        id="portfolio"
-        className={`py-32 px-4 bg-white transition-all duration-1000 ${
-          isVisible("portfolio") ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-5xl md:text-6xl font-bold text-center text-slate-900 mb-20">
+          <h2 className="text-5xl md:text-6xl font-bold text-center text-gray-900 mb-20">
             포트폴리오
           </h2>
           {loading ? (
-            <div className="text-center text-slate-600">로딩 중...</div>
+            <div className="text-center text-gray-600">로딩 중...</div>
           ) : (
             <div className="grid md:grid-cols-3 gap-8">
               {portfolios.length > 0
                 ? portfolios.map((project) => (
                     <div
                       key={project.id}
-                      className="bg-white border border-slate-200 rounded-xl overflow-hidden hover:shadow-xl transition-all"
+                      className="bg-gray-100 rounded-lg overflow-hidden hover:shadow-xl transition-all"
                     >
-                      {project.image_url && (
+                      {project.image_url ? (
                         <img
                           src={project.image_url}
                           alt={project.title}
-                          className="w-full h-48 object-cover"
+                          className="w-full h-64 object-cover"
                         />
+                      ) : (
+                        <div className="w-full h-64 bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center">
+                          <div className="text-white text-center">
+                            <div className="text-4xl mb-2">🏢</div>
+                            <p className="font-semibold">{project.title}</p>
+                          </div>
+                        </div>
                       )}
                       <div className="p-6">
-                        <h3 className="font-bold text-lg text-slate-900 mb-2">
+                        <h3 className="font-bold text-lg text-gray-900 mb-1">
                           {project.title}
                         </h3>
-                        <p className="text-sm text-slate-600 mb-4">
-                          {project.location}
-                        </p>
-                        <span className="inline-block text-xs font-semibold px-3 py-1 bg-blue-100 text-blue-600 rounded-full">
-                          {project.status}
-                        </span>
+                        <p className="text-sm text-gray-600">{project.location}</p>
                       </div>
                     </div>
                   ))
                 : projectNames.map((project, idx) => (
                     <div
                       key={idx}
-                      className="bg-white border border-slate-200 rounded-xl overflow-hidden hover:shadow-xl transition-all"
+                      className="bg-gray-100 rounded-lg overflow-hidden hover:shadow-xl transition-all"
                     >
-                      <div className="bg-gradient-to-br from-blue-500 to-blue-600 h-48 flex items-center justify-center">
+                      <div className="w-full h-64 bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center">
                         <div className="text-white text-center">
                           <div className="text-4xl mb-2">🏢</div>
-                          <p className="font-semibold">{project.title}</p>
+                          <p className="font-semibold text-sm">{project.title}</p>
                         </div>
                       </div>
                       <div className="p-6">
-                        <h3 className="font-bold text-lg text-slate-900 mb-2">
+                        <h3 className="font-bold text-lg text-gray-900 mb-1">
                           {project.title}
                         </h3>
-                        <p className="text-sm text-slate-600 mb-4">
-                          {project.location}
-                        </p>
-                        <span className="inline-block text-xs font-semibold px-3 py-1 bg-blue-100 text-blue-600 rounded-full">
-                          완공
-                        </span>
+                        <p className="text-sm text-gray-600">{project.location}</p>
                       </div>
                     </div>
                   ))}
@@ -354,93 +203,83 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 7. CEO MESSAGE */}
-      <section id="ceo-message" className="py-32 px-4 bg-gradient-to-r from-slate-900 to-slate-800 text-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-5xl md:text-6xl font-bold mb-8">CEO 메시지</h2>
-          <p className="text-2xl md:text-3xl leading-relaxed mb-8 text-slate-300">
-            "고객의 성공이 곧 우리의 성장입니다."
-          </p>
-          <p className="text-lg text-slate-400 leading-relaxed max-w-2xl mx-auto">
-            풍부한 경험과 전문성을 바탕으로<br />
-            프로젝트의 성공을 위한 최적의 솔루션을 제공하겠습니다.
-          </p>
+      {/* 5. CEO MESSAGE */}
+      <section id="ceo-message" className="py-24 px-4 bg-gray-50">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-xl p-12 shadow-lg">
+            <h2 className="text-4xl font-bold text-gray-900 mb-8">CEO 인사말</h2>
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div className="bg-gradient-to-br from-purple-400 to-purple-600 h-80 rounded-xl"></div>
+              <div>
+                <p className="text-2xl font-bold text-purple-600 mb-4">
+                  "고객의 성공이<br />곧 우리의 성공입니다."
+                </p>
+                <p className="text-gray-700 leading-relaxed">
+                  풍부한 경험과 전문성을 바탕으로 프로젝트의 성공을 위한 최적의 솔루션을 제공하겠습니다.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* 8. CONTACT */}
-      <section
-        id="contact"
-        className={`py-32 px-4 bg-slate-50 transition-all duration-1000 ${
-          isVisible("contact") ? "opacity-100" : "opacity-0"
-        }`}
-      >
+      {/* 6. CONTACT */}
+      <section id="contact" className="py-24 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-5xl md:text-6xl font-bold text-center text-slate-900 mb-20">
+          <h2 className="text-5xl md:text-6xl font-bold text-center text-gray-900 mb-20">
             문의하기
           </h2>
           <div className="grid md:grid-cols-2 gap-12">
             <div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-8">연락처</h3>
-              <div className="space-y-6 text-slate-700">
+              <h3 className="text-2xl font-bold text-gray-900 mb-8">연락처</h3>
+              <div className="space-y-6">
                 <div>
-                  <p className="text-sm text-slate-600 font-semibold mb-1 uppercase">
-                    회사명
-                  </p>
-                  <p className="text-lg font-semibold">주식회사 신우아이앤씨</p>
-                </div>
-                <div>
-                  <p className="text-sm text-slate-600 font-semibold mb-1 uppercase">
+                  <p className="text-sm text-gray-600 font-semibold mb-1 uppercase">
                     주소
                   </p>
-                  <p className="text-lg font-semibold">
+                  <p className="text-gray-800 leading-relaxed">
                     서울특별시 강서구 마곡중앙6로 45<br />
                     리더스퀘어마곡
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-slate-600 font-semibold mb-1 uppercase">
+                  <p className="text-sm text-gray-600 font-semibold mb-1 uppercase">
                     전화
                   </p>
-                  <p className="text-lg font-semibold">02-6941-0884</p>
+                  <p className="text-gray-800">02-6941-0884</p>
                 </div>
                 <div>
-                  <p className="text-sm text-slate-600 font-semibold mb-1 uppercase">
+                  <p className="text-sm text-gray-600 font-semibold mb-1 uppercase">
                     이메일
                   </p>
-                  <p className="text-lg font-semibold">sinwooinc2014@naver.com</p>
+                  <p className="text-gray-800">sinwooinc2014@naver.com</p>
                 </div>
               </div>
             </div>
             <div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-8">간단한 문의</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-8">간단한 문의</h3>
               <form className="space-y-4">
                 <input
                   type="text"
                   placeholder="이름"
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
                   required
                 />
                 <input
                   type="email"
                   placeholder="이메일"
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
                   required
-                />
-                <input
-                  type="tel"
-                  placeholder="전화번호"
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                 />
                 <textarea
                   placeholder="문의 내용"
                   rows={4}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
                   required
                 ></textarea>
                 <button
                   type="submit"
-                  className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-all hover:shadow-lg text-lg"
+                  className="w-full bg-purple-600 text-white font-bold py-3 rounded-lg hover:bg-purple-700 transition-all text-lg"
                 >
                   문의하기
                 </button>
@@ -451,14 +290,34 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-slate-400 py-12 px-4">
-        <div className="max-w-6xl mx-auto text-center">
-          <p className="font-semibold text-slate-300">
-            &copy; 2024 신우아이앤씨. All rights reserved.
-          </p>
-          <p className="text-sm mt-3">
-            분양대행 | 부동산 개발 컨설팅 | 투자자문 | 개발 PM
-          </p>
+      <footer className="bg-gray-900 text-gray-300 py-12 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 mb-8 pb-8 border-b border-gray-800">
+            <div>
+              <h3 className="text-white font-bold mb-4">신우아이앤씨</h3>
+              <p className="text-sm">부동산 개발 | 분양대행 | 투자자문 | 개발 PM</p>
+            </div>
+            <div className="flex justify-end gap-6">
+              <a href="#" className="text-gray-400 hover:text-white transition">
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                </svg>
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white transition">
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2s9 5 20 5a9.5 9.5 0 00-9-5.5c4.75 2.25 7-7 7-7" />
+                </svg>
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white transition">
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z" />
+                </svg>
+              </a>
+            </div>
+          </div>
+          <div className="text-sm text-center text-gray-400">
+            <p>&copy; 2024 신우아이앤씨. All rights reserved.</p>
+          </div>
         </div>
       </footer>
     </div>
