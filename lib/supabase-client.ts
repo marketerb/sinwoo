@@ -37,8 +37,8 @@ export interface CompanyInfo {
   phone: string;
   email: string;
   address: string;
-  business_number: string;
-  description: string;
+  business_number?: string;
+  description?: string;
   created_at?: string;
   updated_at?: string;
 }
@@ -113,32 +113,41 @@ export async function deleteHistory(id: string) {
 
 // Company Info functions
 export async function getCompanyInfo() {
-  const { data, error } = await supabase
+  // Use supabaseAdmin for READ to bypass RLS policies
+  const client = serviceRoleKey ? supabaseAdmin : supabase;
+  const { data, error } = await client
     .from("company_info")
-    .select("*")
-    .single();
-  if (error && error.code !== "PGRST116") throw error; // PGRST116 = no rows
-  return data;
+    .select("*");
+  if (error) {
+    console.error("[getCompanyInfo] Error:", error);
+    throw error;
+  }
+  // Return first row if exists
+  return data && data.length > 0 ? data[0] : null;
 }
 
 export async function updateCompanyInfo(companyInfo: Partial<CompanyInfo>) {
   const existing = await getCompanyInfo();
 
+  // Use supabaseAdmin for INSERT/UPDATE to bypass RLS policies
+  const client = serviceRoleKey ? supabaseAdmin : supabase;
+
   if (existing) {
-    const { data, error } = await supabase
+    const { data, error } = await client
       .from("company_info")
       .update(companyInfo)
       .eq("id", existing.id)
       .select();
     if (error) throw error;
-    return data[0];
+    return data && data.length > 0 ? data[0] : existing;
   } else {
-    const { data, error } = await supabase
+    // Insert without specifying id to let DB auto-generate it
+    const { data, error } = await client
       .from("company_info")
-      .insert([companyInfo])
+      .insert([companyInfo as CompanyInfo])
       .select();
     if (error) throw error;
-    return data[0];
+    return data && data.length > 0 ? data[0] : null;
   }
 }
 

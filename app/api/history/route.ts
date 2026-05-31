@@ -5,6 +5,7 @@ import {
   updateHistory,
   deleteHistory,
   History,
+  supabaseAdmin,
 } from "@/lib/supabase-client";
 
 export async function GET() {
@@ -13,8 +14,9 @@ export async function GET() {
     return NextResponse.json(history);
   } catch (error) {
     console.error("Error fetching history:", error);
+    const message = error instanceof Error ? error.message : "연혁을 불러올 수 없습니다.";
     return NextResponse.json(
-      { error: "Failed to fetch history" },
+      { error: message },
       { status: 500 }
     );
   }
@@ -27,7 +29,7 @@ export async function POST(request: NextRequest) {
 
     if (!year || !title || !description) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "필수 필드를 입력해주세요." },
         { status: 400 }
       );
     }
@@ -38,12 +40,21 @@ export async function POST(request: NextRequest) {
       description,
     };
 
-    const created = await createHistory(history);
-    return NextResponse.json(created, { status: 201 });
+    // Use admin client to bypass RLS
+    const { data, error } = await supabaseAdmin
+      .from("history")
+      .insert([history])
+      .select();
+
+    if (error) {
+      throw new Error(error.message || "연혁 추가에 실패했습니다.");
+    }
+    return NextResponse.json(data?.[0], { status: 201 });
   } catch (error) {
-    console.error("Error creating history:", error);
+    console.error("[POST /api/history] Caught error:", error);
+    const message = error instanceof Error ? error.message : "연혁 추가에 실패했습니다.";
     return NextResponse.json(
-      { error: "Failed to create history" },
+      { error: message },
       { status: 500 }
     );
   }
@@ -56,22 +67,29 @@ export async function PUT(request: NextRequest) {
 
     if (!id || !year || !title || !description) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "필수 필드를 입력해주세요." },
         { status: 400 }
       );
     }
 
-    const updated = await updateHistory(id, {
-      year: parseInt(year),
-      title,
-      description,
-    });
+    // Use admin client to bypass RLS
+    const { data, error } = await supabaseAdmin
+      .from("history")
+      .update({
+        year: parseInt(year),
+        title,
+        description,
+      })
+      .eq("id", id)
+      .select();
 
-    return NextResponse.json(updated);
+    if (error) throw error;
+    return NextResponse.json(data?.[0]);
   } catch (error) {
     console.error("Error updating history:", error);
+    const message = error instanceof Error ? error.message : "연혁 수정에 실패했습니다.";
     return NextResponse.json(
-      { error: "Failed to update history" },
+      { error: message },
       { status: 500 }
     );
   }
@@ -82,15 +100,22 @@ export async function DELETE(request: NextRequest) {
     const { id } = await request.json();
 
     if (!id) {
-      return NextResponse.json({ error: "Missing id" }, { status: 400 });
+      return NextResponse.json({ error: "연혁 ID가 없습니다." }, { status: 400 });
     }
 
-    await deleteHistory(id);
+    // Use admin client to bypass RLS
+    const { error } = await supabaseAdmin
+      .from("history")
+      .delete()
+      .eq("id", id);
+
+    if (error) throw error;
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error deleting history:", error);
+    const message = error instanceof Error ? error.message : "연혁 삭제에 실패했습니다.";
     return NextResponse.json(
-      { error: "Failed to delete history" },
+      { error: message },
       { status: 500 }
     );
   }

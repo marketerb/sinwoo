@@ -11,8 +11,9 @@ export async function GET() {
     return NextResponse.json(info || {});
   } catch (error) {
     console.error("Error fetching company info:", error);
+    const message = error instanceof Error ? error.message : "기본정보를 불러올 수 없습니다.";
     return NextResponse.json(
-      { error: "Failed to fetch company info" },
+      { error: message },
       { status: 500 }
     );
   }
@@ -21,12 +22,11 @@ export async function GET() {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
-    const { company_name, phone, email, address, business_number, description } =
-      body;
+    const { company_name, phone, email, address, description } = body;
 
-    if (!company_name || !phone || !email || !address || !business_number) {
+    if (!company_name || !phone || !email || !address) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "필수 필드를 입력해주세요." },
         { status: 400 }
       );
     }
@@ -36,16 +36,17 @@ export async function PUT(request: NextRequest) {
       phone,
       email,
       address,
-      business_number,
-      description: description || "",
     };
+
+    if (description) companyInfo.description = description;
 
     const updated = await updateCompanyInfo(companyInfo);
     return NextResponse.json(updated);
   } catch (error) {
     console.error("Error updating company info:", error);
+    const message = error instanceof Error ? error.message : "기본정보 저장에 실패했습니다.";
     return NextResponse.json(
-      { error: "Failed to update company info" },
+      { error: message },
       { status: 500 }
     );
   }

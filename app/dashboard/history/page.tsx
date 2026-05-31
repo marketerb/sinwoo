@@ -8,12 +8,21 @@ interface HistoryWithDates extends History {
   created_at: string;
 }
 
+interface FormErrors {
+  year?: string;
+  title?: string;
+  description?: string;
+}
+
 export default function HistoryPage() {
   const [histories, setHistories] = useState<HistoryWithDates[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [formData, setFormData] = useState({
     year: new Date().getFullYear(),
     title: "",
@@ -27,14 +36,18 @@ export default function HistoryPage() {
   async function fetchHistory() {
     try {
       setLoading(true);
+      setError("");
       const response = await fetch("/api/history");
-      if (!response.ok) throw new Error("Failed to fetch");
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "연혁을 불러올 수 없습니다.");
+      }
       const data = await response.json();
       setHistories(data || []);
-      setError("");
     } catch (err) {
-      setError("연혁을 불러올 수 없습니다.");
-      console.error(err);
+      const message = err instanceof Error ? err.message : "연혁을 불러올 수 없습니다.";
+      setError(message);
+      console.error("Error fetching history:", err);
     } finally {
       setLoading(false);
     }
@@ -47,6 +60,35 @@ export default function HistoryPage() {
       description: "",
     });
     setEditingId(null);
+    setFormErrors({});
+  }
+
+  function validateForm(): boolean {
+    const errors: FormErrors = {};
+    const currentYear = new Date().getFullYear();
+
+    if (!formData.year) {
+      errors.year = "연도를 입력해주세요.";
+    } else if (formData.year < 1900) {
+      errors.year = "연도는 1900년 이상이어야 합니다.";
+    } else if (formData.year > currentYear + 10) {
+      errors.year = `연도는 ${currentYear + 10}년 이하여야 합니다.`;
+    }
+
+    if (!formData.title.trim()) {
+      errors.title = "제목을 입력해주세요.";
+    } else if (formData.title.length > 100) {
+      errors.title = "제목은 100자 이내여야 합니다.";
+    }
+
+    if (!formData.description.trim()) {
+      errors.description = "설명을 입력해주세요.";
+    } else if (formData.description.length > 500) {
+      errors.description = "설명은 500자 이내여야 합니다.";
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
   }
 
   function openAddModal() {
@@ -67,13 +109,22 @@ export default function HistoryPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
+    if (!validateForm()) {
+      setError("입력 정보를 확인해주세요.");
+      return;
+    }
+
     try {
+      setSubmitting(true);
+      setError("");
+      setSuccess("");
+
       const method = editingId ? "PUT" : "POST";
       const body = {
         ...(editingId && { id: editingId }),
         year: parseInt(formData.year.toString()),
-        title: formData.title,
-        description: formData.description,
+        title: formData.title.trim(),
+        description: formData.description.trim(),
       };
 
       const response = await fetch("/api/history", {
@@ -82,31 +133,50 @@ export default function HistoryPage() {
         body: JSON.stringify(body),
       });
 
-      if (!response.ok) throw new Error("Failed to save");
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "저장에 실패했습니다.");
+      }
 
+      setSuccess(editingId ? "연혁이 수정되었습니다." : "연혁이 추가되었습니다.");
       setShowModal(false);
+      resetForm();
       await fetchHistory();
+      setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
-      setError("저장에 실패했습니다.");
-      console.error(err);
+      const message = err instanceof Error ? err.message : "저장에 실패했습니다.";
+      setError(message);
+      console.error("Error saving history:", err);
+    } finally {
+      setSubmitting(false);
     }
   }
 
   async function handleDelete(id: string) {
-    if (!confirm("정말 삭제하시겠습니까?")) return;
+    if (!confirm("정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) return;
 
     try {
+      setError("");
+      setSuccess("");
+
       const response = await fetch("/api/history", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
       });
 
-      if (!response.ok) throw new Error("Failed to delete");
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "삭제에 실패했습니다.");
+      }
+
+      setSuccess("연혁이 삭제되었습니다.");
       await fetchHistory();
+      setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
-      setError("삭제에 실패했습니다.");
-      console.error(err);
+      const message = err instanceof Error ? err.message : "삭제에 실패했습니다.";
+      setError(message);
+      console.error("Error deleting history:", err);
     }
   }
 
@@ -133,8 +203,26 @@ export default function HistoryPage() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-8">
         {error && (
-          <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
-            {error}
+          <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg flex justify-between items-center">
+            <span>{error}</span>
+            <button
+              onClick={() => setError("")}
+              className="text-red-700 hover:text-red-900 font-bold"
+            >
+              닫기
+            </button>
+          </div>
+        )}
+
+        {success && (
+          <div className="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg flex justify-between items-center">
+            <span>{success}</span>
+            <button
+              onClick={() => setSuccess("")}
+              className="text-green-700 hover:text-green-900 font-bold"
+            >
+              닫기
+            </button>
           </div>
         )}
 
@@ -213,64 +301,91 @@ export default function HistoryPage() {
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  연도
+                  연도 *
                 </label>
                 <input
                   type="number"
                   value={formData.year}
-                  onChange={(e) =>
-                    setFormData({ ...formData, year: parseInt(e.target.value) })
-                  }
+                  onChange={(e) => {
+                    setFormData({ ...formData, year: parseInt(e.target.value) });
+                    if (formErrors.year) setFormErrors({ ...formErrors, year: undefined });
+                  }}
                   min="1900"
                   max={new Date().getFullYear() + 10}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
+                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                    formErrors.year
+                      ? "border-red-500 focus:ring-red-500"
+                      : "border-gray-300 focus:ring-blue-500"
+                  }`}
                 />
+                {formErrors.year && (
+                  <p className="text-red-600 text-xs mt-1">{formErrors.year}</p>
+                )}
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  제목
+                  제목 *
                 </label>
                 <input
                   type="text"
                   value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
+                  onChange={(e) => {
+                    setFormData({ ...formData, title: e.target.value });
+                    if (formErrors.title) setFormErrors({ ...formErrors, title: undefined });
+                  }}
+                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                    formErrors.title
+                      ? "border-red-500 focus:ring-red-500"
+                      : "border-gray-300 focus:ring-blue-500"
+                  }`}
+                  maxLength={100}
                 />
+                {formErrors.title && (
+                  <p className="text-red-600 text-xs mt-1">{formErrors.title}</p>
+                )}
+                <p className="text-gray-500 text-xs mt-1">{formData.title.length}/100</p>
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  설명
+                  설명 *
                 </label>
                 <textarea
                   value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setFormData({ ...formData, description: e.target.value });
+                    if (formErrors.description) setFormErrors({ ...formErrors, description: undefined });
+                  }}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
+                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                    formErrors.description
+                      ? "border-red-500 focus:ring-red-500"
+                      : "border-gray-300 focus:ring-blue-500"
+                  }`}
+                  maxLength={500}
                 />
+                {formErrors.description && (
+                  <p className="text-red-600 text-xs mt-1">{formErrors.description}</p>
+                )}
+                <p className="text-gray-500 text-xs mt-1">{formData.description.length}/500</p>
               </div>
 
               <div className="flex gap-3 pt-4">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
+                  disabled={submitting}
+                  className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 disabled:bg-gray-300 disabled:cursor-not-allowed"
                 >
                   취소
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  disabled={submitting}
+                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed font-semibold"
                 >
-                  {editingId ? "수정" : "추가"}
+                  {submitting ? (editingId ? "수정 중..." : "추가 중...") : (editingId ? "수정" : "추가")}
                 </button>
               </div>
             </form>

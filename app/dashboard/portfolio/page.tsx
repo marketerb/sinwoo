@@ -8,12 +8,21 @@ interface PortfolioWithDates extends Portfolio {
   created_at: string;
 }
 
+interface FormErrors {
+  title?: string;
+  description?: string;
+  location?: string;
+}
+
 export default function PortfolioPage() {
   const [portfolios, setPortfolios] = useState<PortfolioWithDates[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -30,14 +39,18 @@ export default function PortfolioPage() {
   async function fetchPortfolios() {
     try {
       setLoading(true);
+      setError("");
       const response = await fetch("/api/portfolios");
-      if (!response.ok) throw new Error("Failed to fetch");
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "포트폴리오를 불러올 수 없습니다.");
+      }
       const data = await response.json();
       setPortfolios(data || []);
-      setError("");
     } catch (err) {
-      setError("포트폴리오를 불러올 수 없습니다.");
-      console.error(err);
+      const message = err instanceof Error ? err.message : "포트폴리오를 불러올 수 없습니다.";
+      setError(message);
+      console.error("Error fetching portfolios:", err);
     } finally {
       setLoading(false);
     }
@@ -53,6 +66,30 @@ export default function PortfolioPage() {
       existingImageUrl: "",
     });
     setEditingId(null);
+    setFormErrors({});
+  }
+
+  function validateForm(): boolean {
+    const errors: FormErrors = {};
+
+    if (!formData.title.trim()) {
+      errors.title = "제목을 입력해주세요.";
+    } else if (formData.title.length > 100) {
+      errors.title = "제목은 100자 이내여야 합니다.";
+    }
+
+    if (!formData.description.trim()) {
+      errors.description = "설명을 입력해주세요.";
+    } else if (formData.description.length > 1000) {
+      errors.description = "설명은 1000자 이내여야 합니다.";
+    }
+
+    if (!formData.location.trim()) {
+      errors.location = "위치를 입력해주세요.";
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
   }
 
   function openAddModal() {
@@ -76,11 +113,20 @@ export default function PortfolioPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
+    if (!validateForm()) {
+      setError("입력 정보를 확인해주세요.");
+      return;
+    }
+
     try {
+      setSubmitting(true);
+      setError("");
+      setSuccess("");
+
       const formDataToSend = new FormData();
-      formDataToSend.append("title", formData.title);
-      formDataToSend.append("description", formData.description);
-      formDataToSend.append("location", formData.location);
+      formDataToSend.append("title", formData.title.trim());
+      formDataToSend.append("description", formData.description.trim());
+      formDataToSend.append("location", formData.location.trim());
       formDataToSend.append("status", formData.status);
       formDataToSend.append("existingImageUrl", formData.existingImageUrl);
 
@@ -98,31 +144,50 @@ export default function PortfolioPage() {
         body: formDataToSend,
       });
 
-      if (!response.ok) throw new Error("Failed to save");
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "저장에 실패했습니다.");
+      }
 
+      setSuccess(editingId ? "포트폴리오가 수정되었습니다." : "포트폴리오가 추가되었습니다.");
       setShowModal(false);
+      resetForm();
       await fetchPortfolios();
+      setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
-      setError("저장에 실패했습니다.");
-      console.error(err);
+      const message = err instanceof Error ? err.message : "저장에 실패했습니다.";
+      setError(message);
+      console.error("Error saving portfolio:", err);
+    } finally {
+      setSubmitting(false);
     }
   }
 
   async function handleDelete(id: string) {
-    if (!confirm("정말 삭제하시겠습니까?")) return;
+    if (!confirm("정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) return;
 
     try {
+      setError("");
+      setSuccess("");
+
       const response = await fetch("/api/portfolios", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
       });
 
-      if (!response.ok) throw new Error("Failed to delete");
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "삭제에 실패했습니다.");
+      }
+
+      setSuccess("포트폴리오가 삭제되었습니다.");
       await fetchPortfolios();
+      setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
-      setError("삭제에 실패했습니다.");
-      console.error(err);
+      const message = err instanceof Error ? err.message : "삭제에 실패했습니다.";
+      setError(message);
+      console.error("Error deleting portfolio:", err);
     }
   }
 
@@ -151,8 +216,26 @@ export default function PortfolioPage() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-8">
         {error && (
-          <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
-            {error}
+          <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg flex justify-between items-center">
+            <span>{error}</span>
+            <button
+              onClick={() => setError("")}
+              className="text-red-700 hover:text-red-900 font-bold"
+            >
+              닫기
+            </button>
+          </div>
+        )}
+
+        {success && (
+          <div className="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg flex justify-between items-center">
+            <span>{success}</span>
+            <button
+              onClick={() => setSuccess("")}
+              className="text-green-700 hover:text-green-900 font-bold"
+            >
+              닫기
+            </button>
           </div>
         )}
 
@@ -252,47 +335,72 @@ export default function PortfolioPage() {
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  제목
+                  제목 *
                 </label>
                 <input
                   type="text"
                   value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
+                  onChange={(e) => {
+                    setFormData({ ...formData, title: e.target.value });
+                    if (formErrors.title) setFormErrors({ ...formErrors, title: undefined });
+                  }}
+                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                    formErrors.title
+                      ? "border-red-500 focus:ring-red-500"
+                      : "border-gray-300 focus:ring-blue-500"
+                  }`}
+                  maxLength={100}
                 />
+                {formErrors.title && (
+                  <p className="text-red-600 text-xs mt-1">{formErrors.title}</p>
+                )}
+                <p className="text-gray-500 text-xs mt-1">{formData.title.length}/100</p>
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  설명
+                  설명 *
                 </label>
                 <textarea
                   value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setFormData({ ...formData, description: e.target.value });
+                    if (formErrors.description) setFormErrors({ ...formErrors, description: undefined });
+                  }}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
+                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                    formErrors.description
+                      ? "border-red-500 focus:ring-red-500"
+                      : "border-gray-300 focus:ring-blue-500"
+                  }`}
+                  maxLength={1000}
                 />
+                {formErrors.description && (
+                  <p className="text-red-600 text-xs mt-1">{formErrors.description}</p>
+                )}
+                <p className="text-gray-500 text-xs mt-1">{formData.description.length}/1000</p>
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  위치
+                  위치 *
                 </label>
                 <input
                   type="text"
                   value={formData.location}
-                  onChange={(e) =>
-                    setFormData({ ...formData, location: e.target.value })
-                  }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
+                  onChange={(e) => {
+                    setFormData({ ...formData, location: e.target.value });
+                    if (formErrors.location) setFormErrors({ ...formErrors, location: undefined });
+                  }}
+                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                    formErrors.location
+                      ? "border-red-500 focus:ring-red-500"
+                      : "border-gray-300 focus:ring-blue-500"
+                  }`}
                 />
+                {formErrors.location && (
+                  <p className="text-red-600 text-xs mt-1">{formErrors.location}</p>
+                )}
               </div>
 
               <div>
@@ -338,15 +446,17 @@ export default function PortfolioPage() {
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
+                  disabled={submitting}
+                  className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 disabled:bg-gray-300 disabled:cursor-not-allowed"
                 >
                   취소
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  disabled={submitting}
+                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed font-semibold"
                 >
-                  {editingId ? "수정" : "추가"}
+                  {submitting ? (editingId ? "수정 중..." : "추가 중...") : (editingId ? "수정" : "추가")}
                 </button>
               </div>
             </form>

@@ -13,8 +13,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "신우아이앤씨 관리자",
-  description: "신우아이앤씨 관리자 페이지",
+  title: "신우아이앤씨 - 부동산 개발 & 분양 전문",
+  description: "신우아이앤씨는 부동산 개발 및 분양 중개 사업을 전문으로 하는 회사입니다.",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
