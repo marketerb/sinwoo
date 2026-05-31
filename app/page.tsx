@@ -41,34 +41,58 @@ export default function Home() {
       {/* 1. HERO */}
       <section
         id="home"
-        className="relative h-screen bg-cover bg-center flex items-center justify-center px-4"
+        className="relative h-screen bg-cover bg-center bg-fixed flex items-center justify-center px-4 overflow-hidden"
         style={{
           backgroundImage:
-            'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1200 600%22%3E%3Crect fill=%22%23667eea%22 width=%221200%22 height=%22600%22/%3E%3C/svg%3E")',
+            'linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(102,126,234,0.4) 100%), url("https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1920&h=1080&fit=crop")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
         }}
       >
-        <div className="max-w-5xl mx-auto text-center text-white">
-          <h1 className="text-6xl md:text-7xl font-bold mb-6 leading-tight">
+        {/* Animated gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/60"></div>
+
+        <div className="max-w-5xl mx-auto text-center text-white relative z-10">
+          <h1 className="text-6xl md:text-7xl font-bold mb-6 leading-tight animate-fade-in">
             부동산의 가치를<br />
-            설계하고 완성합니다
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-purple-100">
+              설계하고 완성합니다
+            </span>
           </h1>
-          <p className="text-lg md:text-xl text-gray-200 mb-12 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-gray-200 mb-12 max-w-2xl mx-auto animate-fade-in animation-delay-200">
             사업의 시작과 끝을 책임지는 부동산 전문 파트너
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in animation-delay-400">
             <a
               href="#portfolio"
-              className="px-10 py-4 bg-purple-600 text-white font-bold rounded-lg hover:bg-purple-700 transition-all text-lg"
+              className="px-10 py-4 bg-purple-600 text-white font-bold rounded-lg hover:bg-purple-700 transition-all text-lg shadow-lg hover:shadow-2xl hover:shadow-purple-500/50"
             >
               포트폴리오
             </a>
             <a
               href="#contact"
-              className="px-10 py-4 border-2 border-white text-white font-bold rounded-lg hover:bg-white/20 transition-all text-lg"
+              className="px-10 py-4 border-2 border-white text-white font-bold rounded-lg hover:bg-white hover:text-gray-900 transition-all text-lg shadow-lg"
             >
               문의하기
             </a>
           </div>
+        </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 14l-7 7m0 0l-7-7m7 7V3"
+            />
+          </svg>
         </div>
       </section>
 
