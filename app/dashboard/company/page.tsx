@@ -148,7 +148,7 @@ export default function CompanyPage() {
       {/* Header */}
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-2xl mx-auto px-4 py-4">
-          <Link href="/dashboard" className="text-blue-600 hover:text-blue-700">
+          <Link href="/dashboard" className="text-yellow-600 hover:text-yellow-700">
             ← 돌아가기
           </Link>
           <h1 className="text-2xl font-bold text-gray-800 mt-2">기본정보 수정</h1>
@@ -200,7 +200,7 @@ export default function CompanyPage() {
                   className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                     formErrors.company_name
                       ? "border-red-500 focus:ring-red-500"
-                      : "border-gray-300 focus:ring-blue-500"
+                      : "border-gray-300 focus:ring-yellow-600"
                   }`}
                   maxLength={100}
                 />
@@ -228,7 +228,7 @@ export default function CompanyPage() {
                   className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                     formErrors.phone
                       ? "border-red-500 focus:ring-red-500"
-                      : "border-gray-300 focus:ring-blue-500"
+                      : "border-gray-300 focus:ring-yellow-600"
                   }`}
                 />
                 {formErrors.phone && (
@@ -253,7 +253,7 @@ export default function CompanyPage() {
                   className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                     formErrors.email
                       ? "border-red-500 focus:ring-red-500"
-                      : "border-gray-300 focus:ring-blue-500"
+                      : "border-gray-300 focus:ring-yellow-600"
                   }`}
                 />
                 {formErrors.email && (
@@ -277,7 +277,7 @@ export default function CompanyPage() {
                   className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                     formErrors.address
                       ? "border-red-500 focus:ring-red-500"
-                      : "border-gray-300 focus:ring-blue-500"
+                      : "border-gray-300 focus:ring-yellow-600"
                   }`}
                   maxLength={200}
                 />
@@ -297,7 +297,7 @@ export default function CompanyPage() {
                   value={formData.description}
                   onChange={handleChange}
                   rows={5}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-600"
                 />
               </div>
             </div>
@@ -313,7 +313,7 @@ export default function CompanyPage() {
               <button
                 type="submit"
                 disabled={saving}
-                className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="flex-1 px-4 py-3 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 {saving ? "저장 중..." : "저장"}
               </button>

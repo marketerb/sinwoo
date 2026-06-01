@@ -33,7 +33,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 to-amber-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-96">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-black">신우아이앤씨</h1>
@@ -47,7 +47,7 @@ export default function Login() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-yellow-600 focus:ring-1 focus:ring-yellow-600"
               placeholder="sinwoo"
               disabled={loading}
             />
@@ -59,7 +59,7 @@ export default function Login() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-yellow-600 focus:ring-1 focus:ring-yellow-600"
               placeholder="••••••"
               disabled={loading}
             />
@@ -74,7 +74,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400 transition"
+            className="w-full bg-yellow-600 text-white py-2 rounded-lg font-medium hover:bg-yellow-700 disabled:bg-gray-400 transition"
           >
             {loading ? "로그인 중..." : "로그인"}
           </button>

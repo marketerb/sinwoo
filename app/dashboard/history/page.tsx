@@ -186,14 +186,14 @@ export default function HistoryPage() {
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
           <div>
-            <Link href="/dashboard" className="text-blue-600 hover:text-blue-700">
+            <Link href="/dashboard" className="text-yellow-600 hover:text-yellow-700">
               ← 돌아가기
             </Link>
             <h1 className="text-2xl font-bold text-gray-800 mt-2">연혁 관리</h1>
           </div>
           <button
             onClick={openAddModal}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700"
           >
             + 추가
           </button>
@@ -269,7 +269,7 @@ export default function HistoryPage() {
                     <td className="px-6 py-4 text-sm space-x-2">
                       <button
                         onClick={() => openEditModal(history)}
-                        className="text-blue-600 hover:text-blue-700 font-semibold"
+                        className="text-yellow-600 hover:text-yellow-700 font-semibold"
                       >
                         수정
                       </button>
@@ -315,7 +315,7 @@ export default function HistoryPage() {
                   className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                     formErrors.year
                       ? "border-red-500 focus:ring-red-500"
-                      : "border-gray-300 focus:ring-blue-500"
+                      : "border-gray-300 focus:ring-yellow-600"
                   }`}
                 />
                 {formErrors.year && (
@@ -337,7 +337,7 @@ export default function HistoryPage() {
                   className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                     formErrors.title
                       ? "border-red-500 focus:ring-red-500"
-                      : "border-gray-300 focus:ring-blue-500"
+                      : "border-gray-300 focus:ring-yellow-600"
                   }`}
                   maxLength={100}
                 />
@@ -361,7 +361,7 @@ export default function HistoryPage() {
                   className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
                     formErrors.description
                       ? "border-red-500 focus:ring-red-500"
-                      : "border-gray-300 focus:ring-blue-500"
+                      : "border-gray-300 focus:ring-yellow-600"
                   }`}
                   maxLength={500}
                 />
@@ -383,7 +383,7 @@ export default function HistoryPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed font-semibold"
+                  className="flex-1 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 disabled:bg-gray-400 disabled:cursor-not-allowed font-semibold"
                 >
                   {submitting ? (editingId ? "수정 중..." : "추가 중...") : (editingId ? "수정" : "추가")}
                 </button>
