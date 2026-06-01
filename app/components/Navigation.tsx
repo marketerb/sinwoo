@@ -9,11 +9,11 @@ export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
 
   const navItems = [
-    { href: "#home", label: "HOME" },
-    { href: "#about", label: "COMPANY" },
-    { href: "#business", label: "BUSINESS" },
-    { href: "#portfolio", label: "PORTFOLIO" },
-    { href: "#contact", label: "CONTACT" },
+    { href: "#home", label: "홈" },
+    { href: "#about", label: "회사소개" },
+    { href: "#business", label: "사업영역" },
+    { href: "#portfolio", label: "포트폴리오" },
+    { href: "#contact", label: "문의하기" },
   ];
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export default function Navigation() {
       {/* Scroll Progress Bar */}
       <div className="fixed top-0 left-0 right-0 h-1 bg-gray-200 z-50">
         <div
-          className="h-full bg-gradient-to-r from-purple-600 to-purple-800 transition-all duration-300"
+          className="h-full bg-gradient-to-r from-yellow-600 to-yellow-800 transition-all duration-300"
           style={{ width: `${scrollProgress}%` }}
         ></div>
       </div>
@@ -54,7 +54,7 @@ export default function Navigation() {
               href="#home"
               className={`text-2xl font-bold transition-all ${
                 scrolled
-                  ? "text-purple-600"
+                  ? "text-yellow-600"
                   : "text-white drop-shadow-lg"
               }`}
             >
@@ -71,16 +71,16 @@ export default function Navigation() {
                 <a
                   key={item.href}
                   href={item.href}
-                  className={`text-sm font-bold transition-colors duration-300 hover:text-purple-600 relative group ${
+                  className={`text-sm font-bold transition-colors duration-300 hover:text-yellow-600 relative group ${
                     scrolled
-                      ? "hover:text-purple-600"
-                      : "hover:text-purple-300"
+                      ? "hover:text-yellow-600"
+                      : "hover:text-yellow-300"
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {item.label}
                   <span
-                    className={`absolute bottom-0 left-0 h-0.5 bg-purple-600 transition-all duration-300 w-0 group-hover:w-full`}
+                    className={`absolute bottom-0 left-0 h-0.5 bg-yellow-600 transition-all duration-300 w-0 group-hover:w-full`}
                   ></span>
                 </a>
               ))}
@@ -89,34 +89,42 @@ export default function Navigation() {
             {/* CTA Button */}
             <a
               href="#contact"
-              className="hidden md:block px-6 py-2 bg-purple-600 text-white font-bold rounded-lg hover:bg-purple-700 transition-all text-sm"
+              className="hidden md:block px-6 py-2 bg-yellow-800 text-white font-bold rounded-lg hover:bg-yellow-900 transition-all text-sm"
             >
               문의하기
             </a>
 
             {/* Mobile Menu Button */}
             <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden flex flex-col gap-1.5"
+              onClick={() => {
+                setMobileMenuOpen(!mobileMenuOpen);
+                if (!mobileMenuOpen) {
+                  document.body.style.overflow = 'hidden';
+                } else {
+                  document.body.style.overflow = 'auto';
+                }
+              }}
+              className="md:hidden flex flex-col gap-1.5 p-3 -mr-2 hover:opacity-80 transition-opacity"
               aria-label="Toggle menu"
+              aria-expanded={mobileMenuOpen}
             >
               <div
-                className={`w-6 h-0.5 transition-all duration-300 ${
+                className={`w-6 h-1 transition-all duration-500 ${
                   scrolled ? "bg-gray-800" : "bg-white"
                 } ${
-                  mobileMenuOpen ? "rotate-45 translate-y-2" : ""
+                  mobileMenuOpen ? "rotate-45 translate-y-3.5" : ""
                 }`}
               ></div>
               <div
-                className={`w-6 h-0.5 transition-all duration-300 ${
+                className={`w-6 h-1 transition-all duration-500 ${
                   scrolled ? "bg-gray-800" : "bg-white"
-                } ${mobileMenuOpen ? "opacity-0" : ""}`}
+                } ${mobileMenuOpen ? "scale-0" : "scale-100"}`}
               ></div>
               <div
-                className={`w-6 h-0.5 transition-all duration-300 ${
+                className={`w-6 h-1 transition-all duration-500 ${
                   scrolled ? "bg-gray-800" : "bg-white"
                 } ${
-                  mobileMenuOpen ? "-rotate-45 -translate-y-2" : ""
+                  mobileMenuOpen ? "-rotate-45 -translate-y-3.5" : ""
                 }`}
               ></div>
             </button>
@@ -128,7 +136,7 @@ export default function Navigation() {
               className={`md:hidden mt-6 pb-4 space-y-2 border-t transition-all ${
                 scrolled
                   ? "border-gray-200 bg-white"
-                  : "border-white/30 bg-white/10"
+                  : "border-white/30 bg-white"
               } pt-4`}
             >
               {navItems.map((item) => (
@@ -137,8 +145,8 @@ export default function Navigation() {
                   href={item.href}
                   className={`block py-3 px-2 text-sm font-bold transition-colors rounded-lg ${
                     scrolled
-                      ? "text-gray-800 hover:text-purple-600 hover:bg-purple-50"
-                      : "text-white hover:text-purple-300 hover:bg-white/10"
+                      ? "text-gray-800 hover:text-yellow-600 hover:bg-amber-50"
+                      : "text-gray-800 hover:text-yellow-600 hover:bg-gray-100"
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
@@ -147,8 +155,11 @@ export default function Navigation() {
               ))}
               <a
                 href="#contact"
-                className="block py-3 px-2 mt-4 pt-4 border-t text-sm font-bold text-center text-white bg-purple-600 rounded-lg hover:bg-purple-700 transition-all"
-                onClick={() => setMobileMenuOpen(false)}
+                className="block py-3 px-2 mt-4 pt-4 border-t text-sm font-bold text-center text-white bg-yellow-800 rounded-lg hover:bg-yellow-900 transition-all"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  document.body.style.overflow = 'auto';
+                }}
               >
                 문의하기
               </a>
