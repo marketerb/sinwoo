@@ -196,7 +196,65 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. BUSINESS - PREMIUM CARDS */}
+      {/* 3. CORE VALUE */}
+      <section id="core-values" className="py-24 px-4 bg-gradient-to-b from-amber-50/60 to-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16 animate-slide-up">
+            <span className="text-yellow-700 font-semibold tracking-widest uppercase text-sm">핵심 가치</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4">
+              CORE VALUES
+            </h2>
+          </div>
+          <div className="grid md:grid-cols-4 gap-6">
+            {[
+              { icon: "👤", title: "사람 중심의 가치", desc: "고객과 임직원 모두의 성장을 위한 사람 중심 경영을 실천합니다." },
+              { icon: "🤝", title: "고객과 함께 성장", desc: "고객의 성공이 곧 우리의 성장임을 신념으로 삼고 함께 나아갑니다." },
+              { icon: "🌐", title: "전문가 네트워크", desc: "다년간 구축된 업계 전문가 네트워크로 최적의 솔루션을 제공합니다." },
+              { icon: "🏆", title: "시장 선도 역량", desc: "시장을 선도하는 분석력과 전략으로 사업 성공을 실현합니다." },
+            ].map((value, idx) => (
+              <div key={idx} className="card-premium bg-white p-8 text-center animate-slide-up" style={{ animationDelay: `${idx * 80}ms` }}>
+                <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-yellow-50 to-amber-100 flex items-center justify-center">
+                  <span className="text-3xl">{value.icon}</span>
+                </div>
+                <h3 className="text-base font-bold text-gray-900 mb-3">{value.title}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">{value.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 4. WHY SINWOO */}
+      <section id="why-sinwoo" className="py-24 px-4 bg-gradient-to-br from-gray-900 to-black relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-600/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-yellow-500/5 rounded-full blur-3xl"></div>
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="text-center mb-16 animate-slide-up">
+            <span className="text-yellow-500 font-semibold tracking-widest uppercase text-sm">선택의 이유</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mt-4">
+              WHY SINWOO
+            </h2>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            {[
+              { num: "01", title: "시장분석 기반 전략수립", desc: "데이터 기반의 심층적인 시장 분석으로 리스크를 최소화하고 최적의 전략을 수립합니다." },
+              { num: "02", title: "최유효 이용방안 도출", desc: "부동산의 잠재가치를 극대화하는 최유효 이용방안을 도출하여 사업성을 높입니다." },
+              { num: "03", title: "맞춤형 마케팅 전략", desc: "프로젝트 특성과 타겟에 맞는 정밀한 마케팅 전략으로 분양 성공을 이끕니다." },
+              { num: "04", title: "사업 전 과정 통합 운영", desc: "기획부터 사후관리까지 전 단계를 통합 운영하여 완성도 높은 결과를 만들어냅니다." },
+            ].map((item, idx) => (
+              <div key={idx} className="flex gap-6 p-7 rounded-2xl border border-white/10 hover:border-yellow-600/30 bg-white/5 hover:bg-white/8 transition-all duration-300 group animate-slide-up" style={{ animationDelay: `${idx * 100}ms` }}>
+                <div className="text-4xl font-bold text-yellow-500/40 font-mono shrink-0 group-hover:text-yellow-500/60 transition-colors">{item.num}</div>
+                <div>
+                  <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
+                  <p className="text-gray-400 leading-relaxed text-sm">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 5. BUSINESS - PREMIUM CARDS */}
       <section id="business" className="py-32 px-4 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-20 animate-slide-up">
@@ -251,7 +309,44 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. PORTFOLIO - PREMIUM GRID */}
+      {/* PROCESS */}
+      <section id="process" className="py-24 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16 animate-slide-up">
+            <span className="text-yellow-700 font-semibold tracking-widest uppercase text-sm">진행 절차</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4">
+              PROCESS
+            </h2>
+            <p className="text-gray-500 mt-4 text-base max-w-xl mx-auto">
+              체계적인 6단계 프로세스로 프로젝트의 성공을 보장합니다.
+            </p>
+          </div>
+          <div className="relative">
+            {/* Connecting line (desktop only) */}
+            <div className="hidden md:block absolute top-9 left-[8.33%] right-[8.33%] h-0.5 bg-gradient-to-r from-yellow-200 via-yellow-500 to-yellow-200 z-0"></div>
+            <div className="grid grid-cols-2 md:grid-cols-6 gap-6 relative z-10">
+              {[
+                { step: "01", title: "시장조사", icon: "🔍" },
+                { step: "02", title: "사업성 검토", icon: "📊" },
+                { step: "03", title: "전략수립", icon: "🎯" },
+                { step: "04", title: "마케팅기획", icon: "📢" },
+                { step: "05", title: "분양운영", icon: "🏠" },
+                { step: "06", title: "사후관리", icon: "✅" },
+              ].map((process, idx) => (
+                <div key={idx} className="flex flex-col items-center text-center animate-slide-up" style={{ animationDelay: `${idx * 80}ms` }}>
+                  <div className="w-[72px] h-[72px] rounded-full bg-gradient-to-br from-yellow-500 to-yellow-700 flex items-center justify-center shadow-lg mb-4 hover:scale-110 transition-transform duration-300 cursor-default">
+                    <span className="text-2xl">{process.icon}</span>
+                  </div>
+                  <p className="text-xs text-yellow-600 font-bold tracking-wider mb-1">STEP {process.step}</p>
+                  <p className="text-sm font-bold text-gray-800">{process.title}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* PORTFOLIO - PREMIUM GRID */}
       <section id="portfolio" className="py-32 px-4 bg-white relative overflow-hidden">
         {/* Subtle background */}
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-yellow-50 rounded-full blur-3xl -z-10 opacity-40"></div>
@@ -342,7 +437,7 @@ export default function Home() {
               <div className="order-1 md:order-2 animate-slide-up animation-delay-200">
                 <span className="text-yellow-700 font-semibold tracking-widest uppercase text-sm">CEO 메시지</span>
                 <p className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 mt-4 leading-tight" style={{ fontFamily: "'Playfair Display', serif" }}>
-                  "고객의 성공이<br />곧 우리의 성공입니다."
+                  "고객의 성공이<br />곧 우리의 성장입니다."
                 </p>
                 <p className="text-gray-700 leading-relaxed text-lg" style={{ letterSpacing: '0.3px' }}>
                   풍부한 경험과 전문성을 바탕으로 프로젝트의 성공을 위한 최적의 솔루션을 제공하겠습니다. 신우아이앤씨는 고객과의 신뢰 관계를 최우선으로 생각하며, 언제나 고객의 편에서 최선의 노력을 다하겠습니다.

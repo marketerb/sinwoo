@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useState, useEffect } from "react";
 
 export default function Navigation() {
@@ -13,6 +12,7 @@ export default function Navigation() {
     { href: "#home", label: "홈" },
     { href: "#about", label: "회사소개" },
     { href: "#business", label: "사업영역" },
+    { href: "#process", label: "프로세스" },
     { href: "#portfolio", label: "포트폴리오" },
     { href: "#contact", label: "문의하기" },
   ];
@@ -24,28 +24,50 @@ export default function Navigation() {
       const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
       setScrollProgress(scrollPercent);
       setScrolled(scrollTop > 50);
-      // Check if still in HERO section (first viewport)
       setIsHeroSection(scrollTop < window.innerHeight);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const openMenu = () => {
+    setMobileMenuOpen(true);
+    document.body.style.overflow = "hidden";
+  };
+
+  const closeMenu = () => {
+    setMobileMenuOpen(false);
+    document.body.style.overflow = "auto";
+  };
+
+  /* hamburger bar color:
+     - menu open → nav turns white → dark bars
+     - hero + not scrolled → dark nav bg → white bars
+     - scrolled → white nav → dark bars
+  */
+  const barColor =
+    mobileMenuOpen
+      ? "bg-gray-800"
+      : !scrolled && isHeroSection
+      ? "bg-white"
+      : "bg-gray-800";
+
   return (
     <>
-      {/* Scroll Progress Bar - Premium */}
+      {/* Scroll Progress Bar */}
       <div className="fixed top-0 left-0 right-0 h-1 bg-gray-100/30 z-50 backdrop-blur-sm">
         <div
-          className="h-full bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-700 transition-all duration-300 shadow-lg"
-          style={{ width: `${scrollProgress}%`, boxShadow: '0 0 15px rgba(212, 175, 55, 0.3)' }}
-        ></div>
+          className="h-full bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-700 transition-all duration-300"
+          style={{ width: `${scrollProgress}%`, boxShadow: "0 0 15px rgba(212, 175, 55, 0.3)" }}
+        />
       </div>
 
-      {/* Navigation - Premium Design */}
+      {/* Navigation */}
       <nav
-        className={`sticky top-1 z-40 transition-all duration-300 ${
-          scrolled
+        className={`sticky top-1 z-40 transition-all duration-500 ${
+          mobileMenuOpen
+            ? "bg-white/98 backdrop-blur-xl shadow-lg"
+            : scrolled
             ? "bg-white/95 backdrop-blur-xl border-b border-yellow-100/50 shadow-xl"
             : isHeroSection
             ? "bg-gradient-to-b from-black/40 to-transparent backdrop-blur-md"
@@ -54,220 +76,147 @@ export default function Navigation() {
       >
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
-            {/* Logo - Premium Design */}
-            <a
-              href="#home"
-              className={`flex items-center gap-3 transition-all duration-300 group font-semibold`}
-            >
-              {/* Logo Icon */}
+
+            {/* Logo */}
+            <a href="#home" className="flex items-center gap-3 transition-all duration-300 group">
               <div className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all duration-300 ${
-                scrolled
+                scrolled || mobileMenuOpen
                   ? "bg-gradient-to-br from-yellow-100 to-yellow-50 shadow-md"
                   : "bg-white/15 group-hover:bg-white/25 backdrop-blur-sm"
               }`}>
-                <span className="text-xl font-bold">🏢</span>
+                <span className="text-xl">🏢</span>
               </div>
-              {/* Logo Text */}
-              <div className="flex flex-col leading-tight hidden sm:block">
+              <div className="flex-col leading-tight hidden sm:flex">
                 <span className={`text-xs font-bold tracking-widest opacity-80 transition-all ${
-                  scrolled ? "text-yellow-700" : "text-yellow-200"
-                }`}>
-                  SINWOO INC.
-                </span>
+                  scrolled || mobileMenuOpen ? "text-yellow-700" : "text-yellow-200"
+                }`}>SINWOO INC.</span>
                 <span className={`text-lg font-bold transition-all ${
-                  scrolled
-                    ? "text-yellow-800"
-                    : "text-white drop-shadow-lg"
-                }`}>
-                  신우아이앤씨
-                </span>
+                  scrolled || mobileMenuOpen ? "text-yellow-800" : "text-white drop-shadow-lg"
+                }`}>신우아이앤씨</span>
               </div>
             </a>
 
             {/* Desktop Menu */}
-            <div
-              className={`hidden md:flex items-center gap-10 ${
-                scrolled ? "text-gray-800" : "text-white"
-              }`}
-            >
+            <div className={`hidden md:flex items-center gap-10 ${
+              scrolled ? "text-gray-800" : "text-white"
+            }`}>
               {navItems.map((item) => (
                 <a
                   key={item.href}
                   href={item.href}
-                  className={`text-sm font-semibold transition-all duration-300 hover:text-yellow-600 relative group ${
-                    scrolled
-                      ? "hover:text-yellow-700"
-                      : "hover:text-yellow-200"
+                  className={`text-sm font-semibold transition-all duration-300 relative group ${
+                    scrolled ? "hover:text-yellow-700" : "hover:text-yellow-200"
                   }`}
-                  onClick={() => setMobileMenuOpen(false)}
                 >
                   {item.label}
-                  <span
-                    className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-yellow-600 to-yellow-500 transition-all duration-300 w-0 group-hover:w-full`}
-                  ></span>
+                  <span className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-yellow-600 to-yellow-500 transition-all duration-300 w-0 group-hover:w-full" />
                 </a>
               ))}
             </div>
 
-            {/* CTA Button - Premium */}
+            {/* CTA Button */}
             <a
               href="#contact"
               className="hidden md:block px-6 py-2.5 bg-gradient-to-r from-yellow-600 to-yellow-700 text-white font-bold rounded-lg hover:from-yellow-700 hover:to-yellow-800 transition-all text-sm shadow-md hover:shadow-lg duration-300 relative overflow-hidden group"
             >
               <span className="relative z-10">문의하기</span>
-              <div className="absolute inset-0 bg-white/0 group-hover:bg-white/20 transition-all duration-300"></div>
+              <div className="absolute inset-0 bg-white/0 group-hover:bg-white/20 transition-all duration-300" />
             </a>
 
-            {/* Mobile Menu Button */}
+            {/* Hamburger Button */}
             <button
-              onClick={() => {
-                setMobileMenuOpen(!mobileMenuOpen);
-                if (!mobileMenuOpen) {
-                  document.body.style.overflow = 'hidden';
-                } else {
-                  document.body.style.overflow = 'auto';
-                }
-              }}
-              className="md:hidden flex flex-col gap-1.5 p-2 -mr-2 hover:opacity-80 transition-opacity"
+              onClick={mobileMenuOpen ? closeMenu : openMenu}
+              className="md:hidden flex flex-col gap-1.5 p-3 -mr-2 transition-opacity hover:opacity-70"
               aria-label="Toggle menu"
               aria-expanded={mobileMenuOpen}
             >
-              <div
-                className={`w-6 h-1.5 transition-all duration-500 ${
-                  scrolled ? "bg-gray-800" : "bg-white"
-                } ${
-                  mobileMenuOpen ? "rotate-45 translate-y-3.5" : ""
-                }`}
-              ></div>
-              <div
-                className={`w-6 h-1.5 transition-all duration-500 ${
-                  scrolled ? "bg-gray-800" : "bg-white"
-                } ${mobileMenuOpen ? "scale-0" : "scale-100"}`}
-              ></div>
-              <div
-                className={`w-6 h-1.5 transition-all duration-500 ${
-                  scrolled ? "bg-gray-800" : "bg-white"
-                } ${
-                  mobileMenuOpen ? "-rotate-45 -translate-y-3.5" : ""
-                }`}
-              ></div>
+              <div className={`w-6 h-1.5 rounded-full transition-all duration-400 ${barColor} ${
+                mobileMenuOpen ? "rotate-45 translate-y-3" : ""
+              }`} />
+              <div className={`w-6 h-1.5 rounded-full transition-all duration-400 ${barColor} ${
+                mobileMenuOpen ? "scale-0" : "scale-100"
+              }`} />
+              <div className={`w-6 h-1.5 rounded-full transition-all duration-400 ${barColor} ${
+                mobileMenuOpen ? "-rotate-45 -translate-y-3" : ""
+              }`} />
             </button>
           </div>
-
-          {/* Mobile Menu - Full Screen Premium */}
-          {mobileMenuOpen && (
-            <div
-              className="fixed inset-0 z-30 md:hidden"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                document.body.style.overflow = 'auto';
-              }}
-            />
-          )}
-
-          {mobileMenuOpen && (
-            <div className="fixed inset-0 z-35 md:hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black overflow-y-auto">
-              {/* Decorative Background Elements */}
-              <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute top-20 right-10 w-72 h-72 bg-yellow-600 opacity-5 rounded-full blur-3xl"></div>
-                <div className="absolute bottom-20 left-10 w-80 h-80 bg-yellow-500 opacity-5 rounded-full blur-3xl"></div>
-              </div>
-
-              {/* Content */}
-              <div className="relative z-10 min-h-screen flex flex-col justify-center items-center px-6 py-12">
-                {/* Logo at Top */}
-                <div className="absolute top-6 left-6">
-                  <a
-                    href="#home"
-                    className="flex items-center gap-2 text-2xl font-bold text-yellow-500 drop-shadow-lg"
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      document.body.style.overflow = 'auto';
-                    }}
-                  >
-                    <span>🏢</span>
-                    <span>SINWOO</span>
-                  </a>
-                </div>
-
-                {/* Close Button */}
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    document.body.style.overflow = 'auto';
-                  }}
-                  className="absolute top-6 right-6 text-white hover:text-yellow-400 transition-colors p-2"
-                >
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-
-                {/* Menu Items - Large and Centered */}
-                <div className="text-center space-y-8 max-w-2xl">
-                  {navItems.map((item, index) => (
-                    <a
-                      key={item.href}
-                      href={item.href}
-                      className={`block text-5xl font-bold text-white hover:text-yellow-400 transition-all duration-300 transform hover:scale-110 relative group ${
-                        mobileMenuOpen
-                          ? "translate-y-0 opacity-100"
-                          : "translate-y-8 opacity-0"
-                      }`}
-                      style={{
-                        transitionDelay: mobileMenuOpen ? `${index * 100}ms` : '0ms',
-                      }}
-                      onClick={() => {
-                        setMobileMenuOpen(false);
-                        document.body.style.overflow = 'auto';
-                      }}
-                    >
-                      {item.label}
-                      <span className="absolute bottom-[-8px] left-1/2 transform -translate-x-1/2 w-0 h-1 bg-gradient-to-r from-yellow-400 to-yellow-600 group-hover:w-24 transition-all duration-300"></span>
-                    </a>
-                  ))}
-                </div>
-
-                {/* CTA Button */}
-                <div className="mt-16">
-                  <a
-                    href="#contact"
-                    className={`inline-block px-12 py-4 bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-900 font-bold text-lg rounded-lg hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 transform hover:scale-105 shadow-2xl ${
-                      mobileMenuOpen
-                        ? "translate-y-0 opacity-100"
-                        : "translate-y-8 opacity-0"
-                    }`}
-                    style={{
-                      transitionDelay: mobileMenuOpen ? `${navItems.length * 100}ms` : '0ms',
-                    }}
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      document.body.style.overflow = 'auto';
-                    }}
-                  >
-                    지금 문의하기
-                  </a>
-                </div>
-
-                {/* Bottom Info */}
-                <div
-                  className={`absolute bottom-8 text-center text-gray-400 text-sm space-y-2 ${
-                    mobileMenuOpen
-                      ? "translate-y-0 opacity-100"
-                      : "translate-y-8 opacity-0"
-                  }`}
-                  style={{
-                    transitionDelay: mobileMenuOpen ? `${(navItems.length + 1) * 100}ms` : '0ms',
-                  }}
-                >
-                  <p>프리미엄 부동산 개발·분양대행</p>
-                  <p>신우아이앤씨</p>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </nav>
+
+      {/* Mobile: Backdrop overlay */}
+      <div
+        className={`fixed inset-0 bg-black/50 z-40 md:hidden transition-all duration-300 ${
+          mobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={closeMenu}
+      />
+
+      {/* Mobile: Slide-from-right panel (always in DOM for smooth animation) */}
+      <div
+        className={`fixed top-0 right-0 h-full w-80 bg-white z-50 md:hidden shadow-2xl flex flex-col transition-transform duration-300 ease-out ${
+          mobileMenuOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        {/* Panel Header */}
+        <div className="flex items-center justify-between px-6 py-5 bg-gradient-to-r from-yellow-50 to-amber-50 border-b border-yellow-100">
+          <div className="flex items-center gap-2">
+            <span className="text-xl">🏢</span>
+            <div>
+              <p className="text-xs font-bold text-yellow-700 tracking-widest">SINWOO INC.</p>
+              <p className="text-sm font-bold text-yellow-900">신우아이앤씨</p>
+            </div>
+          </div>
+          <button
+            onClick={closeMenu}
+            className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-yellow-100 transition-colors text-gray-500 hover:text-yellow-800"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Menu Items with staggered animation */}
+        <nav className="flex-1 px-3 py-6 overflow-y-auto space-y-1">
+          {navItems.map((item, index) => (
+            <a
+              key={item.href}
+              href={item.href}
+              className={`flex items-center gap-3 px-4 py-4 rounded-xl text-base font-semibold text-gray-700 hover:bg-amber-50 hover:text-yellow-800 transition-all duration-200 group transform ${
+                mobileMenuOpen
+                  ? "translate-x-0 opacity-100"
+                  : "translate-x-6 opacity-0"
+              }`}
+              style={{
+                transitionDelay: mobileMenuOpen ? `${120 + index * 50}ms` : "0ms",
+                transition: "background-color 0.2s, color 0.2s, transform 0.35s ease-out, opacity 0.35s ease-out",
+              }}
+              onClick={closeMenu}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-yellow-500 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+              <span>{item.label}</span>
+            </a>
+          ))}
+        </nav>
+
+        {/* CTA at bottom */}
+        <div
+          className={`px-4 pb-8 pt-4 border-t border-gray-100 transition-all duration-300 ${
+            mobileMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          }`}
+          style={{ transitionDelay: mobileMenuOpen ? `${120 + navItems.length * 50}ms` : "0ms" }}
+        >
+          <a
+            href="#contact"
+            className="block w-full py-4 px-6 bg-gradient-to-r from-yellow-600 to-yellow-700 text-white font-bold text-center rounded-xl hover:from-yellow-700 hover:to-yellow-800 transition-all shadow-md hover:shadow-lg text-sm"
+            onClick={closeMenu}
+          >
+            지금 문의하기 →
+          </a>
+          <p className="text-center text-xs text-gray-400 mt-4">프리미엄 부동산 개발·분양대행</p>
+        </div>
+      </div>
     </>
   );
 }

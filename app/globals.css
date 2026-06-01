@@ -1,13 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
 
 @import "tailwindcss";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --font-heading: 'Playfair Display', serif;
-  --font-elegant: 'Cormorant Garamond', serif;
-  --font-body: 'Inter', sans-serif;
+  --font-heading: 'Nanum Myeongjo', 'Playfair Display', serif;
+  --font-elegant: 'Nanum Myeongjo', 'Cormorant Garamond', serif;
+  --font-body: 'Inter', 'Nanum Myeongjo', sans-serif;
 
   /* Premium Gold Color Palette */
   --gold-primary: #D4AF37;
