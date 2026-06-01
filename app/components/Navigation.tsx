@@ -57,32 +57,26 @@ export default function Navigation() {
             {/* Logo - Premium Design */}
             <a
               href="#home"
-              className={`flex items-center gap-2 transition-all duration-300 group ${
-                scrolled
-                  ? "text-yellow-700 hover:text-yellow-800"
-                  : "text-white hover:text-yellow-300"
-              }`}
+              className={`flex items-center gap-3 transition-all duration-300 group font-semibold`}
             >
               {/* Logo Icon */}
-              <div className={`flex items-center justify-center w-10 h-10 rounded-lg transition-all ${
+              <div className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all duration-300 ${
                 scrolled
-                  ? "bg-yellow-100/80"
-                  : "bg-white/10 group-hover:bg-white/20"
+                  ? "bg-gradient-to-br from-yellow-100 to-yellow-50 shadow-md"
+                  : "bg-white/15 group-hover:bg-white/25 backdrop-blur-sm"
               }`}>
-                <span className="text-lg font-bold bg-gradient-to-br from-yellow-500 to-yellow-700 bg-clip-text text-transparent">
-                  🏢
-                </span>
+                <span className="text-xl font-bold">🏢</span>
               </div>
               {/* Logo Text */}
-              <div className="flex flex-col leading-tight">
-                <span className={`text-sm font-bold tracking-widest opacity-90 ${
+              <div className="flex flex-col leading-tight hidden sm:block">
+                <span className={`text-xs font-bold tracking-widest opacity-80 transition-all ${
                   scrolled ? "text-yellow-700" : "text-yellow-200"
                 }`}>
-                  SINWOO
+                  SINWOO INC.
                 </span>
-                <span className={`text-xl font-bold transition-all ${
+                <span className={`text-lg font-bold transition-all ${
                   scrolled
-                    ? "text-yellow-700"
+                    ? "text-yellow-800"
                     : "text-white drop-shadow-lg"
                 }`}>
                   신우아이앤씨
@@ -100,49 +94,28 @@ export default function Navigation() {
                 <a
                   key={item.href}
                   href={item.href}
-                  className={`text-sm font-semibold transition-all duration-300 relative group px-1 py-2 ${
+                  className={`text-sm font-semibold transition-all duration-300 hover:text-yellow-600 relative group ${
                     scrolled
-                      ? "text-gray-700 hover:text-yellow-700"
-                      : "text-white/95 hover:text-yellow-200"
+                      ? "hover:text-yellow-700"
+                      : "hover:text-yellow-200"
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {item.label}
-                  {/* Underline Animation */}
                   <span
-                    className={`absolute bottom-0 left-0 h-0.5 transition-all duration-500 ease-out ${
-                      scrolled ? "bg-yellow-600" : "bg-yellow-300"
-                    } w-0 group-hover:w-full`}
-                  ></span>
-                  {/* Hover background */}
-                  <span
-                    className={`absolute inset-0 rounded-md transition-all duration-300 -z-10 ${
-                      scrolled
-                        ? "bg-yellow-50 opacity-0 group-hover:opacity-100"
-                        : "bg-white/5 opacity-0 group-hover:opacity-100"
-                    }`}
+                    className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-yellow-600 to-yellow-500 transition-all duration-300 w-0 group-hover:w-full`}
                   ></span>
                 </a>
               ))}
             </div>
 
-            {/* CTA Button - Premium Style */}
+            {/* CTA Button - Premium */}
             <a
               href="#contact"
-              className={`hidden md:block relative px-8 py-3 font-bold rounded-xl transition-all duration-300 text-sm shadow-lg hover:shadow-xl overflow-hidden group ${
-                scrolled
-                  ? "bg-gradient-to-r from-yellow-600 to-yellow-700 text-white hover:from-yellow-700 hover:to-yellow-800"
-                  : "bg-gradient-to-r from-yellow-500 to-yellow-600 text-white hover:from-yellow-600 hover:to-yellow-700 shadow-yellow-600/40"
-              }`}
+              className="hidden md:block px-6 py-2.5 bg-gradient-to-r from-yellow-600 to-yellow-700 text-white font-bold rounded-lg hover:from-yellow-700 hover:to-yellow-800 transition-all text-sm shadow-md hover:shadow-lg duration-300 relative overflow-hidden group"
             >
-              {/* Shimmer effect on hover */}
-              <span className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-              <span className="relative flex items-center gap-2">
-                문의하기
-                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </span>
+              <span className="relative z-10">문의하기</span>
+              <div className="absolute inset-0 bg-white/0 group-hover:bg-white/20 transition-all duration-300"></div>
             </a>
 
             {/* Mobile Menu Button */}
@@ -155,28 +128,24 @@ export default function Navigation() {
                   document.body.style.overflow = 'auto';
                 }
               }}
-              className={`md:hidden flex flex-col gap-1.5 p-3 -mr-2 hover:opacity-80 transition-all rounded-lg ${
-                scrolled || isHeroSection
-                  ? scrolled ? "hover:bg-gray-100" : "hover:bg-white/10"
-                  : "hover:bg-white/10"
-              }`}
+              className="md:hidden flex flex-col gap-1.5 p-2 -mr-2 hover:opacity-80 transition-opacity"
               aria-label="Toggle menu"
               aria-expanded={mobileMenuOpen}
             >
               <div
-                className={`w-6 h-1 transition-all duration-500 rounded-full ${
+                className={`w-6 h-1.5 transition-all duration-500 ${
                   scrolled ? "bg-gray-800" : "bg-white"
                 } ${
                   mobileMenuOpen ? "rotate-45 translate-y-3.5" : ""
                 }`}
               ></div>
               <div
-                className={`w-6 h-1 transition-all duration-500 rounded-full ${
+                className={`w-6 h-1.5 transition-all duration-500 ${
                   scrolled ? "bg-gray-800" : "bg-white"
                 } ${mobileMenuOpen ? "scale-0" : "scale-100"}`}
               ></div>
               <div
-                className={`w-6 h-1 transition-all duration-500 rounded-full ${
+                className={`w-6 h-1.5 transition-all duration-500 ${
                   scrolled ? "bg-gray-800" : "bg-white"
                 } ${
                   mobileMenuOpen ? "-rotate-45 -translate-y-3.5" : ""
@@ -185,40 +154,116 @@ export default function Navigation() {
             </button>
           </div>
 
-          {/* Mobile Menu */}
+          {/* Mobile Menu - Full Screen Premium */}
           {mobileMenuOpen && (
             <div
-              className={`md:hidden mt-4 pb-6 space-y-3 border-t transition-all backdrop-blur-sm ${
-                scrolled
-                  ? "border-gray-200 bg-white/98"
-                  : "border-white/30 bg-white"
-              } pt-6`}
-            >
-              {navItems.map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  className={`block py-3 px-4 text-sm font-semibold transition-all rounded-lg relative overflow-hidden group ${
-                    scrolled
-                      ? "text-gray-800 hover:text-yellow-700 hover:bg-yellow-50"
-                      : "text-gray-800 hover:text-yellow-700 hover:bg-yellow-50"
-                  }`}
-                  onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 z-30 md:hidden"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                document.body.style.overflow = 'auto';
+              }}
+            />
+          )}
+
+          {mobileMenuOpen && (
+            <div className="fixed inset-0 z-35 md:hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black overflow-y-auto">
+              {/* Decorative Background Elements */}
+              <div className="absolute inset-0 overflow-hidden">
+                <div className="absolute top-20 right-10 w-72 h-72 bg-yellow-600 opacity-5 rounded-full blur-3xl"></div>
+                <div className="absolute bottom-20 left-10 w-80 h-80 bg-yellow-500 opacity-5 rounded-full blur-3xl"></div>
+              </div>
+
+              {/* Content */}
+              <div className="relative z-10 min-h-screen flex flex-col justify-center items-center px-6 py-12">
+                {/* Logo at Top */}
+                <div className="absolute top-6 left-6">
+                  <a
+                    href="#home"
+                    className="flex items-center gap-2 text-2xl font-bold text-yellow-500 drop-shadow-lg"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      document.body.style.overflow = 'auto';
+                    }}
+                  >
+                    <span>🏢</span>
+                    <span>SINWOO</span>
+                  </a>
+                </div>
+
+                {/* Close Button */}
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    document.body.style.overflow = 'auto';
+                  }}
+                  className="absolute top-6 right-6 text-white hover:text-yellow-400 transition-colors p-2"
                 >
-                  <span className="relative z-10">{item.label}</span>
-                  <span className={`absolute bottom-0 left-0 h-0.5 bg-yellow-600 transition-all duration-500 w-0 group-hover:w-full`}></span>
-                </a>
-              ))}
-              <a
-                href="#contact"
-                className="block py-3 px-4 mt-2 pt-4 border-t border-gray-200 text-sm font-bold text-center text-white bg-gradient-to-r from-yellow-600 to-yellow-700 rounded-lg hover:from-yellow-700 hover:to-yellow-800 transition-all shadow-lg"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  document.body.style.overflow = 'auto';
-                }}
-              >
-                문의하기
-              </a>
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+
+                {/* Menu Items - Large and Centered */}
+                <div className="text-center space-y-8 max-w-2xl">
+                  {navItems.map((item, index) => (
+                    <a
+                      key={item.href}
+                      href={item.href}
+                      className={`block text-5xl font-bold text-white hover:text-yellow-400 transition-all duration-300 transform hover:scale-110 relative group ${
+                        mobileMenuOpen
+                          ? "translate-y-0 opacity-100"
+                          : "translate-y-8 opacity-0"
+                      }`}
+                      style={{
+                        transitionDelay: mobileMenuOpen ? `${index * 100}ms` : '0ms',
+                      }}
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        document.body.style.overflow = 'auto';
+                      }}
+                    >
+                      {item.label}
+                      <span className="absolute bottom-[-8px] left-1/2 transform -translate-x-1/2 w-0 h-1 bg-gradient-to-r from-yellow-400 to-yellow-600 group-hover:w-24 transition-all duration-300"></span>
+                    </a>
+                  ))}
+                </div>
+
+                {/* CTA Button */}
+                <div className="mt-16">
+                  <a
+                    href="#contact"
+                    className={`inline-block px-12 py-4 bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-900 font-bold text-lg rounded-lg hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 transform hover:scale-105 shadow-2xl ${
+                      mobileMenuOpen
+                        ? "translate-y-0 opacity-100"
+                        : "translate-y-8 opacity-0"
+                    }`}
+                    style={{
+                      transitionDelay: mobileMenuOpen ? `${navItems.length * 100}ms` : '0ms',
+                    }}
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      document.body.style.overflow = 'auto';
+                    }}
+                  >
+                    지금 문의하기
+                  </a>
+                </div>
+
+                {/* Bottom Info */}
+                <div
+                  className={`absolute bottom-8 text-center text-gray-400 text-sm space-y-2 ${
+                    mobileMenuOpen
+                      ? "translate-y-0 opacity-100"
+                      : "translate-y-8 opacity-0"
+                  }`}
+                  style={{
+                    transitionDelay: mobileMenuOpen ? `${(navItems.length + 1) * 100}ms` : '0ms',
+                  }}
+                >
+                  <p>프리미엄 부동산 개발·분양대행</p>
+                  <p>신우아이앤씨</p>
+                </div>
+              </div>
             </div>
           )}
         </div>
