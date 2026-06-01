@@ -106,25 +106,49 @@ export default function Home() {
       <Navigation />
 
       {/* ─── HERO ─── */}
-      <section id="home" className="min-h-screen flex flex-col justify-end relative overflow-hidden" style={{ background: G.lighter, padding: "0 48px 80px" }}>
+      {/*
+        nav는 sticky(높이 약 80px)이므로 hero를 min-h-screen으로 하면
+        콘텐츠가 뷰포트 아래로 밀림 → calc(100vh - 80px)로 보정
+      */}
+      <section
+        id="home"
+        className="flex flex-col justify-end relative overflow-hidden px-5 sm:px-10 md:px-12 pb-16 md:pb-20"
+        style={{ background: G.lighter, minHeight: "calc(100vh - 80px)" }}
+      >
+        {/* Grid texture */}
         <div className="absolute inset-0" style={{ backgroundImage: `linear-gradient(${G.border} 1px,transparent 1px),linear-gradient(90deg,${G.border} 1px,transparent 1px)`, backgroundSize: "80px 80px" }} />
+        {/* Ambient glow */}
         <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 80% 70% at 70% 30%,rgba(184,147,90,0.07) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 10% 70%,rgba(184,147,90,0.04) 0%,transparent 50%)" }} />
+
+        {/* Side label */}
         <div className="absolute top-1/2 left-10 -translate-y-1/2 hidden lg:block" style={{ writingMode: "vertical-lr", fontSize: ".6rem", letterSpacing: "4px", color: G.muted, textTransform: "uppercase", opacity: .5 }}>
           SINWOO Inc. · Est. 2015 · Seoul
         </div>
-        <div className="absolute right-10 top-1/2 -translate-y-1/2 hidden lg:flex flex-col items-center gap-3">
+
+        {/* Scroll indicator */}
+        <div className="absolute right-10 bottom-24 hidden lg:flex flex-col items-center gap-3">
           <div style={{ width: "1px", height: "60px", background: `linear-gradient(to bottom,transparent,${G.gold})`, animation: "scrollLine 1.8s ease-in-out infinite" }} />
           <span style={{ fontSize: ".6rem", color: G.muted }}>scroll</span>
         </div>
+
+        {/* Content */}
         <div className="relative z-10 max-w-7xl">
-          <div className="inline-flex items-center gap-2 mb-9 px-4 py-2 rounded-full" style={{ border: `1px solid ${G.borderGold}`, color: G.gold, fontSize: ".7rem", letterSpacing: "2px", background: "rgba(184,147,90,0.04)" }}>
+          {/* Tag */}
+          <div className="inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-full" style={{ border: `1px solid ${G.borderGold}`, color: G.gold, fontSize: ".7rem", letterSpacing: "2px", background: "rgba(184,147,90,0.04)" }}>
             <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: G.gold, animation: "pulse 2s ease infinite", display: "inline-block" }} />
             전문 분양대행 · 부동산 솔루션
           </div>
-          <h1 className="mb-9" style={{ fontWeight: 900, lineHeight: ".92", letterSpacing: "-4px", fontSize: "clamp(42px,7.5vw,110px)" }}>
+
+          {/* Title — lineHeight 1.05, letterSpacing -2px (한글 최적화) */}
+          <h1 className="mb-8" style={{ fontWeight: 900, lineHeight: "1.05", letterSpacing: "-2px", fontSize: "clamp(38px,6.5vw,96px)" }}>
             <span style={{ color: G.dark, display: "block" }}>부동산의 가치를</span>
-            <span style={{ display: "block", ...gradText, fontStyle: "italic", fontFamily: "'Playfair Display',serif" }}>설계하고 완성합니다.</span>
+            {/* 나눔명조(한글 세리프) 우선, Playfair는 영문 폴백 */}
+            <span style={{ display: "block", ...gradText, fontFamily: "'Nanum Myeongjo','Playfair Display',serif" }}>
+              설계하고 완성합니다.
+            </span>
           </h1>
+
+          {/* Bottom row */}
           <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 flex-wrap">
             <p style={{ maxWidth: "380px", fontSize: ".92rem", color: G.muted, lineHeight: "1.9" }}>
               개발 컨설팅부터 분양대행, 투자자문, PM까지<br />

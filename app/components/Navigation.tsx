@@ -40,17 +40,8 @@ export default function Navigation() {
     document.body.style.overflow = "auto";
   };
 
-  /* hamburger bar color:
-     - menu open → nav turns white → dark bars
-     - hero + not scrolled → dark nav bg → white bars
-     - scrolled → white nav → dark bars
-  */
-  const barColor =
-    mobileMenuOpen
-      ? "bg-gray-800"
-      : !scrolled && isHeroSection
-      ? "bg-white"
-      : "bg-gray-800";
+  /* 라이트 hero 배경이므로 항상 어두운 바 색상 */
+  const barColor = "bg-gray-700";
 
   return (
     <>
@@ -62,16 +53,14 @@ export default function Navigation() {
         />
       </div>
 
-      {/* Navigation */}
+      {/* Navigation — hero는 이제 라이트 배경이므로 dark overlay 제거 */}
       <nav
-        className={`sticky top-1 z-40 transition-all duration-500 ${
+        className={`sticky top-0 z-40 transition-all duration-500 ${
           mobileMenuOpen
-            ? "bg-white/98 backdrop-blur-xl shadow-lg"
+            ? "bg-white shadow-lg"
             : scrolled
-            ? "bg-white/95 backdrop-blur-xl border-b border-yellow-100/50 shadow-xl"
-            : isHeroSection
-            ? "bg-gradient-to-b from-black/40 to-transparent backdrop-blur-md"
-            : "bg-white/95 backdrop-blur-xl shadow-lg"
+            ? "bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-md"
+            : "bg-white/60 backdrop-blur-sm"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 py-4">
@@ -79,34 +68,23 @@ export default function Navigation() {
 
             {/* Logo */}
             <a href="#home" className="flex items-center gap-3 transition-all duration-300 group">
-              <div className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all duration-300 ${
-                scrolled || mobileMenuOpen
-                  ? "bg-gradient-to-br from-yellow-100 to-yellow-50 shadow-md"
-                  : "bg-white/15 group-hover:bg-white/25 backdrop-blur-sm"
-              }`}>
+              {/* 라이트 hero이므로 항상 골드 배경 아이콘 박스 */}
+              <div className="flex items-center justify-center w-11 h-11 rounded-lg bg-gradient-to-br from-yellow-100 to-yellow-50 shadow-sm group-hover:shadow-md transition-shadow duration-300">
                 <span className="text-xl">🏢</span>
               </div>
               <div className="flex-col leading-tight hidden sm:flex">
-                <span className={`text-xs font-bold tracking-widest opacity-80 transition-all ${
-                  scrolled || mobileMenuOpen ? "text-yellow-700" : "text-yellow-200"
-                }`}>SINWOO INC.</span>
-                <span className={`text-lg font-bold transition-all ${
-                  scrolled || mobileMenuOpen ? "text-yellow-800" : "text-white drop-shadow-lg"
-                }`}>신우아이앤씨</span>
+                <span className="text-xs font-bold tracking-widest text-yellow-700 opacity-70">SINWOO INC.</span>
+                <span className="text-lg font-bold text-yellow-800">신우아이앤씨</span>
               </div>
             </a>
 
-            {/* Desktop Menu */}
-            <div className={`hidden md:flex items-center gap-10 ${
-              scrolled ? "text-gray-800" : "text-white"
-            }`}>
+            {/* Desktop Menu — 항상 다크 텍스트 (라이트 배경) */}
+            <div className="hidden md:flex items-center gap-10 text-gray-700">
               {navItems.map((item) => (
                 <a
                   key={item.href}
                   href={item.href}
-                  className={`text-sm font-semibold transition-all duration-300 relative group ${
-                    scrolled ? "hover:text-yellow-700" : "hover:text-yellow-200"
-                  }`}
+                  className="text-sm font-semibold transition-all duration-300 relative group hover:text-yellow-700"
                 >
                   {item.label}
                   <span className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-yellow-600 to-yellow-500 transition-all duration-300 w-0 group-hover:w-full" />
