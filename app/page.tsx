@@ -5,8 +5,10 @@ import { useState, useEffect, useRef } from "react";
 
 const G = {
   gold: "#b8935a", gold2: "#d4ad6e", goldPale: "#faf5ec",
-  dark: "#16161a", dark2: "#2e2e36", muted: "#7a7a85",
-  light: "#f9f8f5", lighter: "#fdfcfa",
+  dark: "#141413",  /* Mastercard Ink Black */
+  dark2: "#2e2e36", muted: "#7a7a85",
+  light: "#F7F4F1",   /* Lifted Cream */
+  lighter: "#F3F0EE", /* Canvas Cream — Mastercard's signature warm putty */
   border: "rgba(0,0,0,0.07)", borderGold: "rgba(184,147,90,0.2)",
 };
 const gradText = { background: `linear-gradient(135deg,${G.gold},${G.gold2})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" } as React.CSSProperties;
@@ -150,36 +152,62 @@ export default function Home() {
       <Navigation />
 
       {/* ─── HERO ─── */}
+      {/* nav는 fixed라 document flow 차지 안 함 → 100vh 사용, paddingTop으로 nav 여백 확보 */}
       <section
         id="home"
         className="flex flex-col justify-end relative overflow-hidden px-5 sm:px-10 md:px-12 pb-16 md:pb-20"
-        style={{ background: G.lighter, minHeight: "calc(100vh - 80px)" }}
+        style={{ background: G.lighter, minHeight: "100vh", paddingTop: "100px" }}
       >
+        {/* Grid texture */}
         <div className="absolute inset-0" style={{ backgroundImage: `linear-gradient(${G.border} 1px,transparent 1px),linear-gradient(90deg,${G.border} 1px,transparent 1px)`, backgroundSize: "80px 80px" }} />
-        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 80% 70% at 70% 30%,rgba(184,147,90,0.07) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 10% 70%,rgba(184,147,90,0.04) 0%,transparent 50%)" }} />
-        <div className="absolute top-1/2 left-10 -translate-y-1/2 hidden lg:block" style={{ writingMode: "vertical-lr", fontSize: ".6rem", letterSpacing: "4px", color: G.muted, textTransform: "uppercase", opacity: .5 }}>
+        {/* Ambient glow */}
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 80% 70% at 70% 30%,rgba(184,147,90,0.06) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 10% 70%,rgba(184,147,90,0.03) 0%,transparent 50%)" }} />
+
+        {/* Ghost Watermark — Mastercard signature: cream-on-cream large headline */}
+        <div className="absolute hidden lg:block" style={{
+          top: "20%", left: 0, right: 0,
+          fontSize: "clamp(80px,13vw,200px)", fontWeight: 900,
+          color: "#E5E0DB",
+          letterSpacing: "-6px", lineHeight: 1,
+          userSelect: "none", pointerEvents: "none",
+          paddingLeft: "5vw", whiteSpace: "nowrap", overflow: "hidden",
+          fontFamily: "'Nanum Myeongjo',serif",
+        }}>신우아이앤씨</div>
+
+        {/* Side label */}
+        <div className="absolute top-1/2 left-10 -translate-y-1/2 hidden lg:block" style={{ writingMode: "vertical-lr", fontSize: ".6rem", letterSpacing: "4px", color: G.muted, textTransform: "uppercase", opacity: .4 }}>
           SINWOO Inc. · Est. 2015 · Seoul
         </div>
+
+        {/* Scroll indicator */}
         <div className="absolute right-10 bottom-24 hidden lg:flex flex-col items-center gap-3">
           <div style={{ width: "1px", height: "60px", background: `linear-gradient(to bottom,transparent,${G.gold})`, animation: "scrollLine 1.8s ease-in-out infinite" }} />
           <span style={{ fontSize: ".6rem", color: G.muted }}>scroll</span>
         </div>
+
+        {/* Content */}
         <div className="relative z-10 max-w-7xl">
-          <div className="inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-full" style={{ border: `1px solid ${G.borderGold}`, color: G.gold, fontSize: ".7rem", letterSpacing: "2px", background: "rgba(184,147,90,0.04)" }}>
+          {/* Eyebrow — Mastercard dot + uppercase */}
+          <div className="inline-flex items-center gap-2 mb-8" style={{ color: G.gold, fontSize: ".68rem", letterSpacing: "3px", fontWeight: 700, textTransform: "uppercase" }}>
             <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: G.gold, animation: "pulse 2s ease infinite", display: "inline-block" }} />
             전문 분양대행 · 부동산 솔루션
           </div>
-          <h1 className="mb-8" style={{ fontWeight: 900, lineHeight: "1.05", letterSpacing: "-2px", fontSize: "clamp(38px,6.5vw,96px)" }}>
+
+          {/* Title */}
+          <h1 className="mb-8" style={{ fontWeight: 900, lineHeight: "1.0", letterSpacing: "-2px", fontSize: "clamp(38px,6.5vw,96px)" }}>
             <span style={{ color: G.dark, display: "block" }}>부동산의 가치를</span>
             <span style={{ display: "block", ...gradText, fontFamily: "'Nanum Myeongjo','Playfair Display',serif" }}>
               설계하고 완성합니다.
             </span>
           </h1>
+
+          {/* Bottom row: desc + CTA */}
           <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 flex-wrap">
             <p style={{ maxWidth: "380px", fontSize: ".92rem", color: G.muted, lineHeight: "1.9" }}>
               개발 컨설팅부터 분양대행, 투자자문, PM까지<br />
               사업의 시작과 끝을 책임지는 <span style={{ color: G.gold, fontWeight: 600 }}>부동산 전문 파트너</span>입니다.
             </p>
+            {/* Mastercard: Ink Black primary + outlined secondary */}
             <div className="flex gap-3 flex-wrap">
               <a href="#portfolio" className="btn-gold">포트폴리오 보기 →</a>
               <a href="#contact" className="btn-line">문의하기</a>
@@ -300,6 +328,13 @@ export default function Home() {
               현장 특성을 최적화한 맞춤형 전략으로 프로젝트의 성공을 이끕니다.
             </p>
           </div>
+          {/* Orbital arc decoration — thin gold curves connecting service cards */}
+          <div className="hidden md:block" style={{ position: "relative", height: "0", marginBottom: "0" }}>
+            <svg style={{ position: "absolute", top: "60px", left: 0, width: "100%", overflow: "visible", pointerEvents: "none", zIndex: 5 }} aria-hidden="true">
+              <path d="M 320 0 Q 600 -60 920 0" stroke="#d4ad6e" strokeWidth="1" fill="none" opacity="0.45" />
+              <path d="M 800 0 Q 950 80 980 180" stroke="#d4ad6e" strokeWidth="1" fill="none" opacity="0.3" />
+            </svg>
+          </div>
           <div className="bento">
             <div className="bc b1 fade-in-on-scroll">
               <div className="bc-num">01 / Distribution</div>
@@ -405,19 +440,40 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <div className="grid md:grid-cols-3 gap-4">
+          {/* Circular portrait cards — Mastercard signature gesture */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-12">
             {featuredProjects.map((p: any, i) => (
-              <div key={i} className="fade-in-on-scroll" style={{ borderRadius: "18px", overflow: "hidden", background: "#fff", border: `1px solid ${G.border}`, transition: "all .4s", transitionDelay: `${i * 60}ms` }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-6px)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 24px 60px rgba(0,0,0,0.08)"; (e.currentTarget as HTMLElement).style.borderColor = G.borderGold; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = ""; (e.currentTarget as HTMLElement).style.boxShadow = ""; (e.currentTarget as HTMLElement).style.borderColor = G.border; }}>
-                <div style={{ height: "200px", overflow: "hidden", position: "relative", background: G.light }}>
-                  {p.img ? <img src={p.img} alt={p.title} style={{ width: "100%", height: "100%", objectFit: "cover", opacity: .65 }} loading="lazy" /> : <div style={{ position: "absolute", inset: 0, background: `linear-gradient(135deg,${G.gold},${G.gold2})` }} />}
-                  <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top,rgba(0,0,0,0.4) 0%,transparent 50%)" }} />
+              <div key={i} className="flex flex-col items-center text-center fade-in-on-scroll" style={{ transitionDelay: `${i * 80}ms` }}>
+                {/* Circle portrait + satellite CTA */}
+                <div style={{ position: "relative", width: "240px", height: "240px", margin: "0 auto" }}>
+                  <div style={{ width: "240px", height: "240px", borderRadius: "50%", overflow: "hidden", boxShadow: "rgba(0,0,0,0.08) 0px 24px 48px" }}>
+                    {p.img
+                      ? <img src={p.img} alt={p.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
+                      : <div style={{ width: "100%", height: "100%", background: `linear-gradient(135deg,${G.gold},${G.gold2})` }} />
+                    }
+                  </div>
+                  {/* Satellite CTA — white circle docked bottom-right */}
+                  <div style={{
+                    position: "absolute", bottom: "12px", right: "4px",
+                    width: "52px", height: "52px", borderRadius: "50%",
+                    background: "#fff",
+                    boxShadow: "0 6px 20px rgba(0,0,0,0.14)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    transition: "transform .3s, box-shadow .3s", cursor: "pointer",
+                  }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "scale(1.1)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 10px 28px rgba(0,0,0,0.18)"; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = ""; (e.currentTarget as HTMLElement).style.boxShadow = "0 6px 20px rgba(0,0,0,0.14)"; }}
+                  >
+                    <svg width="18" height="18" fill="none" stroke={G.dark} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </div>
                 </div>
-                <div style={{ padding: "22px" }}>
-                  <div style={{ fontSize: "1rem", fontWeight: 700, color: G.dark, marginBottom: "6px" }}>{p.title}</div>
-                  <div style={{ fontSize: ".75rem", color: G.muted }}>{p.sub || (p as any).location}</div>
-                </div>
+
+                {/* Eyebrow + title */}
+                <p style={{ fontSize: ".62rem", fontWeight: 700, color: G.gold, letterSpacing: "3px", textTransform: "uppercase", marginTop: "20px" }}>· 포트폴리오</p>
+                <p style={{ fontSize: "1rem", fontWeight: 700, color: G.dark, marginTop: "6px", lineHeight: "1.3" }}>{p.title}</p>
+                <p style={{ fontSize: ".75rem", color: G.muted, marginTop: "4px" }}>{p.sub || (p as any).location}</p>
               </div>
             ))}
           </div>
