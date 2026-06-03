@@ -47,8 +47,9 @@ export default function Home() {
   const [statsOn, setStatsOn] = useState(false);
   const [counts, setCounts] = useState({ y: 0, p: 0, u: 0, s: 0, b: 0 });
   const [showTop, setShowTop] = useState(false);
+  const [company, setCompany] = useState<{ phone?: string; fax?: string; email?: string; address?: string; kakao_channel?: string } | null>(null);
 
-  useEffect(() => { fetchPortfolios(); }, []);
+  useEffect(() => { fetchPortfolios(); fetchCompany(); }, []);
 
   useEffect(() => {
     const el = statsRef.current;
@@ -105,6 +106,13 @@ export default function Home() {
       const res = await fetch("/api/portfolios");
       if (res.ok) setPortfolios((await res.json()) || []);
     } catch { } finally { setLoading(false); }
+  }
+
+  async function fetchCompany() {
+    try {
+      const res = await fetch("/api/company");
+      if (res.ok) setCompany(await res.json());
+    } catch { }
   }
 
   const marqueeItems = ["분양대행", "부동산 개발 컨설팅", "투자자문", "개발 PM", "100% 성공 분양", "SINWOO Inc.", "분양대행", "부동산 개발 컨설팅", "투자자문", "개발 PM", "100% 성공 분양", "SINWOO Inc."];
@@ -438,28 +446,102 @@ export default function Home() {
       {/* ─── CONTACT ─── */}
       <section id="contact" style={{ background: "#fff", padding: "88px 48px" }}>
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-20">
+          <div className="grid md:grid-cols-2 gap-16">
+
+            {/* 연락처 + 네이버 지도 */}
             <div className="fade-in-on-scroll">
               <div className="s-tag">Contact</div>
               <h2 className="s-title mb-10">오시는 <span style={gradText}>길</span></h2>
-              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                {[
-                  { icon: icons.mail,   label: "Email",    val: "sinwooinc2014@naver.com", href: "mailto:sinwooinc2014@naver.com" },
-                  { icon: icons.printer, label: "Fax",     val: "02-6941-0884" },
-                  { icon: icons.mapPin, label: "Location", val: "서울특별시 강서구 마곡중앙6로 45\n리더스퀘어마곡 6층 (5호선 발산역 인근)" },
-                ].map((item, i) => (
-                  <div key={i} className="cc-card">
-                    <div className="cc-icon" style={{ color: G.gold }}><Ico d={item.icon} size={20} /></div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "24px" }}>
+                {/* 전화 — DB에서 읽거나 없으면 팩스 표시 */}
+                {(company?.phone) && (
+                  <div className="cc-card">
+                    <div className="cc-icon" style={{ color: G.gold }}><Ico d={icons.mail} size={20} /></div>
                     <div>
-                      <div className="cc-label">{item.label}</div>
-                      {item.href
-                        ? <a href={item.href} className="cc-val" style={{ textDecoration: "none" }}>{item.val}</a>
-                        : <div className="cc-val" style={{ whiteSpace: "pre-line" }}>{item.val}</div>}
+                      <div className="cc-label">전화</div>
+                      <a href={`tel:${company.phone.replace(/[^0-9]/g,"")}`} className="cc-val" style={{ textDecoration: "none" }}>{company.phone}</a>
                     </div>
                   </div>
-                ))}
+                )}
+                <div className="cc-card">
+                  <div className="cc-icon" style={{ color: G.gold }}><Ico d={icons.printer} size={20} /></div>
+                  <div>
+                    <div className="cc-label">Fax</div>
+                    <div className="cc-val">{company?.fax || "02-6941-0884"}</div>
+                  </div>
+                </div>
+                <div className="cc-card">
+                  <div className="cc-icon" style={{ color: G.gold }}><Ico d={icons.mail} size={20} /></div>
+                  <div>
+                    <div className="cc-label">Email</div>
+                    <a href={`mailto:${company?.email || "sinwooinc2014@naver.com"}`} className="cc-val" style={{ textDecoration: "none" }}>
+                      {company?.email || "sinwooinc2014@naver.com"}
+                    </a>
+                  </div>
+                </div>
+                <div className="cc-card">
+                  <div className="cc-icon" style={{ color: G.gold }}><Ico d={icons.mapPin} size={20} /></div>
+                  <div>
+                    <div className="cc-label">Location</div>
+                    <div className="cc-val" style={{ whiteSpace: "pre-line" }}>
+                      {company?.address || "서울특별시 강서구 마곡중앙6로 45\n리더스퀘어마곡 6층 (5호선 발산역 인근)"}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 네이버 지도 영역 */}
+              <div style={{ borderRadius: "16px", overflow: "hidden", border: `1px solid ${G.border}`, position: "relative" }}>
+                {/* 지도 헤더 */}
+                <div style={{ padding: "12px 16px", background: "#fff", borderBottom: `1px solid ${G.border}`, display: "flex", alignItems: "center", gap: "8px" }}>
+                  <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: G.gold, display: "inline-block" }} />
+                  <span style={{ fontSize: ".75rem", color: G.muted }}>서울 강서구 마곡 · SINWOO Inc.</span>
+                </div>
+                {/* 지도 플레이스홀더 (배경 이미지 스타일) */}
+                <div style={{
+                  height: "240px",
+                  background: `linear-gradient(135deg,${G.goldPale} 0%,#f0e8d8 100%)`,
+                  backgroundImage: `
+                    linear-gradient(rgba(184,147,90,0.06) 1px,transparent 1px),
+                    linear-gradient(90deg,rgba(184,147,90,0.06) 1px,transparent 1px)`,
+                  backgroundSize: "30px 30px",
+                  display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: "12px",
+                  position: "relative"
+                }}>
+                  {/* 핀 마커 */}
+                  <div style={{
+                    width: "48px", height: "48px", borderRadius: "50%",
+                    background: G.gold, display: "flex", alignItems: "center", justifyContent: "center",
+                    color: "#fff", boxShadow: `0 0 0 12px rgba(184,147,90,0.12)`,
+                    animation: "pulseBadge 2s ease infinite"
+                  }}>
+                    <Ico d={icons.mapPin} size={24} />
+                  </div>
+                  <div style={{ textAlign: "center" }}>
+                    <p style={{ fontSize: ".82rem", fontWeight: 700, color: G.dark }}>리더스퀘어마곡 6층</p>
+                    <p style={{ fontSize: ".72rem", color: G.muted }}>마곡중앙6로 45</p>
+                  </div>
+                  {/* 네이버 지도 링크 버튼 */}
+                  <a
+                    href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EA%B0%95%EC%84%9C%EA%B5%AC%20%EB%A7%88%EA%B3%A1%EC%A4%91%EC%95%996%EB%A1%9C%2045%20%EB%A6%AC%EB%8D%94%EC%8A%A4%ED%80%98%EC%96%B4%EB%A7%88%EA%B3%A1"
+                    target="_blank" rel="noopener noreferrer"
+                    style={{
+                      padding: "10px 24px", borderRadius: "100px",
+                      background: "#03c75a", color: "#fff",
+                      fontSize: ".78rem", fontWeight: 700, textDecoration: "none",
+                      boxShadow: "0 4px 16px rgba(3,199,90,0.25)",
+                      transition: "all .3s"
+                    }}
+                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(3,199,90,0.35)"}
+                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 16px rgba(3,199,90,0.25)"}
+                  >
+                    네이버 지도로 보기 →
+                  </a>
+                </div>
               </div>
             </div>
+
+            {/* 상담 신청 폼 */}
             <div className="fade-in-on-scroll" style={{ transitionDelay: "150ms" }}>
               <h3 style={{ fontSize: "1.2rem", fontWeight: 700, color: G.dark, marginBottom: "24px" }}>무료 상담 신청</h3>
               <div style={{ background: "#fff", border: `1px solid ${G.border}`, borderRadius: "20px", padding: "40px" }}>
@@ -481,6 +563,17 @@ export default function Home() {
                   <p style={{ textAlign: "center", marginTop: "12px", fontSize: ".68rem", color: G.muted }}>* 상담 내용은 비밀이 보장되며, 24시간 내 회신 드립니다.</p>
                 </form>
               </div>
+
+              {/* 카카오톡 채널 버튼 (설정된 경우) */}
+              {company?.kakao_channel && (
+                <a href={company.kakao_channel} target="_blank" rel="noopener noreferrer"
+                  style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginTop: "12px", padding: "14px", borderRadius: "12px", background: "#fee500", color: "#3c1e1e", fontWeight: 700, fontSize: ".85rem", textDecoration: "none", transition: "opacity .2s" }}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = ".85"}
+                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = "1"}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="#3c1e1e"><path d="M12 3C6.48 3 2 6.92 2 11.75c0 3.04 1.76 5.7 4.4 7.3-.15.54-.54 1.96-.63 2.27-.1.37.14.37.29.27.12-.08 1.9-1.29 2.68-1.82.73.1 1.48.16 2.26.16 5.52 0 10-3.92 10-8.75C22 6.92 17.52 3 12 3z"/></svg>
+                  카카오톡으로 상담하기
+                </a>
+              )}
             </div>
           </div>
         </div>
@@ -513,6 +606,31 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* ─── 모바일 전화 바로걸기 (전화번호 설정된 경우만 표시) ─── */}
+      {company?.phone && (
+        <a
+          href={`tel:${company.phone.replace(/[^0-9]/g, "")}`}
+          className="md:hidden"
+          style={{
+            position: "fixed", bottom: "88px", right: "28px", zIndex: 99,
+            width: "48px", height: "48px", borderRadius: "50%",
+            background: G.dark, color: "#fff", border: "none",
+            boxShadow: "0 8px 24px rgba(0,0,0,0.2)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            textDecoration: "none",
+            transition: "opacity .4s, transform .4s",
+            opacity: showTop ? 1 : 0,
+            transform: showTop ? "translateY(0) scale(1)" : "translateY(16px) scale(0.85)",
+            pointerEvents: showTop ? "auto" : "none",
+          }}
+          aria-label="전화 바로걸기"
+        >
+          <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.64A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.91a16 16 0 006.18 6.18l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
+          </svg>
+        </a>
+      )}
 
       {/* ─── SCROLL TO TOP ─── */}
       <button

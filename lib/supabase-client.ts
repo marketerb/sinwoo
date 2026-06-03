@@ -35,10 +35,13 @@ export interface CompanyInfo {
   id?: string;
   company_name: string;
   phone: string;
+  fax?: string;
   email: string;
   address: string;
   business_number?: string;
   description?: string;
+  ga_tracking_id?: string;
+  kakao_channel?: string;
   created_at?: string;
   updated_at?: string;
 }

@@ -20,10 +20,13 @@ export default function CompanyPage() {
   const [formData, setFormData] = useState({
     company_name: "",
     phone: "",
+    fax: "",
     email: "",
     address: "",
     business_number: "",
     description: "",
+    ga_tracking_id: "",
+    kakao_channel: "",
   });
 
   useEffect(() => {
@@ -44,10 +47,13 @@ export default function CompanyPage() {
         setFormData({
           company_name: data.company_name || "",
           phone: data.phone || "",
+          fax: data.fax || "",
           email: data.email || "",
           address: data.address || "",
           business_number: data.business_number || "",
           description: data.description || "",
+          ga_tracking_id: data.ga_tracking_id || "",
+          kakao_channel: data.kakao_channel || "",
         });
       }
     } catch (err) {
@@ -214,7 +220,7 @@ export default function CompanyPage() {
               {/* Phone */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  전화번호 *
+                  전화번호 * <span className="text-xs font-normal text-gray-500">(모바일 바로걸기에 사용)</span>
                 </label>
                 <input
                   type="tel"
@@ -234,6 +240,19 @@ export default function CompanyPage() {
                 {formErrors.phone && (
                   <p className="text-red-600 text-xs mt-1">{formErrors.phone}</p>
                 )}
+              </div>
+
+              {/* Fax */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">팩스</label>
+                <input
+                  type="tel"
+                  name="fax"
+                  value={formData.fax}
+                  onChange={handleChange}
+                  placeholder="02-6941-0884"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-600"
+                />
               </div>
 
               {/* Email */}
@@ -287,16 +306,46 @@ export default function CompanyPage() {
                 <p className="text-gray-500 text-xs mt-1">{formData.address.length}/200</p>
               </div>
 
+              {/* GA4 Tracking ID */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Google Analytics ID
+                  <span className="text-xs font-normal text-gray-500 ml-1">(G-XXXXXXXXXX 형식)</span>
+                </label>
+                <input
+                  type="text"
+                  name="ga_tracking_id"
+                  value={formData.ga_tracking_id}
+                  onChange={handleChange}
+                  placeholder="G-XXXXXXXXXX"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-600 font-mono text-sm"
+                />
+                <p className="text-gray-500 text-xs mt-1">입력 즉시 웹사이트에 방문자 통계 적용</p>
+              </div>
+
+              {/* Kakao Channel */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  카카오톡 채널 URL
+                </label>
+                <input
+                  type="url"
+                  name="kakao_channel"
+                  value={formData.kakao_channel}
+                  onChange={handleChange}
+                  placeholder="https://pf.kakao.com/..."
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-600 text-sm"
+                />
+              </div>
+
               {/* Description */}
               <div className="md:col-span-2">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  회사소개
-                </label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">회사소개</label>
                 <textarea
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
-                  rows={5}
+                  rows={4}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-600"
                 />
               </div>

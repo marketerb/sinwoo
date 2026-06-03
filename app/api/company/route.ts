@@ -22,7 +22,7 @@ export async function GET() {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
-    const { company_name, phone, email, address, description } = body;
+    const { company_name, phone, fax, email, address, description, ga_tracking_id, kakao_channel } = body;
 
     if (!company_name || !phone || !email || !address) {
       return NextResponse.json(
@@ -32,13 +32,13 @@ export async function PUT(request: NextRequest) {
     }
 
     const companyInfo: Partial<CompanyInfo> = {
-      company_name,
-      phone,
-      email,
-      address,
+      company_name, phone, email, address,
     };
 
-    if (description) companyInfo.description = description;
+    if (fax !== undefined) companyInfo.fax = fax;
+    if (description !== undefined) companyInfo.description = description;
+    if (ga_tracking_id !== undefined) companyInfo.ga_tracking_id = ga_tracking_id;
+    if (kakao_channel !== undefined) companyInfo.kakao_channel = kakao_channel;
 
     const updated = await updateCompanyInfo(companyInfo);
     return NextResponse.json(updated);
