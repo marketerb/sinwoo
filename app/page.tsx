@@ -126,19 +126,22 @@ export default function Home() {
   ];
 
   const timeline = [
-    { year: "2014", name: "마곡힐스테이트 M&L라마다" }, { year: "2015", name: "여의도프라임뷰 1차" },
-    { year: "2015", name: "대한마크포리스" }, { year: "2015", name: "마곡 프라임뷰 2차" },
-    { year: "2015", name: "배곧한국리조트 1차" }, { year: "2016", name: "배곧한국리조트 2차" },
-    { year: "2016", name: "마곡문정테크노 9·10" }, { year: "2017", name: "위례 스카이아이파리스" },
-    { year: "2017", name: "인터라식 헤리온 메트로파크" }, { year: "2018", name: "마곡 M타임" },
-    { year: "2018", name: "마곡지구 마그793" }, { year: "2019", name: "조림 켄트내폴" },
-    { year: "2020", name: "블루지 주차빌딩" }, { year: "2021", name: "마곡 그레이스" },
-    { year: "2021", name: "마곡 르웨스트" }, { year: "2022", name: "포항 아이파크" },
-    { year: "2023", name: "수원 세마 헤드프리미어원 퍼스" }, { year: "2023", name: "상도 트르지스 클라베뉴" },
-    { year: "2024", name: "신길 AK 푸르지오" }, { year: "2024", name: "신광교 클라우드시티" },
-    { year: "2024", name: "이이 헤리든 (지역주택조합)" }, { year: "2025", name: "천안 힐스테이트 두정역" },
-    { year: "2025", name: "이문 아이파크 자이 3단지" }, { year: "2025", name: "보라매 파르크힐" },
     { year: "2026", name: "힐스테이트 회룡역파크뷰" },
+    { year: "2025", name: "보라매 파르크힐" }, { year: "2025", name: "이문 아이파크 자이 3단지" },
+    { year: "2025", name: "천안 힐스테이트 두정역" },
+    { year: "2024", name: "이이 헤리든 (지역주택조합)" }, { year: "2024", name: "신광교 클라우드시티" },
+    { year: "2024", name: "신길 AK 푸르지오" },
+    { year: "2023", name: "상도 트르지스 클라베뉴" }, { year: "2023", name: "수원 세마 헤드프리미어원 퍼스" },
+    { year: "2022", name: "포항 아이파크" },
+    { year: "2021", name: "마곡 르웨스트" }, { year: "2021", name: "마곡 그레이스" },
+    { year: "2020", name: "블루지 주차빌딩" },
+    { year: "2019", name: "조림 켄트내폴" },
+    { year: "2018", name: "마곡지구 마그793" }, { year: "2018", name: "마곡 M타임" },
+    { year: "2017", name: "인터라식 헤리온 메트로파크" }, { year: "2017", name: "위례 스카이아이파리스" },
+    { year: "2016", name: "마곡문정테크노 9·10" }, { year: "2016", name: "배곧한국리조트 2차" },
+    { year: "2015", name: "배곧한국리조트 1차" }, { year: "2015", name: "마곡 프라임뷰 2차" },
+    { year: "2015", name: "대한마크포리스" }, { year: "2015", name: "여의도프라임뷰 1차" },
+    { year: "2014", name: "마곡힐스테이트 M&L라마다" },
   ];
 
   const featuredProjects = portfolios.length > 0
@@ -266,21 +269,7 @@ export default function Home() {
                 <h3 style={{ fontSize: "1.1rem", fontStyle: "italic", fontFamily: "'Playfair Display',serif", color: G.gold, marginBottom: "6px" }}>"Above &amp; Beyond"</h3>
                 <p style={{ fontSize: ".8rem", color: G.muted, lineHeight: "1.7" }}>기대를 뛰어넘다, 그 이상을 위해 최선을 다하는 신우아이앤씨의 약속입니다.</p>
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                {[
-                  { k: "대표이사", v: "임중용" },
-                  { k: "업종", v: "부동산 개발 및 분양대행" },
-                  { k: "소재지", v: "서울특별시 강서구 마곡중앙6로 45, 리더스퀘어마곡 6층" },
-                  { k: "이메일", v: "sinwooinc2014@naver.com" },
-                  { k: "사업자번호", v: "192-88-02038", gold: true },
-                  { k: "설립일", v: "2021년 05월 31일" },
-                ].map((item, i) => (
-                  <div key={i} className={`info-pill ${(item as any).gold ? "ip-gold" : ""}`}>
-                    <span className="ip-key">{item.k}</span>
-                    <span className="ip-val">{item.v}</span>
-                  </div>
-                ))}
-              </div>
+              {/* 회사 정보 필 — 비공개 처리 */}
             </div>
             <div className="fade-in-on-scroll" style={{ transitionDelay: "150ms" }}>
               <div className="grid grid-cols-2 gap-3 mb-5">
