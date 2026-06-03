@@ -12,7 +12,7 @@ const G = {
 const gradText = { background: `linear-gradient(135deg,${G.gold},${G.gold2})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" } as React.CSSProperties;
 
 /* SVG 아이콘 헬퍼 — Feather/Heroicons 스타일 라인 아이콘 */
-const Ico = ({ d, size = 28, multi }: { d: string | string[]; size?: number; multi?: boolean }) => (
+const Ico = ({ d, size = 28 }: { d: string | string[]; size?: number }) => (
   <svg width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
     {Array.isArray(d) ? d.map((p, i) => <path key={i} d={p} />) : <path d={d} />}
   </svg>
@@ -232,7 +232,7 @@ export default function Home() {
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                 {[
-                  { k: "대표이사", v: "이성우" },
+                  { k: "대표이사", v: "임중용" },
                   { k: "업종", v: "부동산 개발 및 분양대행" },
                   { k: "소재지", v: "서울특별시 강서구 마곡중앙6로 45, 리더스퀘어마곡 6층" },
                   { k: "이메일", v: "sinwooinc2014@naver.com" },
@@ -428,7 +428,7 @@ export default function Home() {
               풍부한 경험과 전문성을 바탕으로 프로젝트의 성공을 위한 최적의 솔루션을 제공하겠습니다. 신우아이앤씨는 고객과의 신뢰 관계를 최우선으로 생각하며, 언제나 고객의 편에서 최선의 노력을 다하겠습니다.
             </p>
             <div style={{ marginTop: "32px", paddingTop: "24px", borderTop: `1px solid ${G.border}` }}>
-              <div style={{ fontSize: ".88rem", color: G.dark, fontWeight: 700 }}>이성우</div>
+              <div style={{ fontSize: ".88rem", color: G.dark, fontWeight: 700 }}>임중용</div>
               <div style={{ fontSize: ".75rem", color: G.muted, marginTop: "4px" }}>주식회사 신우아이앤씨 대표이사</div>
             </div>
           </div>
@@ -506,7 +506,7 @@ export default function Home() {
             <div style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
               <span>사업자등록번호 192-88-02038</span>
               <span>법인등록번호 110111-7898799</span>
-              <span>대표 이성우</span>
+              <span>대표 임중용</span>
               <span>서울특별시 강서구 마곡중앙6로 45 리더스퀘어마곡 6층</span>
             </div>
             <div>©{new Date().getFullYear()} 주식회사 신우아이앤씨. All rights reserved.</div>

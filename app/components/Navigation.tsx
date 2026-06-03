@@ -66,16 +66,10 @@ export default function Navigation() {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
 
-            {/* Logo */}
-            <a href="#home" className="flex items-center gap-3 transition-all duration-300 group">
-              {/* 라이트 hero이므로 항상 골드 배경 아이콘 박스 */}
-              <div className="flex items-center justify-center w-11 h-11 rounded-lg bg-gradient-to-br from-yellow-100 to-yellow-50 shadow-sm group-hover:shadow-md transition-shadow duration-300">
-                <span className="text-xl">🏢</span>
-              </div>
-              <div className="flex-col leading-tight hidden sm:flex">
-                <span className="text-xs font-bold tracking-widest text-yellow-700 opacity-70">SINWOO INC.</span>
-                <span className="text-lg font-bold text-yellow-800">신우아이앤씨</span>
-              </div>
+            {/* Logo — 아이콘 박스 제거, 텍스트만 */}
+            <a href="#home" className="flex flex-col leading-tight transition-all duration-300 group">
+              <span className="text-xs font-bold tracking-widest text-yellow-700 opacity-70 group-hover:opacity-100 transition-opacity">SINWOO INC.</span>
+              <span className="text-base font-bold text-yellow-800 group-hover:text-yellow-700 transition-colors">신우아이앤씨</span>
             </a>
 
             {/* Desktop Menu — 항상 다크 텍스트 (라이트 배경) */}
@@ -138,12 +132,9 @@ export default function Navigation() {
       >
         {/* Panel Header */}
         <div className="flex items-center justify-between px-6 py-5 bg-gradient-to-r from-yellow-50 to-amber-50 border-b border-yellow-100">
-          <div className="flex items-center gap-2">
-            <span className="text-xl">🏢</span>
-            <div>
-              <p className="text-xs font-bold text-yellow-700 tracking-widest">SINWOO INC.</p>
-              <p className="text-sm font-bold text-yellow-900">신우아이앤씨</p>
-            </div>
+          <div className="flex flex-col leading-tight">
+            <p className="text-xs font-bold text-yellow-700 tracking-widest">SINWOO INC.</p>
+            <p className="text-sm font-bold text-yellow-900">신우아이앤씨</p>
           </div>
           <button
             onClick={closeMenu}
