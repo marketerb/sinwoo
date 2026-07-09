@@ -50,8 +50,14 @@ export default function Home() {
   const [counts, setCounts] = useState({ y: 0, p: 0, u: 0, s: 0, b: 0 });
   const [showTop, setShowTop] = useState(false);
   const [company, setCompany] = useState<{ phone?: string; fax?: string; email?: string; address?: string; kakao_channel?: string } | null>(null);
+  /* 히어로 배경영상 — 모바일은 경량 SD, 데스크톱은 HD (마운트 후 선택해 불필요 다운로드 방지) */
+  const [heroVideo, setHeroVideo] = useState<string | null>(null);
 
   useEffect(() => { fetchCompany(); }, []);
+
+  useEffect(() => {
+    setHeroVideo(window.matchMedia("(max-width: 767px)").matches ? "/hero-bg-mobile.mp4" : "/hero-bg.mp4");
+  }, []);
 
   useEffect(() => {
     const el = statsRef.current;
@@ -124,55 +130,68 @@ export default function Home() {
       <section
         id="home"
         className="flex flex-col justify-end relative overflow-hidden px-5 sm:px-10 md:px-12 pb-16 md:pb-20"
-        style={{ background: "#fff", minHeight: "100svh", paddingTop: "100px" }}
+        style={{ minHeight: "100svh", paddingTop: "100px", background: "#0a0a0a url('/hero-poster.jpg') center/cover no-repeat" }}
       >
-        {/* Ghost Watermark — 미니멀 시그니처: 뉴트럴 대형 타이포 */}
+        {/* Background video — 마운트 후 화면폭에 맞는 소스만 로드 */}
+        {heroVideo && (
+          <video
+            autoPlay muted loop playsInline preload="auto" poster="/hero-poster.jpg"
+            key={heroVideo}
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }}
+          >
+            <source src={heroVideo} type="video/mp4" />
+          </video>
+        )}
+        {/* Dark overlay — 텍스트 가독성 */}
+        <div className="absolute inset-0" style={{ zIndex: 1, background: "linear-gradient(180deg,rgba(0,0,0,0.60) 0%,rgba(0,0,0,0.42) 42%,rgba(0,0,0,0.82) 100%)" }} />
+
+        {/* Ghost Watermark — 대형 타이포, 영상 위 은은하게 */}
         <div className="absolute hidden lg:block" style={{
-          top: "20%", left: 0, right: 0,
+          top: "20%", left: 0, right: 0, zIndex: 2,
           fontSize: "clamp(80px,13vw,200px)", fontWeight: 900,
-          color: "#F2F2F2",
+          color: "rgba(255,255,255,0.07)",
           letterSpacing: "-6px", lineHeight: 1,
           userSelect: "none", pointerEvents: "none",
           paddingLeft: "5vw", whiteSpace: "nowrap", overflow: "hidden",
         }}>신우아이앤씨</div>
 
         {/* Side label */}
-        <div className="absolute top-1/2 left-10 -translate-y-1/2 hidden lg:block" style={{ writingMode: "vertical-lr", fontSize: ".6rem", letterSpacing: "4px", color: G.muted, textTransform: "uppercase", opacity: .4 }}>
+        <div className="absolute top-1/2 left-10 -translate-y-1/2 hidden lg:block" style={{ zIndex: 2, writingMode: "vertical-lr", fontSize: ".6rem", letterSpacing: "4px", color: "rgba(255,255,255,0.45)", textTransform: "uppercase" }}>
           SINWOO Inc. · Est. 2015 · Seoul
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute right-10 bottom-24 hidden lg:flex flex-col items-center gap-3">
-          <div style={{ width: "1px", height: "60px", background: `linear-gradient(to bottom,transparent,${G.dark})`, animation: "scrollLine 1.8s ease-in-out infinite" }} />
-          <span style={{ fontSize: ".6rem", color: G.muted }}>scroll</span>
+        <div className="absolute right-10 bottom-24 hidden lg:flex flex-col items-center gap-3" style={{ zIndex: 2 }}>
+          <div style={{ width: "1px", height: "60px", background: `linear-gradient(to bottom,transparent,rgba(255,255,255,0.9))`, animation: "scrollLine 1.8s ease-in-out infinite" }} />
+          <span style={{ fontSize: ".6rem", color: "rgba(255,255,255,0.6)" }}>scroll</span>
         </div>
 
         {/* Content */}
         <div className="relative z-10 max-w-7xl">
-          {/* Eyebrow — Mastercard dot + uppercase */}
-          <div className="inline-flex items-center gap-2 mb-8" style={{ color: G.gold, fontSize: ".68rem", letterSpacing: "3px", fontWeight: 700, textTransform: "uppercase" }}>
+          {/* Eyebrow */}
+          <div className="inline-flex items-center gap-2 mb-8" style={{ color: "rgba(255,255,255,0.92)", fontSize: ".68rem", letterSpacing: "3px", fontWeight: 700, textTransform: "uppercase" }}>
             <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: G.gold, animation: "pulse 2s ease infinite", display: "inline-block" }} />
             전문 분양대행 · 부동산 솔루션
           </div>
 
           {/* Title */}
-          <h1 className="mb-8" style={{ fontWeight: 900, lineHeight: "1.0", letterSpacing: "-2px", fontSize: "clamp(38px,6.5vw,96px)" }}>
-            <span style={{ color: G.dark, display: "block" }}>부동산의 가치를</span>
-            <span style={{ display: "block", ...gradText, fontFamily: "'Nanum Myeongjo','Playfair Display',serif" }}>
+          <h1 className="mb-8" style={{ fontWeight: 900, lineHeight: "1.0", letterSpacing: "-2px", fontSize: "clamp(38px,6.5vw,96px)", textShadow: "0 2px 30px rgba(0,0,0,0.4)" }}>
+            <span style={{ color: "#fff", display: "block" }}>부동산의 가치를</span>
+            <span style={{ display: "block", color: "#fff", fontFamily: "'Nanum Myeongjo','Playfair Display',serif" }}>
               설계하고 완성합니다.
             </span>
           </h1>
 
           {/* Bottom row: desc + CTA */}
           <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 flex-wrap">
-            <p style={{ maxWidth: "380px", fontSize: ".92rem", color: G.muted, lineHeight: "1.9" }}>
+            <p style={{ maxWidth: "380px", fontSize: ".92rem", color: "rgba(255,255,255,0.78)", lineHeight: "1.9" }}>
               개발 컨설팅부터 분양대행, 투자자문, PM까지<br />
-              사업의 시작과 끝을 책임지는 <span style={{ color: G.dark, fontWeight: 700 }}>부동산 전문 파트너</span>입니다.
+              사업의 시작과 끝을 책임지는 <span style={{ color: "#fff", fontWeight: 700 }}>부동산 전문 파트너</span>입니다.
             </p>
-            {/* Mastercard: Ink Black primary + outlined secondary */}
+            {/* White primary + outlined-white secondary (영상 위 대비) */}
             <div className="flex gap-3 flex-wrap">
-              <a href="#portfolio" className="btn-gold">포트폴리오 보기 →</a>
-              <a href="#contact" className="btn-line">문의하기</a>
+              <a href="#portfolio" className="btn-hero-primary">포트폴리오 보기 →</a>
+              <a href="#contact" className="btn-hero-line">문의하기</a>
             </div>
           </div>
         </div>
