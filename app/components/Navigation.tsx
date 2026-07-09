@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 
-const CREAM = "#F3F0EE";
-const DARK  = "#141413";
+const CREAM = "#F5F5F5";
+const DARK  = "#111111";
 const GOLD  = "#b8935a";
 
 export default function Navigation() {
@@ -38,8 +38,7 @@ export default function Navigation() {
       <div className="fixed top-0 left-0 right-0 z-50" style={{ height: "2px" }}>
         <div style={{
           width: `${scrollProgress}%`, height: "100%",
-          background: `linear-gradient(to right,${GOLD},#d4ad6e)`,
-          boxShadow: `0 0 8px rgba(184,147,90,0.4)`,
+          background: DARK,
           transition: "width .3s",
         }} />
       </div>
@@ -70,7 +69,7 @@ export default function Navigation() {
           {navItems.map(item => (
             <a key={item.href} href={item.href}
               style={{ fontSize: ".82rem", fontWeight: 500, color: "#262627", textDecoration: "none", letterSpacing: "-0.01em", transition: "color .2s", whiteSpace: "nowrap" }}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = GOLD}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = DARK}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "#262627"}
             >{item.label}</a>
           ))}

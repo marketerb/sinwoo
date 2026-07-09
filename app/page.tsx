@@ -3,15 +3,17 @@
 import Navigation from "./components/Navigation";
 import { useState, useEffect, useRef } from "react";
 
+/* 모노크롬 미니멀 — 골드는 극소량 액센트로만 사용 */
 const G = {
   gold: "#b8935a", gold2: "#d4ad6e", goldPale: "#faf5ec",
-  dark: "#141413",  /* Mastercard Ink Black */
-  dark2: "#2e2e36", muted: "#7a7a85",
-  light: "#F7F4F1",   /* Lifted Cream */
-  lighter: "#F3F0EE", /* Canvas Cream — Mastercard's signature warm putty */
-  border: "rgba(0,0,0,0.07)", borderGold: "rgba(184,147,90,0.2)",
+  dark: "#111111",
+  dark2: "#333333", muted: "#6b6b6b",
+  light: "#FAFAFA",
+  lighter: "#F5F5F5",
+  border: "rgba(0,0,0,0.08)", borderGold: "rgba(0,0,0,0.08)",
 };
-const gradText = { background: `linear-gradient(135deg,${G.gold},${G.gold2})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" } as React.CSSProperties;
+/* 구 골드 그라데이션 자리 — 모노크롬에서는 딥블랙 솔리드 */
+const gradText = { color: G.dark } as React.CSSProperties;
 
 /* SVG 아이콘 헬퍼 — Feather/Heroicons 스타일 라인 아이콘 */
 const Ico = ({ d, size = 28 }: { d: string | string[]; size?: number }) => (
@@ -43,15 +45,13 @@ const icons = {
 };
 
 export default function Home() {
-  const [portfolios, setPortfolios] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const statsRef = useRef<HTMLElement>(null);
   const [statsOn, setStatsOn] = useState(false);
   const [counts, setCounts] = useState({ y: 0, p: 0, u: 0, s: 0, b: 0 });
   const [showTop, setShowTop] = useState(false);
   const [company, setCompany] = useState<{ phone?: string; fax?: string; email?: string; address?: string; kakao_channel?: string } | null>(null);
 
-  useEffect(() => { fetchPortfolios(); fetchCompany(); }, []);
+  useEffect(() => { fetchCompany(); }, []);
 
   useEffect(() => {
     const el = statsRef.current;
@@ -70,18 +70,6 @@ export default function Home() {
     }, { threshold: 0.06 });
     items.forEach(el => io.observe(el));
     return () => io.disconnect();
-  }, [loading]);
-
-  useEffect(() => {
-    const c = document.getElementById("cur"), r = document.getElementById("curR");
-    if (!c || !r) return;
-    let mx = 0, my = 0, rx = 0, ry = 0;
-    const onMove = (e: MouseEvent) => { mx = e.clientX; my = e.clientY; c.style.left = mx + "px"; c.style.top = my + "px"; };
-    document.addEventListener("mousemove", onMove);
-    let af: number;
-    const anim = () => { rx += (mx - rx) * 0.1; ry += (my - ry) * 0.1; r.style.left = rx + "px"; r.style.top = ry + "px"; af = requestAnimationFrame(anim); };
-    af = requestAnimationFrame(anim);
-    return () => { document.removeEventListener("mousemove", onMove); cancelAnimationFrame(af); };
   }, []);
 
   /* 스크롤 탑버튼 표시 여부 */
@@ -104,27 +92,12 @@ export default function Home() {
     requestAnimationFrame(tick);
   }
 
-  async function fetchPortfolios() {
-    try {
-      const res = await fetch("/api/portfolios");
-      if (res.ok) setPortfolios((await res.json()) || []);
-    } catch { } finally { setLoading(false); }
-  }
-
   async function fetchCompany() {
     try {
       const res = await fetch("/api/company");
       if (res.ok) setCompany(await res.json());
     } catch { }
   }
-
-  const marqueeItems = ["분양대행", "부동산 개발 컨설팅", "투자자문", "개발 PM", "100% 성공 분양", "SINWOO Inc.", "분양대행", "부동산 개발 컨설팅", "투자자문", "개발 PM", "100% 성공 분양", "SINWOO Inc."];
-
-  const fallbackProjects = [
-    { title: "보라매 파르크힐", sub: "서울 동작구 · 7개동 768세대", img: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&auto=format&q=70" },
-    { title: "이문 아이파크자이 3단지", sub: "서울 동대문구 · 7개동 152세대", img: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600&auto=format&q=70" },
-    { title: "천안 힐스테이트 두정역", sub: "충남 천안시 · 11개동 997세대", img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&auto=format&q=70" },
-  ];
 
   /* 지명원(회사소개서) 기준 현장명 — 최신 연도 우선, ★ = 회사 연혁 마일스톤 */
   const timelineGroups: { year: string; items: { name: string; milestone?: boolean }[] }[] = [
@@ -142,14 +115,8 @@ export default function Home() {
     { year: "2015", items: [{ name: "배곧 힘찬헤리움1" }, { name: "마곡 프라이빗 타워2" }, { name: "동탄마크폴리스" }, { name: "안강프라이빗타워" }, { name: "하이앤드컴퍼니 설립", milestone: true }] },
   ];
 
-  const featuredProjects = portfolios.length > 0
-    ? portfolios.slice(0, 6).map(p => ({ title: p.title, sub: p.location, img: p.image_url || "" }))
-    : fallbackProjects;
-
   return (
     <div style={{ background: "#fff" }}>
-      <div className="cursor" id="cur" />
-      <div className="cursor-ring" id="curR" />
       <Navigation />
 
       {/* ─── HERO ─── */}
@@ -157,22 +124,16 @@ export default function Home() {
       <section
         id="home"
         className="flex flex-col justify-end relative overflow-hidden px-5 sm:px-10 md:px-12 pb-16 md:pb-20"
-        style={{ background: G.lighter, minHeight: "100vh", paddingTop: "100px" }}
+        style={{ background: "#fff", minHeight: "100svh", paddingTop: "100px" }}
       >
-        {/* Grid texture */}
-        <div className="absolute inset-0" style={{ backgroundImage: `linear-gradient(${G.border} 1px,transparent 1px),linear-gradient(90deg,${G.border} 1px,transparent 1px)`, backgroundSize: "80px 80px" }} />
-        {/* Ambient glow */}
-        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 80% 70% at 70% 30%,rgba(184,147,90,0.06) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 10% 70%,rgba(184,147,90,0.03) 0%,transparent 50%)" }} />
-
-        {/* Ghost Watermark — Mastercard signature: cream-on-cream large headline */}
+        {/* Ghost Watermark — 미니멀 시그니처: 뉴트럴 대형 타이포 */}
         <div className="absolute hidden lg:block" style={{
           top: "20%", left: 0, right: 0,
           fontSize: "clamp(80px,13vw,200px)", fontWeight: 900,
-          color: "#E5E0DB",
+          color: "#F2F2F2",
           letterSpacing: "-6px", lineHeight: 1,
           userSelect: "none", pointerEvents: "none",
           paddingLeft: "5vw", whiteSpace: "nowrap", overflow: "hidden",
-          fontFamily: "'Nanum Myeongjo',serif",
         }}>신우아이앤씨</div>
 
         {/* Side label */}
@@ -182,7 +143,7 @@ export default function Home() {
 
         {/* Scroll indicator */}
         <div className="absolute right-10 bottom-24 hidden lg:flex flex-col items-center gap-3">
-          <div style={{ width: "1px", height: "60px", background: `linear-gradient(to bottom,transparent,${G.gold})`, animation: "scrollLine 1.8s ease-in-out infinite" }} />
+          <div style={{ width: "1px", height: "60px", background: `linear-gradient(to bottom,transparent,${G.dark})`, animation: "scrollLine 1.8s ease-in-out infinite" }} />
           <span style={{ fontSize: ".6rem", color: G.muted }}>scroll</span>
         </div>
 
@@ -206,7 +167,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 flex-wrap">
             <p style={{ maxWidth: "380px", fontSize: ".92rem", color: G.muted, lineHeight: "1.9" }}>
               개발 컨설팅부터 분양대행, 투자자문, PM까지<br />
-              사업의 시작과 끝을 책임지는 <span style={{ color: G.gold, fontWeight: 600 }}>부동산 전문 파트너</span>입니다.
+              사업의 시작과 끝을 책임지는 <span style={{ color: G.dark, fontWeight: 700 }}>부동산 전문 파트너</span>입니다.
             </p>
             {/* Mastercard: Ink Black primary + outlined secondary */}
             <div className="flex gap-3 flex-wrap">
@@ -216,17 +177,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* ─── MARQUEE ─── */}
-      <div style={{ borderTop: `1px solid ${G.border}`, borderBottom: `1px solid ${G.border}`, padding: "16px 0", overflow: "hidden", background: "#fff" }}>
-        <div style={{ display: "flex", animation: "marqueeScroll 22s linear infinite", whiteSpace: "nowrap" }}>
-          {marqueeItems.map((item, i) => (
-            <div key={i} style={{ display: "inline-flex", alignItems: "center", gap: "20px", padding: "0 36px", fontSize: ".72rem", letterSpacing: "3px", textTransform: "uppercase", color: G.muted, whiteSpace: "nowrap" }}>
-              {item} <span style={{ color: G.gold }}>◆</span>
-            </div>
-          ))}
-        </div>
-      </div>
 
       {/* ─── STATS ─── */}
       <section ref={statsRef} style={{ background: "#fff", borderBottom: `1px solid ${G.border}`, padding: "clamp(48px,8vw,80px) clamp(20px,5vw,48px)" }}>
@@ -240,7 +190,7 @@ export default function Home() {
               { num: `${counts.b}`, unit: "개", label: "전문 영업본부" },
             ].map((s, i) => (
               <div key={i} className={`text-center ${i === 4 ? "col-span-2 md:col-span-1" : ""}`} style={{ padding: "clamp(20px,3.5vw,32px) 16px", borderRight: i < 4 ? `1px solid ${G.border}` : "none", transition: "background .3s", cursor: "default" }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = G.goldPale}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = G.light}
                 onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = ""}>
                 <div style={{ fontSize: "clamp(36px,4vw,60px)", fontWeight: 900, letterSpacing: "-3px", lineHeight: 1, ...gradText }}>
                   {s.num}<span style={{ fontSize: ".9rem", fontWeight: 400, color: G.muted, WebkitTextFillColor: G.muted }}>{s.unit}</span>
@@ -273,11 +223,11 @@ export default function Home() {
               <div className="s-tag">About SINWOO</div>
               <h2 className="s-title mb-7">신우아이앤씨<br /><span style={gradText}>소개</span></h2>
               <p style={{ fontSize: "1rem", color: G.muted, lineHeight: 2, marginBottom: "28px", maxWidth: "460px" }}>
-                <strong style={{ color: G.gold, fontWeight: 600 }}>주식회사 신우아이앤씨</strong>는 전문적인 지식과 경험을 바탕으로 고객의 가치와 신뢰를 최우선으로 삼는 <strong style={{ color: G.gold, fontWeight: 600 }}>전문 부동산 솔루션 프로바이더</strong>입니다.<br /><br />
+                <strong style={{ color: G.dark, fontWeight: 700 }}>주식회사 신우아이앤씨</strong>는 전문적인 지식과 경험을 바탕으로 고객의 가치와 신뢰를 최우선으로 삼는 <strong style={{ color: G.dark, fontWeight: 700 }}>전문 부동산 솔루션 프로바이더</strong>입니다.<br /><br />
                 시장분석, 개발기획, 투자자문, 분양마케팅, 프로젝트 관리까지 사업 전 과정의 통합 솔루션을 제공합니다.
               </p>
-              <div style={{ background: "#fff", border: `1px solid ${G.borderGold}`, padding: "20px 24px", borderRadius: "16px", boxShadow: `0 4px 20px rgba(184,147,90,0.06)`, marginBottom: "24px" }}>
-                <h3 style={{ fontSize: "1.1rem", fontStyle: "italic", fontFamily: "'Playfair Display',serif", color: G.gold, marginBottom: "6px" }}>"Above &amp; Beyond"</h3>
+              <div style={{ background: "#fff", border: `1px solid ${G.border}`, padding: "20px 24px", borderRadius: "16px", boxShadow: `0 4px 20px rgba(0,0,0,0.05)`, marginBottom: "24px" }}>
+                <h3 style={{ fontSize: "1.1rem", fontStyle: "italic", fontFamily: "'Playfair Display',serif", color: G.dark, marginBottom: "6px" }}>"Above &amp; Beyond"</h3>
                 <p style={{ fontSize: ".8rem", color: G.muted, lineHeight: "1.7" }}>기대를 뛰어넘다, 그 이상을 위해 최선을 다하는 신우아이앤씨의 약속입니다.</p>
               </div>
               {/* 회사 정보 필 — 비공개 처리 */}
@@ -291,9 +241,9 @@ export default function Home() {
                   { icon: icons.chat,   title: "커뮤니케이션", desc: "신속한 소통으로 프로젝트 가속화" },
                 ].map((item, i) => (
                   <div key={i} style={{ padding: "20px", borderRadius: "14px", background: "#fff", border: `1px solid ${G.border}`, transition: "all .3s" }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = G.borderGold; (e.currentTarget as HTMLElement).style.boxShadow = `0 4px 20px rgba(184,147,90,0.06)`; }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = G.borderGold; (e.currentTarget as HTMLElement).style.boxShadow = `0 4px 20px rgba(0,0,0,0.05)`; }}
                     onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = G.border; (e.currentTarget as HTMLElement).style.boxShadow = ""; }}>
-                    <div style={{ color: G.gold, marginBottom: "8px" }}>
+                    <div style={{ color: G.dark, marginBottom: "8px" }}>
                       <Ico d={item.icon} size={22} />
                     </div>
                     <div style={{ fontSize: ".82rem", fontWeight: 700, color: G.dark, marginBottom: "4px" }}>{item.title}</div>
@@ -301,7 +251,7 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              <div style={{ padding: "24px", background: G.goldPale, borderRadius: "14px", border: `1px solid ${G.borderGold}` }}>
+              <div style={{ padding: "24px", background: G.lighter, borderRadius: "14px", border: `1px solid ${G.border}` }}>
                 <div style={{ fontSize: ".72rem", letterSpacing: "2px", color: G.gold, textTransform: "uppercase", fontWeight: 700, marginBottom: "10px" }}>Why SINWOO?</div>
                 <div style={{ fontSize: ".82rem", color: G.dark2, lineHeight: "1.8" }}>
                   ✓ 10년+ 분양대행 전문 경험<br />
@@ -328,17 +278,10 @@ export default function Home() {
               현장 특성을 최적화한 맞춤형 전략으로 프로젝트의 성공을 이끕니다.
             </p>
           </div>
-          {/* Orbital arc decoration — thin gold curves connecting service cards */}
-          <div className="hidden md:block" style={{ position: "relative", height: "0", marginBottom: "0" }}>
-            <svg style={{ position: "absolute", top: "60px", left: 0, width: "100%", overflow: "visible", pointerEvents: "none", zIndex: 5 }} aria-hidden="true">
-              <path d="M 320 0 Q 600 -60 920 0" stroke="#d4ad6e" strokeWidth="1" fill="none" opacity="0.45" />
-              <path d="M 800 0 Q 950 80 980 180" stroke="#d4ad6e" strokeWidth="1" fill="none" opacity="0.3" />
-            </svg>
-          </div>
           <div className="bento">
             <div className="bc b1 fade-in-on-scroll">
               <div className="bc-num">01 / Distribution</div>
-              <div className="bc-icon" style={{ color: G.gold }}><Ico d={icons.building} size={38} /></div>
+              <div className="bc-icon" style={{ color: G.dark }}><Ico d={icons.building} size={38} /></div>
               <div className="bc-en">Distribution</div>
               <div className="bc-kr">분양대행</div>
               <p className="bc-desc">아파트, 오피스텔, 지식산업센터 등 현장특성에 적합한 마케팅 방식을 개발하고 전문 영업조직을 구성·운영하여 100% 성공 분양을 목표로 합니다.</p>
@@ -348,7 +291,7 @@ export default function Home() {
             </div>
             <div className="bc b2 fade-in-on-scroll" style={{ transitionDelay: "80ms" }}>
               <div className="bc-num">02 / Consulting</div>
-              <div className="bc-icon" style={{ color: G.gold }}><Ico d={icons.chartBars} size={38} /></div>
+              <div className="bc-icon" style={{ color: G.dark }}><Ico d={icons.chartBars} size={38} /></div>
               <div className="bc-en">Consulting</div>
               <div className="bc-kr">부동산 개발 컨설팅</div>
               <p className="bc-desc">최유효 이용분석과 가격분석을 통해 최적의 전략으로 고객 이익을 극대화합니다.</p>
@@ -358,7 +301,7 @@ export default function Home() {
             </div>
             <div className="bc b3 fade-in-on-scroll" style={{ transitionDelay: "160ms" }}>
               <div className="bc-num">03 / Investment</div>
-              <div className="bc-icon" style={{ color: G.gold }}><Ico d={icons.trendUp} size={38} /></div>
+              <div className="bc-icon" style={{ color: G.dark }}><Ico d={icons.trendUp} size={38} /></div>
               <div className="bc-en">Investment</div>
               <div className="bc-kr">부동산 투자자문</div>
               <p className="bc-desc">준공 전후 건축물 매입·매각을 위한 최적의 투자솔루션.</p>
@@ -368,7 +311,7 @@ export default function Home() {
             </div>
             <div className="bc b4 fade-in-on-scroll" style={{ transitionDelay: "240ms" }}>
               <div className="bc-num">04 / PM</div>
-              <div className="bc-icon" style={{ color: G.gold }}><Ico d={icons.clipboard} size={38} /></div>
+              <div className="bc-icon" style={{ color: G.dark }}><Ico d={icons.clipboard} size={38} /></div>
               <div className="bc-en">Project Management</div>
               <div className="bc-kr">부동산 개발 PM</div>
               <p className="bc-desc">사업지 선정부터 사후관리까지 프로젝트 전 과정 대행.</p>
@@ -378,7 +321,7 @@ export default function Home() {
             </div>
             <div className="bc b5 bc-highlight fade-in-on-scroll" style={{ transitionDelay: "320ms" }}>
               <div className="bc-num" style={{ color: G.gold }}>SINWOO VALUE</div>
-              <div style={{ color: G.gold, margin: "16px 0" }}><Ico d={icons.star} size={38} /></div>
+              <div style={{ color: G.dark, margin: "16px 0" }}><Ico d={icons.star} size={38} /></div>
               <div style={{ fontSize: "1rem", fontWeight: 700, color: G.dark, marginBottom: "10px", lineHeight: "1.4" }}>맞춤형 전략 ·<br />전문 네트워크</div>
               <div style={{ fontSize: ".78rem", color: G.muted, lineHeight: "1.8" }}>사람 · 공정 가치경영 · 네트워크 · 전도적 역량으로 모든 프로젝트에 최선을 다합니다.</div>
             </div>
@@ -392,10 +335,10 @@ export default function Home() {
           <div className="s-tag">분양대행 진행 절차</div>
           <h2 className="s-title mb-4">PROCESS</h2>
           <p style={{ fontSize: ".88rem", color: G.muted, lineHeight: "1.8", marginBottom: "48px", maxWidth: "560px" }}>
-            사업지 의뢰부터 계약·고객관리까지, 현장특성에 적합한 마케팅 방안을 개발하고 전문 영업조직을 구성·투입하여 <strong style={{ color: G.gold }}>100% 성공 분양</strong>을 목적으로 합니다.
+            사업지 의뢰부터 계약·고객관리까지, 현장특성에 적합한 마케팅 방안을 개발하고 전문 영업조직을 구성·투입하여 <strong style={{ color: G.dark }}>100% 성공 분양</strong>을 목적으로 합니다.
           </p>
           <div className="relative">
-            <div className="hidden md:block absolute top-9 left-[8.33%] right-[8.33%]" style={{ height: "1px", background: `linear-gradient(to right,${G.goldPale},${G.gold2},${G.goldPale})` }} />
+            <div className="hidden md:block absolute top-9 left-[8.33%] right-[8.33%]" style={{ height: "1px", background: `linear-gradient(to right,transparent,${G.border},transparent)` }} />
             <div className="grid grid-cols-2 md:grid-cols-6 gap-6 relative">
               {[
                 { s: "01", title: "분양대행 의뢰", desc: "업무범위 결정 · 대행계약 · 전담팀 구성", icon: icons.docCheck },
@@ -406,7 +349,7 @@ export default function Home() {
                 { s: "06", title: "분양운영·계약", desc: "청약·분양 상담 / 계약 / 고객관리", icon: icons.home },
               ].map((p, i) => (
                 <div key={i} className="flex flex-col items-center text-center fade-in-on-scroll" style={{ transitionDelay: `${i * 80}ms` }}>
-                  <div style={{ width: "72px", height: "72px", borderRadius: "50%", border: `1px solid ${G.borderGold}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "10px", background: G.goldPale, boxShadow: "0 4px 20px rgba(184,147,90,0.1)", transition: "transform .3s", cursor: "default", color: G.gold }}
+                  <div style={{ width: "72px", height: "72px", borderRadius: "50%", border: `1px solid ${G.border}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "10px", background: G.light, boxShadow: "0 4px 16px rgba(0,0,0,0.06)", transition: "transform .3s", cursor: "default", color: G.dark }}
                     onMouseEnter={e => (e.currentTarget as HTMLElement).style.transform = "scale(1.1)"}
                     onMouseLeave={e => (e.currentTarget as HTMLElement).style.transform = ""}>
                     <Ico d={p.icon} size={28} />
@@ -471,50 +414,13 @@ export default function Home() {
               </div>
             ))}
           </div>
-          {/* Circular portrait cards — Mastercard signature gesture */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-12">
-            {featuredProjects.map((p: any, i) => (
-              <div key={i} className="flex flex-col items-center text-center fade-in-on-scroll" style={{ transitionDelay: `${i * 80}ms` }}>
-                {/* Circle portrait + satellite CTA */}
-                <div style={{ position: "relative", width: "240px", height: "240px", margin: "0 auto" }}>
-                  <div style={{ width: "240px", height: "240px", borderRadius: "50%", overflow: "hidden", boxShadow: "rgba(0,0,0,0.08) 0px 24px 48px" }}>
-                    {p.img
-                      ? <img src={p.img} alt={p.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
-                      : <div style={{ width: "100%", height: "100%", background: `linear-gradient(135deg,${G.gold},${G.gold2})` }} />
-                    }
-                  </div>
-                  {/* Satellite CTA — white circle docked bottom-right */}
-                  <div style={{
-                    position: "absolute", bottom: "12px", right: "4px",
-                    width: "52px", height: "52px", borderRadius: "50%",
-                    background: "#fff",
-                    boxShadow: "0 6px 20px rgba(0,0,0,0.14)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    transition: "transform .3s, box-shadow .3s", cursor: "pointer",
-                  }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "scale(1.1)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 10px 28px rgba(0,0,0,0.18)"; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = ""; (e.currentTarget as HTMLElement).style.boxShadow = "0 6px 20px rgba(0,0,0,0.14)"; }}
-                  >
-                    <svg width="18" height="18" fill="none" stroke={G.dark} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                      <path d="M5 12h14M12 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </div>
-
-                {/* Eyebrow + title */}
-                <p style={{ fontSize: ".62rem", fontWeight: 700, color: G.gold, letterSpacing: "3px", textTransform: "uppercase", marginTop: "20px" }}>· 포트폴리오</p>
-                <p style={{ fontSize: "1rem", fontWeight: 700, color: G.dark, marginTop: "6px", lineHeight: "1.3" }}>{p.title}</p>
-                <p style={{ fontSize: ".75rem", color: G.muted, marginTop: "4px" }}>{p.sub || (p as any).location}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
       {/* ─── CEO MESSAGE ─── */}
       <section id="ceo-message" style={{ background: G.lighter, padding: "clamp(56px,9vw,88px) clamp(20px,5vw,48px)", borderTop: `1px solid ${G.border}` }}>
         <div className="max-w-4xl mx-auto fade-in-on-scroll">
-          <div style={{ background: "#fff", border: `1px solid ${G.borderGold}`, borderRadius: "24px", padding: "clamp(32px,5vw,64px)", boxShadow: "0 20px 60px rgba(184,147,90,0.06)" }}>
+          <div style={{ background: "#fff", border: `1px solid ${G.borderGold}`, borderRadius: "24px", padding: "clamp(32px,5vw,64px)", boxShadow: "0 20px 60px rgba(0,0,0,0.05)" }}>
             <div style={{ fontSize: ".65rem", letterSpacing: "4px", textTransform: "uppercase", color: G.gold, marginBottom: "20px", fontWeight: 700 }}>CEO MESSAGE</div>
             <h2 style={{ fontSize: "clamp(22px,3.5vw,42px)", fontWeight: 800, color: G.dark, lineHeight: "1.3", marginBottom: "24px", fontStyle: "italic", fontFamily: "'Nanum Myeongjo','Playfair Display',serif" }}>
               "고객의 성공이 곧 우리의 성장입니다."
@@ -540,25 +446,27 @@ export default function Home() {
               <div className="s-tag">Contact</div>
               <h2 className="s-title mb-10">오시는 <span style={gradText}>길</span></h2>
               <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "24px" }}>
-                {/* 전화 — DB에서 읽거나 없으면 팩스 표시 */}
-                {(company?.phone) && (
-                  <div className="cc-card">
-                    <div className="cc-icon" style={{ color: G.gold }}><Ico d={icons.mail} size={20} /></div>
-                    <div>
-                      <div className="cc-label">전화</div>
-                      <a href={`tel:${company.phone.replace(/[^0-9]/g,"")}`} className="cc-val" style={{ textDecoration: "none" }}>{company.phone}</a>
-                    </div>
-                  </div>
-                )}
+                {/* 전화 — DB 값 우선, 없으면 대표번호 */}
                 <div className="cc-card">
-                  <div className="cc-icon" style={{ color: G.gold }}><Ico d={icons.printer} size={20} /></div>
+                  <div className="cc-icon" style={{ color: G.dark }}>
+                    <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                      <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.64A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.91a16 16 0 006.18 6.18l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="cc-label">대표전화</div>
+                    <a href={`tel:${(company?.phone || "1877-8489").replace(/[^0-9]/g,"")}`} className="cc-val" style={{ textDecoration: "none", fontWeight: 700 }}>{company?.phone || "1877-8489"}</a>
+                  </div>
+                </div>
+                <div className="cc-card">
+                  <div className="cc-icon" style={{ color: G.dark }}><Ico d={icons.printer} size={20} /></div>
                   <div>
                     <div className="cc-label">Fax</div>
                     <div className="cc-val">{company?.fax || "02-6941-0884"}</div>
                   </div>
                 </div>
                 <div className="cc-card">
-                  <div className="cc-icon" style={{ color: G.gold }}><Ico d={icons.mail} size={20} /></div>
+                  <div className="cc-icon" style={{ color: G.dark }}><Ico d={icons.mail} size={20} /></div>
                   <div>
                     <div className="cc-label">Email</div>
                     <a href={`mailto:${company?.email || "sinwooinc2014@naver.com"}`} className="cc-val" style={{ textDecoration: "none" }}>
@@ -567,7 +475,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="cc-card">
-                  <div className="cc-icon" style={{ color: G.gold }}><Ico d={icons.mapPin} size={20} /></div>
+                  <div className="cc-icon" style={{ color: G.dark }}><Ico d={icons.mapPin} size={20} /></div>
                   <div>
                     <div className="cc-label">Location</div>
                     <div className="cc-val" style={{ whiteSpace: "pre-line" }}>
@@ -587,10 +495,10 @@ export default function Home() {
                 {/* 지도 플레이스홀더 (배경 이미지 스타일) */}
                 <div style={{
                   height: "240px",
-                  background: `linear-gradient(135deg,${G.goldPale} 0%,#f0e8d8 100%)`,
+                  background: G.lighter,
                   backgroundImage: `
-                    linear-gradient(rgba(184,147,90,0.06) 1px,transparent 1px),
-                    linear-gradient(90deg,rgba(184,147,90,0.06) 1px,transparent 1px)`,
+                    linear-gradient(rgba(0,0,0,0.05) 1px,transparent 1px),
+                    linear-gradient(90deg,rgba(0,0,0,0.05) 1px,transparent 1px)`,
                   backgroundSize: "30px 30px",
                   display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: "12px",
                   position: "relative"
@@ -598,8 +506,8 @@ export default function Home() {
                   {/* 핀 마커 */}
                   <div style={{
                     width: "48px", height: "48px", borderRadius: "50%",
-                    background: G.gold, display: "flex", alignItems: "center", justifyContent: "center",
-                    color: "#fff", boxShadow: `0 0 0 12px rgba(184,147,90,0.12)`,
+                    background: G.dark, display: "flex", alignItems: "center", justifyContent: "center",
+                    color: "#fff", boxShadow: `0 0 0 12px rgba(0,0,0,0.06)`,
                     animation: "pulseBadge 2s ease infinite"
                   }}>
                     <Ico d={icons.mapPin} size={24} />
@@ -684,6 +592,7 @@ export default function Home() {
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "16px", fontSize: ".68rem", color: "rgba(255,255,255,0.25)" }}>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
+              <span>대표전화 1877-8489</span>
               <span>사업자등록번호 192-88-02038</span>
               <span>법인등록번호 110111-7898799</span>
               <span>대표 임중용</span>
@@ -694,10 +603,10 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* ─── 모바일 전화 바로걸기 (전화번호 설정된 경우만 표시) ─── */}
-      {company?.phone && (
+      {/* ─── 모바일 전화 바로걸기 ─── */}
+      {(
         <a
-          href={`tel:${company.phone.replace(/[^0-9]/g, "")}`}
+          href={`tel:${(company?.phone || "1877-8489").replace(/[^0-9]/g, "")}`}
           className="md:hidden"
           style={{
             position: "fixed", bottom: "88px", right: "28px", zIndex: 99,
@@ -726,16 +635,16 @@ export default function Home() {
         style={{
           position: "fixed", bottom: "28px", right: "28px", zIndex: 99,
           width: "48px", height: "48px", borderRadius: "50%",
-          background: G.gold, color: "#fff", border: "none",
-          boxShadow: "0 8px 24px rgba(184,147,90,0.35)",
+          background: G.dark, color: "#fff", border: "none",
+          boxShadow: "0 8px 24px rgba(0,0,0,0.25)",
           cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
           transition: "opacity .4s, transform .4s, box-shadow .3s",
           opacity: showTop ? 1 : 0,
           transform: showTop ? "translateY(0) scale(1)" : "translateY(16px) scale(0.85)",
           pointerEvents: showTop ? "auto" : "none",
         }}
-        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-4px) scale(1.08)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 14px 32px rgba(184,147,90,0.45)"; }}
-        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = showTop ? "translateY(0) scale(1)" : "translateY(16px) scale(0.85)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(184,147,90,0.35)"; }}
+        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-4px) scale(1.08)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 14px 32px rgba(0,0,0,0.32)"; }}
+        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = showTop ? "translateY(0) scale(1)" : "translateY(16px) scale(0.85)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(0,0,0,0.25)"; }}
       >
         <Ico d={icons.chevronUp} size={20} />
       </button>
