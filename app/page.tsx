@@ -49,7 +49,7 @@ export default function Home() {
   const [statsOn, setStatsOn] = useState(false);
   const [counts, setCounts] = useState({ y: 0, p: 0, u: 0, s: 0, b: 0 });
   const [showTop, setShowTop] = useState(false);
-  const [company, setCompany] = useState<{ phone?: string; fax?: string; email?: string; address?: string; kakao_channel?: string } | null>(null);
+  const [company, setCompany] = useState<{ phone?: string; email?: string; address?: string; kakao_channel?: string } | null>(null);
   /* 히어로 배경영상 — 모바일은 경량 SD, 데스크톱은 HD (마운트 후 선택해 불필요 다운로드 방지) */
   const [heroVideo, setHeroVideo] = useState<string | null>(null);
 
@@ -475,13 +475,6 @@ export default function Home() {
                   <div>
                     <div className="cc-label">대표전화</div>
                     <a href={`tel:${(company?.phone || "1877-8489").replace(/[^0-9]/g,"")}`} className="cc-val" style={{ textDecoration: "none", fontWeight: 700 }}>{company?.phone || "1877-8489"}</a>
-                  </div>
-                </div>
-                <div className="cc-card">
-                  <div className="cc-icon" style={{ color: G.dark }}><Ico d={icons.printer} size={20} /></div>
-                  <div>
-                    <div className="cc-label">Fax</div>
-                    <div className="cc-val">{company?.fax || "02-6941-0884"}</div>
                   </div>
                 </div>
                 <div className="cc-card">
