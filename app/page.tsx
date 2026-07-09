@@ -92,7 +92,8 @@ export default function Home() {
   }, []);
 
   function animateCounts() {
-    const targets = { y: 10, p: 40, u: 12000, s: 100, b: 6 };
+    /* 지명원 기준: 2015~2026 진행 프로젝트 32건, 확인 가능 분양 세대·실 11,000+ */
+    const targets = { y: 10, p: 30, u: 11000, s: 100, b: 6 };
     const dur = 1500, start = Date.now();
     const tick = () => {
       const p = Math.min((Date.now() - start) / dur, 1);
@@ -121,27 +122,24 @@ export default function Home() {
 
   const fallbackProjects = [
     { title: "보라매 파르크힐", sub: "서울 동작구 · 7개동 768세대", img: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&auto=format&q=70" },
-    { title: "이문 아이파크 자이 3단지", sub: "서울 동대문구 · 7개동 152세대", img: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600&auto=format&q=70" },
+    { title: "이문 아이파크자이 3단지", sub: "서울 동대문구 · 7개동 152세대", img: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600&auto=format&q=70" },
     { title: "천안 힐스테이트 두정역", sub: "충남 천안시 · 11개동 997세대", img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&auto=format&q=70" },
   ];
 
-  const timeline = [
-    { year: "2026", name: "힐스테이트 회룡역파크뷰" },
-    { year: "2025", name: "보라매 파르크힐" }, { year: "2025", name: "이문 아이파크 자이 3단지" },
-    { year: "2025", name: "천안 힐스테이트 두정역" },
-    { year: "2024", name: "이이 헤리든 (지역주택조합)" }, { year: "2024", name: "신광교 클라우드시티" },
-    { year: "2024", name: "신길 AK 푸르지오" },
-    { year: "2023", name: "상도 트르지스 클라베뉴" }, { year: "2023", name: "수원 세마 헤드프리미어원 퍼스" },
-    { year: "2022", name: "포항 아이파크" },
-    { year: "2021", name: "마곡 르웨스트" }, { year: "2021", name: "마곡 그레이스" },
-    { year: "2020", name: "블루지 주차빌딩" },
-    { year: "2019", name: "조림 켄트내폴" },
-    { year: "2018", name: "마곡지구 마그793" }, { year: "2018", name: "마곡 M타임" },
-    { year: "2017", name: "인터라식 헤리온 메트로파크" }, { year: "2017", name: "위례 스카이아이파리스" },
-    { year: "2016", name: "마곡문정테크노 9·10" }, { year: "2016", name: "배곧한국리조트 2차" },
-    { year: "2015", name: "배곧한국리조트 1차" }, { year: "2015", name: "마곡 프라임뷰 2차" },
-    { year: "2015", name: "대한마크포리스" }, { year: "2015", name: "여의도프라임뷰 1차" },
-    { year: "2014", name: "마곡힐스테이트 M&L라마다" },
+  /* 지명원(회사소개서) 기준 현장명 — 최신 연도 우선, ★ = 회사 연혁 마일스톤 */
+  const timelineGroups: { year: string; items: { name: string; milestone?: boolean }[] }[] = [
+    { year: "2026", items: [{ name: "힐스테이트 회룡역파크뷰" }] },
+    { year: "2025", items: [{ name: "동작구 보라매 파르크힐" }, { name: "이문 아이파크자이 3단지" }, { name: "천안 힐스테이트 두정역" }] },
+    { year: "2024", items: [{ name: "이수 헤리드" }, { name: "신광교 클라우드시티" }, { name: "신길 AK 푸르지오" }] },
+    { year: "2023", items: [{ name: "상도 푸르지오 클라베뉴" }, { name: "한화 포레나 인천학익" }, { name: "오산 세마 현대프리미어 캠퍼스" }] },
+    { year: "2022", items: [{ name: "지축 아쿠아테라스몰" }, { name: "포항 아이파크" }] },
+    { year: "2021", items: [{ name: "마곡 르웨스트" }, { name: "마곡 그랑시엘" }, { name: "신우아이앤씨 설립", milestone: true }] },
+    { year: "2020", items: [{ name: "블루원 주차타워" }] },
+    { year: "2019", items: [{ name: "김포 상미공단 센트럴 팩토리움" }, { name: "송림센트럴타워" }] },
+    { year: "2018", items: [{ name: "마곡지구 매그넘793" }, { name: "마곡 M타워" }] },
+    { year: "2017", items: [{ name: "해운대 뷰띠크테라스 호텔" }, { name: "인하대 헤리움 메트로타워" }, { name: "영종도 스카이파크리움" }, { name: "하이앤드컴퍼니 법인변경", milestone: true }] },
+    { year: "2016", items: [{ name: "가산 경우 유미어스" }, { name: "에이스네스트빌" }, { name: "충북혁신도시 밀라움" }, { name: "마곡 문영퀸즈파크10" }, { name: "마곡 문영퀸즈파크9" }, { name: "배곧 힘찬헤리움2" }] },
+    { year: "2015", items: [{ name: "배곧 힘찬헤리움1" }, { name: "마곡 프라이빗 타워2" }, { name: "동탄마크폴리스" }, { name: "안강프라이빗타워" }, { name: "하이앤드컴퍼니 설립", milestone: true }] },
   ];
 
   const featuredProjects = portfolios.length > 0
@@ -231,17 +229,17 @@ export default function Home() {
       </div>
 
       {/* ─── STATS ─── */}
-      <section ref={statsRef} style={{ background: "#fff", borderBottom: `1px solid ${G.border}`, padding: "80px 48px" }}>
+      <section ref={statsRef} style={{ background: "#fff", borderBottom: `1px solid ${G.border}`, padding: "clamp(48px,8vw,80px) clamp(20px,5vw,48px)" }}>
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-5">
             {[
               { num: `${counts.y}`, unit: "+", label: "경력 (Years)" },
               { num: `${counts.p}`, unit: "+", label: "프로젝트 실적" },
-              { num: counts.u.toLocaleString(), unit: "+", label: "총 분양 세대수" },
+              { num: counts.u.toLocaleString(), unit: "+", label: "누적 분양 세대·실" },
               { num: `${counts.s}`, unit: "%", label: "성공 분양 목표" },
               { num: `${counts.b}`, unit: "개", label: "전문 영업본부" },
             ].map((s, i) => (
-              <div key={i} className="text-center" style={{ padding: "32px 16px", borderRight: i < 4 ? `1px solid ${G.border}` : "none", transition: "background .3s", cursor: "default" }}
+              <div key={i} className={`text-center ${i === 4 ? "col-span-2 md:col-span-1" : ""}`} style={{ padding: "clamp(20px,3.5vw,32px) 16px", borderRight: i < 4 ? `1px solid ${G.border}` : "none", transition: "background .3s", cursor: "default" }}
                 onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = G.goldPale}
                 onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = ""}>
                 <div style={{ fontSize: "clamp(36px,4vw,60px)", fontWeight: 900, letterSpacing: "-3px", lineHeight: 1, ...gradText }}>
@@ -254,10 +252,23 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ─── PARTNER BRANDS ─── */}
+      <section style={{ background: G.lighter, borderBottom: `1px solid ${G.border}`, padding: "clamp(40px,6vw,56px) clamp(20px,5vw,48px)" }}>
+        <div className="max-w-7xl mx-auto text-center">
+          <div style={{ fontSize: ".65rem", letterSpacing: "3px", color: G.gold, textTransform: "uppercase", fontWeight: 700, marginBottom: "6px" }}>Partners</div>
+          <p style={{ fontSize: ".85rem", color: G.muted, marginBottom: "28px" }}>신우아이앤씨가 분양을 함께한 주요 브랜드</p>
+          <div className="brand-strip">
+            {["힐스테이트", "아이파크", "자이 Xi", "푸르지오", "한화 포레나", "두산위브", "힘찬건설", "문영건설", "현대 프리미어캠퍼스", "마크폴리스"].map((b, i) => (
+              <span key={i} className="brand-chip fade-in-on-scroll" style={{ transitionDelay: `${i * 40}ms` }}>{b}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ─── ABOUT ─── */}
-      <section id="about" style={{ background: G.light, padding: "88px 48px" }}>
+      <section id="about" style={{ background: G.light, padding: "clamp(56px,9vw,88px) clamp(20px,5vw,48px)" }}>
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-20 items-start">
+          <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-start">
             <div className="fade-in-on-scroll">
               <div className="s-tag">About SINWOO</div>
               <h2 className="s-title mb-7">신우아이앤씨<br /><span style={gradText}>소개</span></h2>
@@ -275,7 +286,7 @@ export default function Home() {
               <div className="grid grid-cols-2 gap-3 mb-5">
                 {[
                   { icon: icons.layers, title: "맞춤형 전략", desc: "프로젝트별 최적 전략과 이용기획" },
-                  { icon: icons.award,  title: "풍부한 경험", desc: "10년 40건+ 성공 프로젝트 노하우" },
+                  { icon: icons.award,  title: "풍부한 경험", desc: "10년 30건+ 성공 프로젝트 노하우" },
                   { icon: icons.share,  title: "전문 네트워크", desc: "건설사·시행사 전문 협력 네트워크" },
                   { icon: icons.chat,   title: "커뮤니케이션", desc: "신속한 소통으로 프로젝트 가속화" },
                 ].map((item, i) => (
@@ -294,7 +305,7 @@ export default function Home() {
                 <div style={{ fontSize: ".72rem", letterSpacing: "2px", color: G.gold, textTransform: "uppercase", fontWeight: 700, marginBottom: "10px" }}>Why SINWOO?</div>
                 <div style={{ fontSize: ".82rem", color: G.dark2, lineHeight: "1.8" }}>
                   ✓ 10년+ 분양대행 전문 경험<br />
-                  ✓ 40건+ 성공 프로젝트 실적<br />
+                  ✓ 30건+ 성공 프로젝트 실적<br />
                   ✓ 6개 전문 영업본부 보유<br />
                   ✓ 대형 건설 브랜드 협력 이력<br />
                   ✓ 성공 분양 100% 목표의식
@@ -306,7 +317,7 @@ export default function Home() {
       </section>
 
       {/* ─── SERVICES BENTO ─── */}
-      <section id="business" style={{ background: "#fff", padding: "88px 48px" }}>
+      <section id="business" style={{ background: "#fff", padding: "clamp(56px,9vw,88px) clamp(20px,5vw,48px)" }}>
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-end flex-wrap gap-6 mb-12">
             <div>
@@ -376,20 +387,23 @@ export default function Home() {
       </section>
 
       {/* ─── PROCESS ─── */}
-      <section id="process" style={{ background: G.light, padding: "88px 48px" }}>
+      <section id="process" style={{ background: G.light, padding: "clamp(56px,9vw,88px) clamp(20px,5vw,48px)" }}>
         <div className="max-w-7xl mx-auto">
-          <div className="s-tag">진행 절차</div>
-          <h2 className="s-title mb-12">PROCESS</h2>
+          <div className="s-tag">분양대행 진행 절차</div>
+          <h2 className="s-title mb-4">PROCESS</h2>
+          <p style={{ fontSize: ".88rem", color: G.muted, lineHeight: "1.8", marginBottom: "48px", maxWidth: "560px" }}>
+            사업지 의뢰부터 계약·고객관리까지, 현장특성에 적합한 마케팅 방안을 개발하고 전문 영업조직을 구성·투입하여 <strong style={{ color: G.gold }}>100% 성공 분양</strong>을 목적으로 합니다.
+          </p>
           <div className="relative">
             <div className="hidden md:block absolute top-9 left-[8.33%] right-[8.33%]" style={{ height: "1px", background: `linear-gradient(to right,${G.goldPale},${G.gold2},${G.goldPale})` }} />
             <div className="grid grid-cols-2 md:grid-cols-6 gap-6 relative">
               {[
-                { s: "01", title: "시장조사",   icon: icons.search },
-                { s: "02", title: "사업성 검토", icon: icons.docCheck },
-                { s: "03", title: "전략수립",   icon: icons.target },
-                { s: "04", title: "마케팅기획", icon: icons.megaphone },
-                { s: "05", title: "분양운영",   icon: icons.home },
-                { s: "06", title: "사후관리",   icon: icons.shield },
+                { s: "01", title: "분양대행 의뢰", desc: "업무범위 결정 · 대행계약 · 전담팀 구성", icon: icons.docCheck },
+                { s: "02", title: "환경분석·검토", desc: "입지환경 · 관련법규 · 사업타당성", icon: icons.search },
+                { s: "03", title: "타겟 설정",     desc: "표적시장 선정 · 상품 컨셉 · 수요측정", icon: icons.target },
+                { s: "04", title: "마케팅 전략수립", desc: "상품 차별화 · 광고홍보 기획 · DB확보", icon: icons.chartBars },
+                { s: "05", title: "사전 마케팅",   desc: "사업설명회 · 가망고객 확보 · 홍보", icon: icons.megaphone },
+                { s: "06", title: "분양운영·계약", desc: "청약·분양 상담 / 계약 / 고객관리", icon: icons.home },
               ].map((p, i) => (
                 <div key={i} className="flex flex-col items-center text-center fade-in-on-scroll" style={{ transitionDelay: `${i * 80}ms` }}>
                   <div style={{ width: "72px", height: "72px", borderRadius: "50%", border: `1px solid ${G.borderGold}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "10px", background: G.goldPale, boxShadow: "0 4px 20px rgba(184,147,90,0.1)", transition: "transform .3s", cursor: "default", color: G.gold }}
@@ -398,7 +412,31 @@ export default function Home() {
                     <Ico d={p.icon} size={28} />
                   </div>
                   <p style={{ fontSize: ".65rem", color: G.gold, fontWeight: 700, letterSpacing: "1px", marginBottom: "4px" }}>STEP {p.s}</p>
-                  <p style={{ fontSize: ".8rem", fontWeight: 700, color: G.dark }}>{p.title}</p>
+                  <p style={{ fontSize: ".82rem", fontWeight: 700, color: G.dark, marginBottom: "4px" }}>{p.title}</p>
+                  <p style={{ fontSize: ".68rem", color: G.muted, lineHeight: "1.6" }}>{p.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 조직 구성 — 지명원 조직도 반영 */}
+          <div style={{ marginTop: "56px", background: "#fff", border: `1px solid ${G.border}`, borderRadius: "20px", padding: "clamp(24px,4vw,36px)" }} className="fade-in-on-scroll">
+            <div style={{ fontSize: ".65rem", letterSpacing: "3px", color: G.gold, textTransform: "uppercase", fontWeight: 700, marginBottom: "8px" }}>Organization</div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "12px", marginBottom: "20px" }}>
+              <p style={{ fontSize: "1.05rem", fontWeight: 700, color: G.dark }}>현장에 투입되는 전문 조직</p>
+              <p style={{ fontSize: ".78rem", color: G.muted }}>대표이사 직속 개발사업부·마케팅기획부 + 6개 전문 영업본부</p>
+            </div>
+            <div className="org-grid">
+              {[
+                { t: "개발사업부", d: "시장조사 · 타당성조사 · 사업제안 · 부동산개발·시행" },
+                { t: "마케팅기획부", d: "분양대행 전문 마케팅 기획" },
+                { t: "영업관리팀", d: "영업본부 운영 · 계약 관리" },
+                { t: "영업 1~6본부", d: "현장별 전문 영업조직 구성·투입" },
+                { t: "법률·세무 고문", d: "프로젝트 리스크 자문" },
+              ].map((o, i) => (
+                <div key={i} className="org-card">
+                  <div style={{ fontSize: ".85rem", fontWeight: 700, color: G.dark, marginBottom: "4px" }}>{o.t}</div>
+                  <div style={{ fontSize: ".72rem", color: G.muted, lineHeight: "1.6" }}>{o.d}</div>
                 </div>
               ))}
             </div>
@@ -407,7 +445,7 @@ export default function Home() {
       </section>
 
       {/* ─── PORTFOLIO ─── */}
-      <section id="portfolio" style={{ background: G.light, padding: "88px 48px", borderTop: `1px solid ${G.border}` }}>
+      <section id="portfolio" style={{ background: G.light, padding: "clamp(56px,9vw,88px) clamp(20px,5vw,48px)", borderTop: `1px solid ${G.border}` }}>
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-end flex-wrap gap-6 mb-12">
             <div>
@@ -415,19 +453,23 @@ export default function Home() {
               <h2 className="s-title">사업 <span style={gradText}>실적</span></h2>
             </div>
             <div style={{ fontSize: "clamp(50px,7vw,90px)", fontWeight: 900, letterSpacing: "-4px", lineHeight: 1, ...gradText }}>
-              40<span style={{ fontSize: "1rem", color: G.muted, WebkitTextFillColor: G.muted, letterSpacing: 0, fontWeight: 400 }}>+ Projects</span>
+              30<span style={{ fontSize: "1rem", color: G.muted, WebkitTextFillColor: G.muted, letterSpacing: 0, fontWeight: 400 }}>+ Projects</span>
             </div>
           </div>
-          <div style={{ background: "#fff", borderRadius: "20px", border: `1px solid ${G.border}`, padding: "28px 32px", marginBottom: "40px" }}>
-            <div style={{ fontSize: ".65rem", letterSpacing: "3px", color: G.gold, textTransform: "uppercase", marginBottom: "16px", fontWeight: 700 }}>▸ 2014 → 2026 전체 진행 프로젝트</div>
-            <div className="tl-grid">
-              {timeline.map((item, i) => (
-                <div key={i} className="tl-item">
-                  <span className="tl-yr">{item.year}</span>
-                  <span className="tl-name">{item.name}</span>
+          <div style={{ background: "#fff", borderRadius: "20px", border: `1px solid ${G.border}`, padding: "clamp(20px,4vw,32px)", marginBottom: "40px" }}>
+            <div style={{ fontSize: ".65rem", letterSpacing: "3px", color: G.gold, textTransform: "uppercase", marginBottom: "20px", fontWeight: 700 }}>▸ 2015 → 2026 전체 진행 프로젝트</div>
+            {timelineGroups.map((group) => (
+              <div key={group.year} className="tl-group fade-in-on-scroll">
+                <div className="tl-group-year">{group.year}</div>
+                <div className="tl-group-items">
+                  {group.items.map((item, i) => (
+                    <span key={i} className={item.milestone ? "tl-chip tl-chip-milestone" : "tl-chip"}>
+                      {item.milestone && "◆ "}{item.name}
+                    </span>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
           {/* Circular portrait cards — Mastercard signature gesture */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-12">
@@ -470,7 +512,7 @@ export default function Home() {
       </section>
 
       {/* ─── CEO MESSAGE ─── */}
-      <section id="ceo-message" style={{ background: G.lighter, padding: "88px 48px", borderTop: `1px solid ${G.border}` }}>
+      <section id="ceo-message" style={{ background: G.lighter, padding: "clamp(56px,9vw,88px) clamp(20px,5vw,48px)", borderTop: `1px solid ${G.border}` }}>
         <div className="max-w-4xl mx-auto fade-in-on-scroll">
           <div style={{ background: "#fff", border: `1px solid ${G.borderGold}`, borderRadius: "24px", padding: "clamp(32px,5vw,64px)", boxShadow: "0 20px 60px rgba(184,147,90,0.06)" }}>
             <div style={{ fontSize: ".65rem", letterSpacing: "4px", textTransform: "uppercase", color: G.gold, marginBottom: "20px", fontWeight: 700 }}>CEO MESSAGE</div>
@@ -489,9 +531,9 @@ export default function Home() {
       </section>
 
       {/* ─── CONTACT ─── */}
-      <section id="contact" style={{ background: "#fff", padding: "88px 48px" }}>
+      <section id="contact" style={{ background: "#fff", padding: "clamp(56px,9vw,88px) clamp(20px,5vw,48px)" }}>
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-16">
+          <div className="grid md:grid-cols-2 gap-12 md:gap-16">
 
             {/* 연락처 + 네이버 지도 */}
             <div className="fade-in-on-scroll">
@@ -589,7 +631,7 @@ export default function Home() {
             {/* 상담 신청 폼 */}
             <div className="fade-in-on-scroll" style={{ transitionDelay: "150ms" }}>
               <h3 style={{ fontSize: "1.2rem", fontWeight: 700, color: G.dark, marginBottom: "24px" }}>무료 상담 신청</h3>
-              <div style={{ background: "#fff", border: `1px solid ${G.border}`, borderRadius: "20px", padding: "40px" }}>
+              <div style={{ background: "#fff", border: `1px solid ${G.border}`, borderRadius: "20px", padding: "clamp(24px,5vw,40px)" }}>
                 <form className="space-y-4" onSubmit={e => { e.preventDefault(); alert("상담 신청이 완료되었습니다.\n담당자가 24시간 내 연락드리겠습니다.\n\n감사합니다. — 신우아이앤씨"); }}>
                   <div><label className="form-label">성함 / 회사명</label><input type="text" className="form-input" placeholder="예) ○○건설 홍길동 부장" required /></div>
                   <div><label className="form-label">연락처</label><input type="tel" className="form-input" placeholder="010-0000-0000" required /></div>
@@ -625,7 +667,7 @@ export default function Home() {
       </section>
 
       {/* ─── FOOTER ─── */}
-      <footer style={{ background: G.dark, padding: "48px", color: "rgba(255,255,255,0.5)" }}>
+      <footer style={{ background: G.dark, padding: "clamp(32px,6vw,48px) clamp(20px,5vw,48px)", color: "rgba(255,255,255,0.5)" }}>
         <div className="max-w-7xl mx-auto">
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "40px", marginBottom: "32px", paddingBottom: "32px", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
             <div>

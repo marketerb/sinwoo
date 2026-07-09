@@ -175,12 +175,48 @@ body {
 .ip-val { font-size: .85rem; color: var(--dark); line-height: 1.5; }
 .ip-gold { border-color: var(--border-gold); background: var(--gold-pale); }
 
-/* === PORTFOLIO TIMELINE === */
-.tl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 2px 16px; }
-.tl-item { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,0.03); cursor: default; }
-.tl-item:hover .tl-name { color: var(--gold); }
-.tl-yr { font-size: .65rem; color: var(--gold); font-weight: 700; min-width: 30px; }
-.tl-name { font-size: .75rem; color: var(--muted); transition: color .2s; }
+/* === PORTFOLIO TIMELINE — 연도별 그룹 === */
+.tl-group { display: flex; align-items: flex-start; gap: 20px; padding: 14px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
+.tl-group:last-child { border-bottom: none; }
+.tl-group-year {
+  min-width: 58px; flex-shrink: 0; padding-top: 4px;
+  font-size: 1.05rem; font-weight: 900; letter-spacing: -0.5px;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.tl-group-items { display: flex; flex-wrap: wrap; gap: 8px; }
+.tl-chip {
+  padding: 7px 14px; border-radius: 100px;
+  background: var(--light); border: 1px solid var(--border);
+  font-size: .78rem; color: var(--dark2); line-height: 1.4;
+  transition: all .25s; cursor: default;
+}
+.tl-chip:hover { border-color: var(--border-gold); background: var(--gold-pale); color: var(--gold); }
+.tl-chip-milestone {
+  background: var(--gold-pale); border-color: var(--border-gold);
+  color: var(--gold); font-weight: 700;
+}
+
+/* === PARTNER BRANDS === */
+.brand-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 12px; }
+.brand-chip {
+  padding: 12px 26px; border-radius: 100px;
+  background: #fff; border: 1px solid var(--border);
+  font-size: .88rem; font-weight: 700; letter-spacing: -0.3px;
+  color: var(--dark2); font-family: var(--font-heading);
+  transition: all .3s; cursor: default;
+}
+.brand-chip:hover { border-color: var(--border-gold); color: var(--gold); box-shadow: 0 6px 20px rgba(184,147,90,0.12); transform: translateY(-2px); }
+
+/* === ORGANIZATION === */
+.org-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+.org-card {
+  padding: 16px 18px; border-radius: 12px;
+  background: var(--light); border: 1px solid var(--border);
+  transition: border-color .3s;
+}
+.org-card:hover { border-color: var(--border-gold); }
 
 /* === CONTACT CARDS === */
 .cc-card {
@@ -234,5 +270,40 @@ html { scroll-behavior: smooth; }
 @media (max-width: 768px) {
   .bento { grid-template-columns: 1fr; }
   .b1, .b2, .b3, .b4, .b5 { grid-column: span 1; }
-  .tl-grid { grid-template-columns: 1fr; }
+
+  /* Mobile font size increases */
+  html { font-size: 17px; }
+  body { font-size: 1rem; line-height: 1.8; }
+
+  .s-tag { font-size: .75rem; }
+  .s-title { font-size: clamp(26px, 7vw, 38px); letter-spacing: -1px; }
+
+  .bc { padding: 26px 22px; }
+  .bc-kr { font-size: 1.45rem; }
+  .b1 .bc-kr { font-size: 1.7rem; }
+  .bc-desc { font-size: .9rem; }
+  .bc-num { font-size: .72rem; margin-bottom: 18px; }
+  .bc-en { font-size: .72rem; }
+
+  /* 연도별 타임라인 — 모바일: 연도 위, 현장 칩 아래 */
+  .tl-group { flex-direction: column; gap: 8px; padding: 16px 0; }
+  .tl-group-year { min-width: 0; padding-top: 0; font-size: 1.15rem; }
+  .tl-chip { font-size: .85rem; padding: 8px 15px; }
+
+  .brand-chip { font-size: .85rem; padding: 11px 20px; }
+
+  .org-grid { grid-template-columns: 1fr 1fr; }
+  .org-card:last-child { grid-column: span 2; }
+
+  .cc-label { font-size: .72rem; }
+  .cc-val { font-size: .95rem; }
+
+  .ip-key { font-size: .72rem; }
+  .ip-val { font-size: .92rem; }
+
+  .btn-gold, .btn-line { font-size: .88rem; padding: 14px 28px; }
+
+  .form-input { font-size: .95rem; }
+  .form-label { font-size: .75rem; }
+  .form-submit { font-size: .9rem; }
 }
