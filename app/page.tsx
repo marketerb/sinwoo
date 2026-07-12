@@ -169,13 +169,13 @@ export default function Home() {
         {/* Content */}
         <div className="relative z-10 max-w-7xl">
           {/* Eyebrow */}
-          <div className="inline-flex items-center gap-2 mb-8" style={{ color: "rgba(255,255,255,0.92)", fontSize: ".68rem", letterSpacing: "3px", fontWeight: 700, textTransform: "uppercase" }}>
+          <div className="inline-flex items-center gap-2 mb-10" style={{ color: "rgba(255,255,255,0.92)", fontSize: ".68rem", letterSpacing: "3px", fontWeight: 700, textTransform: "uppercase" }}>
             <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: G.gold, animation: "pulse 2s ease infinite", display: "inline-block" }} />
             전문 분양대행 · 부동산 솔루션
           </div>
 
           {/* Title */}
-          <h1 className="mb-8" style={{ fontWeight: 900, lineHeight: "1.0", letterSpacing: "-2px", fontSize: "clamp(38px,6.5vw,96px)", textShadow: "0 2px 30px rgba(0,0,0,0.4)" }}>
+          <h1 className="mb-10" style={{ fontWeight: 900, lineHeight: "1.0", letterSpacing: "-2px", fontSize: "clamp(38px,6.5vw,96px)", textShadow: "0 2px 30px rgba(0,0,0,0.4)" }}>
             <span style={{ color: "#fff", display: "block" }}>부동산의 가치를</span>
             <span style={{ display: "block", color: "#fff", fontFamily: "'Nanum Myeongjo','Playfair Display',serif" }}>
               설계하고 완성합니다.
@@ -183,7 +183,7 @@ export default function Home() {
           </h1>
 
           {/* Bottom row: desc + CTA */}
-          <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 flex-wrap">
+          <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-8 flex-wrap">
             <p style={{ maxWidth: "380px", fontSize: ".92rem", color: "rgba(255,255,255,0.78)", lineHeight: "1.9" }}>
               개발 컨설팅부터 분양대행, 투자자문, PM까지<br />
               사업의 시작과 끝을 책임지는 <span style={{ color: "#fff", fontWeight: 700 }}>부동산 전문 파트너</span>입니다.
@@ -198,7 +198,7 @@ export default function Home() {
       </section>
 
       {/* ─── STATS ─── */}
-      <section ref={statsRef} style={{ background: "#fff", borderBottom: `1px solid ${G.border}`, padding: "clamp(48px,8vw,80px) clamp(20px,5vw,48px)" }}>
+      <section ref={statsRef} style={{ background: "#fff", borderBottom: `1px solid ${G.border}`, padding: "clamp(56px,9vw,96px) clamp(20px,5vw,48px)" }}>
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-5">
             {[
@@ -208,8 +208,8 @@ export default function Home() {
               { num: `${counts.s}`, unit: "%", label: "성공 분양 목표" },
               { num: `${counts.b}`, unit: "개", label: "전문 영업본부" },
             ].map((s, i) => (
-              <div key={i} className={`text-center ${i === 4 ? "col-span-2 md:col-span-1" : ""}`} style={{ padding: "clamp(20px,3.5vw,32px) 16px", borderRight: i < 4 ? `1px solid ${G.border}` : "none", transition: "background .3s", cursor: "default" }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = G.light}
+              <div key={i} className={`text-center ${i === 4 ? "col-span-2 md:col-span-1" : ""}`} style={{ padding: "clamp(24px,4vw,40px) 16px", borderRight: i < 4 ? `1px solid ${G.border}` : "none", transition: "background .3s", cursor: "default" }}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = G.goldPale}
                 onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = ""}>
                 <div style={{ fontSize: "clamp(36px,4vw,60px)", fontWeight: 900, letterSpacing: "-3px", lineHeight: 1, ...gradText }}>
                   {s.num}<span style={{ fontSize: ".9rem", fontWeight: 400, color: G.muted, WebkitTextFillColor: G.muted }}>{s.unit}</span>
@@ -222,10 +222,10 @@ export default function Home() {
       </section>
 
       {/* ─── PARTNER BRANDS ─── */}
-      <section style={{ background: G.lighter, borderBottom: `1px solid ${G.border}`, padding: "clamp(40px,6vw,56px) clamp(20px,5vw,48px)" }}>
+      <section style={{ background: G.lighter, borderBottom: `1px solid ${G.border}`, padding: "clamp(48px,7vw,72px) clamp(20px,5vw,48px)" }}>
         <div className="max-w-7xl mx-auto text-center">
-          <div style={{ fontSize: ".65rem", letterSpacing: "3px", color: G.gold, textTransform: "uppercase", fontWeight: 700, marginBottom: "6px" }}>Partners</div>
-          <p style={{ fontSize: ".85rem", color: G.muted, marginBottom: "28px" }}>신우아이앤씨가 분양을 함께한 주요 브랜드</p>
+          <div style={{ fontSize: ".65rem", letterSpacing: "3px", color: G.gold, textTransform: "uppercase", fontWeight: 700, marginBottom: "8px" }}>Partners</div>
+          <p style={{ fontSize: ".85rem", color: G.muted, marginBottom: "36px" }}>신우아이앤씨가 분양을 함께한 주요 브랜드</p>
           <div className="brand-strip">
             {["힐스테이트", "아이파크", "자이 Xi", "푸르지오", "한화 포레나", "두산위브", "힘찬건설", "문영건설", "현대 프리미어캠퍼스", "마크폴리스"].map((b, i) => (
               <span key={i} className="brand-chip fade-in-on-scroll" style={{ transitionDelay: `${i * 40}ms` }}>{b}</span>
@@ -235,13 +235,14 @@ export default function Home() {
       </section>
 
       {/* ─── ABOUT ─── */}
-      <section id="about" style={{ background: G.light, padding: "clamp(56px,9vw,88px) clamp(20px,5vw,48px)" }}>
+      <section id="about" style={{ background: G.light, padding: "clamp(64px,10vw,104px) clamp(20px,5vw,48px)" }}>
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-start">
+          <div className="grid md:grid-cols-2 gap-14 md:gap-24 items-start">
             <div className="fade-in-on-scroll">
               <div className="s-tag">About SINWOO</div>
-              <h2 className="s-title mb-7">신우아이앤씨<br /><span style={gradText}>소개</span></h2>
-              <p style={{ fontSize: "1rem", color: G.muted, lineHeight: 2, marginBottom: "28px", maxWidth: "460px" }}>
+              <div className="s-rule" />
+              <h2 className="s-title mb-8">신우아이앤씨<br /><span style={gradText}>소개</span></h2>
+              <p style={{ fontSize: "1rem", color: G.muted, lineHeight: 2, marginBottom: "32px", maxWidth: "460px" }}>
                 <strong style={{ color: G.dark, fontWeight: 700 }}>주식회사 신우아이앤씨</strong>는 전문적인 지식과 경험을 바탕으로 고객의 가치와 신뢰를 최우선으로 삼는 <strong style={{ color: G.dark, fontWeight: 700 }}>전문 부동산 솔루션 프로바이더</strong>입니다.<br /><br />
                 시장분석, 개발기획, 투자자문, 분양마케팅, 프로젝트 관리까지 사업 전 과정의 통합 솔루션을 제공합니다.
               </p>
@@ -286,11 +287,12 @@ export default function Home() {
       </section>
 
       {/* ─── SERVICES BENTO ─── */}
-      <section id="business" style={{ background: "#fff", padding: "clamp(56px,9vw,88px) clamp(20px,5vw,48px)" }}>
+      <section id="business" style={{ background: "#fff", padding: "clamp(64px,10vw,104px) clamp(20px,5vw,48px)" }}>
         <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-end flex-wrap gap-6 mb-12">
+          <div className="flex justify-between items-end flex-wrap gap-6 mb-16">
             <div>
               <div className="s-tag">Services</div>
+              <div className="s-rule" />
               <h2 className="s-title">전문 서비스 <span style={gradText}>영역</span></h2>
             </div>
             <p style={{ maxWidth: "300px", fontSize: ".85rem", color: G.muted, lineHeight: "1.8" }}>
@@ -349,16 +351,17 @@ export default function Home() {
       </section>
 
       {/* ─── PROCESS ─── */}
-      <section id="process" style={{ background: G.light, padding: "clamp(56px,9vw,88px) clamp(20px,5vw,48px)" }}>
+      <section id="process" style={{ background: G.light, padding: "clamp(64px,10vw,104px) clamp(20px,5vw,48px)" }}>
         <div className="max-w-7xl mx-auto">
           <div className="s-tag">분양대행 진행 절차</div>
+          <div className="s-rule" />
           <h2 className="s-title mb-4">PROCESS</h2>
-          <p style={{ fontSize: ".88rem", color: G.muted, lineHeight: "1.8", marginBottom: "48px", maxWidth: "560px" }}>
+          <p style={{ fontSize: ".88rem", color: G.muted, lineHeight: "1.8", marginBottom: "56px", maxWidth: "560px" }}>
             사업지 의뢰부터 계약·고객관리까지, 현장특성에 적합한 마케팅 방안을 개발하고 전문 영업조직을 구성·투입하여 <strong style={{ color: G.dark }}>100% 성공 분양</strong>을 목적으로 합니다.
           </p>
           <div className="relative">
             <div className="hidden md:block absolute top-9 left-[8.33%] right-[8.33%]" style={{ height: "1px", background: `linear-gradient(to right,transparent,${G.border},transparent)` }} />
-            <div className="grid grid-cols-2 md:grid-cols-6 gap-6 relative">
+            <div className="grid grid-cols-2 md:grid-cols-6 gap-8 relative">
               {[
                 { s: "01", title: "분양대행 의뢰", desc: "업무범위 결정 · 대행계약 · 전담팀 구성", icon: icons.docCheck },
                 { s: "02", title: "환경분석·검토", desc: "입지환경 · 관련법규 · 사업타당성", icon: icons.search },
@@ -368,9 +371,9 @@ export default function Home() {
                 { s: "06", title: "분양운영·계약", desc: "청약·분양 상담 / 계약 / 고객관리", icon: icons.home },
               ].map((p, i) => (
                 <div key={i} className="flex flex-col items-center text-center fade-in-on-scroll" style={{ transitionDelay: `${i * 80}ms` }}>
-                  <div style={{ width: "72px", height: "72px", borderRadius: "50%", border: `1px solid ${G.border}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "10px", background: G.light, boxShadow: "0 4px 16px rgba(0,0,0,0.06)", transition: "transform .3s", cursor: "default", color: G.dark }}
-                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.transform = "scale(1.1)"}
-                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.transform = ""}>
+                  <div style={{ width: "72px", height: "72px", borderRadius: "50%", border: `1px solid ${G.border}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "10px", background: G.light, boxShadow: "0 4px 16px rgba(0,0,0,0.06)", transition: "transform .3s, border-color .3s, box-shadow .3s", cursor: "default", color: G.dark }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "scale(1.1)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(184,147,90,0.35)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(184,147,90,0.18)"; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = ""; (e.currentTarget as HTMLElement).style.borderColor = G.border; (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 16px rgba(0,0,0,0.06)"; }}>
                     <Ico d={p.icon} size={28} />
                   </div>
                   <p style={{ fontSize: ".65rem", color: G.gold, fontWeight: 700, letterSpacing: "1px", marginBottom: "4px" }}>STEP {p.s}</p>
@@ -382,7 +385,7 @@ export default function Home() {
           </div>
 
           {/* 조직 구성 — 지명원 조직도 반영 */}
-          <div style={{ marginTop: "56px", background: "#fff", border: `1px solid ${G.border}`, borderRadius: "20px", padding: "clamp(24px,4vw,36px)" }} className="fade-in-on-scroll">
+          <div style={{ marginTop: "64px", background: "#fff", border: `1px solid ${G.border}`, borderRadius: "20px", padding: "clamp(28px,4.5vw,44px)" }} className="fade-in-on-scroll">
             <div style={{ fontSize: ".65rem", letterSpacing: "3px", color: G.gold, textTransform: "uppercase", fontWeight: 700, marginBottom: "8px" }}>Organization</div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "12px", marginBottom: "20px" }}>
               <p style={{ fontSize: "1.05rem", fontWeight: 700, color: G.dark }}>현장에 투입되는 전문 조직</p>
@@ -407,19 +410,20 @@ export default function Home() {
       </section>
 
       {/* ─── PORTFOLIO ─── */}
-      <section id="portfolio" style={{ background: G.light, padding: "clamp(56px,9vw,88px) clamp(20px,5vw,48px)", borderTop: `1px solid ${G.border}` }}>
+      <section id="portfolio" style={{ background: G.light, padding: "clamp(64px,10vw,104px) clamp(20px,5vw,48px)", borderTop: `1px solid ${G.border}` }}>
         <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-end flex-wrap gap-6 mb-12">
+          <div className="flex justify-between items-end flex-wrap gap-6 mb-16">
             <div>
               <div className="s-tag">Portfolio</div>
+              <div className="s-rule" />
               <h2 className="s-title">사업 <span style={gradText}>실적</span></h2>
             </div>
             <div style={{ fontSize: "clamp(50px,7vw,90px)", fontWeight: 900, letterSpacing: "-4px", lineHeight: 1, ...gradText }}>
-              30<span style={{ fontSize: "1rem", color: G.muted, WebkitTextFillColor: G.muted, letterSpacing: 0, fontWeight: 400 }}>+ Projects</span>
+              30<span style={{ fontSize: "1rem", color: G.gold, letterSpacing: 0, fontWeight: 400 }}>+ Projects</span>
             </div>
           </div>
-          <div style={{ background: "#fff", borderRadius: "20px", border: `1px solid ${G.border}`, padding: "clamp(20px,4vw,32px)", marginBottom: "40px" }}>
-            <div style={{ fontSize: ".65rem", letterSpacing: "3px", color: G.gold, textTransform: "uppercase", marginBottom: "20px", fontWeight: 700 }}>▸ 2015 → 2026 전체 진행 프로젝트</div>
+          <div style={{ background: "#fff", borderRadius: "20px", border: `1px solid ${G.border}`, padding: "clamp(24px,4.5vw,40px)", marginBottom: "48px" }}>
+            <div style={{ fontSize: ".65rem", letterSpacing: "3px", color: G.gold, textTransform: "uppercase", marginBottom: "24px", fontWeight: 700 }}>▸ 2015 → 2026 전체 진행 프로젝트</div>
             {timelineGroups.map((group) => (
               <div key={group.year} className="tl-group fade-in-on-scroll">
                 <div className="tl-group-year">{group.year}</div>
@@ -437,9 +441,9 @@ export default function Home() {
       </section>
 
       {/* ─── CEO MESSAGE ─── */}
-      <section id="ceo-message" style={{ background: G.lighter, padding: "clamp(56px,9vw,88px) clamp(20px,5vw,48px)", borderTop: `1px solid ${G.border}` }}>
+      <section id="ceo-message" style={{ background: G.lighter, padding: "clamp(64px,10vw,104px) clamp(20px,5vw,48px)", borderTop: `1px solid ${G.border}` }}>
         <div className="max-w-4xl mx-auto fade-in-on-scroll">
-          <div style={{ background: "#fff", border: `1px solid ${G.borderGold}`, borderRadius: "24px", padding: "clamp(32px,5vw,64px)", boxShadow: "0 20px 60px rgba(0,0,0,0.05)" }}>
+          <div style={{ background: "#fff", border: `1px solid ${G.borderGold}`, borderRadius: "24px", padding: "clamp(36px,5.5vw,72px)", boxShadow: "0 20px 60px rgba(184,147,90,0.08)" }}>
             <div style={{ fontSize: ".65rem", letterSpacing: "4px", textTransform: "uppercase", color: G.gold, marginBottom: "20px", fontWeight: 700 }}>CEO MESSAGE</div>
             <h2 style={{ fontSize: "clamp(22px,3.5vw,42px)", fontWeight: 800, color: G.dark, lineHeight: "1.3", marginBottom: "24px", fontStyle: "italic", fontFamily: "'Nanum Myeongjo','Playfair Display',serif" }}>
               "고객의 성공이 곧 우리의 성장입니다."
@@ -456,15 +460,16 @@ export default function Home() {
       </section>
 
       {/* ─── CONTACT ─── */}
-      <section id="contact" style={{ background: "#fff", padding: "clamp(56px,9vw,88px) clamp(20px,5vw,48px)" }}>
+      <section id="contact" style={{ background: "#fff", padding: "clamp(64px,10vw,104px) clamp(20px,5vw,48px)" }}>
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 md:gap-16">
+          <div className="grid md:grid-cols-2 gap-14 md:gap-20">
 
             {/* 연락처 + 네이버 지도 */}
             <div className="fade-in-on-scroll">
               <div className="s-tag">Contact</div>
+              <div className="s-rule" />
               <h2 className="s-title mb-10">오시는 <span style={gradText}>길</span></h2>
-              <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "24px" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginBottom: "28px" }}>
                 {/* 전화 — DB 값 우선, 없으면 대표번호 */}
                 <div className="cc-card">
                   <div className="cc-icon" style={{ color: G.dark }}>
@@ -587,14 +592,14 @@ export default function Home() {
       </section>
 
       {/* ─── FOOTER ─── */}
-      <footer style={{ background: G.dark, padding: "clamp(32px,6vw,48px) clamp(20px,5vw,48px)", color: "rgba(255,255,255,0.5)" }}>
+      <footer style={{ background: G.dark, padding: "clamp(40px,7vw,64px) clamp(20px,5vw,48px)", color: "rgba(255,255,255,0.5)" }}>
         <div className="max-w-7xl mx-auto">
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "40px", marginBottom: "32px", paddingBottom: "32px", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "40px", marginBottom: "40px", paddingBottom: "40px", borderBottom: "1px solid rgba(184,147,90,0.15)" }}>
             <div>
               <div style={{ fontSize: ".85rem", fontWeight: 700, color: G.gold, letterSpacing: "2px", marginBottom: "4px" }}>◇ SINWOO Inc. — 신우아이앤씨</div>
               <div style={{ fontSize: ".7rem", color: "rgba(255,255,255,0.3)", letterSpacing: "1px" }}>Above &amp; Beyond · 전문 부동산 솔루션 프로바이더</div>
             </div>
-            <div style={{ display: "flex", gap: "28px", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: "32px", flexWrap: "wrap" }}>
               {[["#about","회사소개"],["#business","서비스"],["#process","프로세스"],["#portfolio","실적"],["#contact","상담신청"]].map(([h,l],i) => (
                 <a key={i} href={h} style={{ fontSize: ".72rem", color: "rgba(255,255,255,0.4)", letterSpacing: "1px", transition: "color .3s" }}
                   onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = G.gold}

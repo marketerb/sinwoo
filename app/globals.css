@@ -17,7 +17,7 @@
   --light: #fafafa;
   --lighter: #f5f5f5;
   --border: rgba(0,0,0,0.08);
-  --border-gold: rgba(0,0,0,0.08);
+  --border-gold: rgba(184,147,90,0.35);
 
   --font-heading: 'Nanum Myeongjo', 'Playfair Display', serif;
   --font-body: 'Inter', sans-serif;
@@ -76,6 +76,12 @@ body {
 .s-title {
   font-size: clamp(30px, 4.5vw, 58px); font-weight: 800;
   letter-spacing: -2px; line-height: 1.05; color: var(--dark);
+}
+
+/* Thin gold rule — luxury section divider, placed under the eyebrow tag */
+.s-rule {
+  width: 36px; height: 2px; border-radius: 2px; margin: 0 0 22px;
+  background: linear-gradient(90deg, var(--gold), var(--gold2));
 }
 
 /* === BUTTONS — Mastercard-inspired === */
@@ -141,7 +147,7 @@ body {
 }
 
 /* === BENTO GRID === */
-.bento { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
+.bento { display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; }
 .b1 { grid-column: span 7; }
 .b2 { grid-column: span 5; }
 .b3 { grid-column: span 4; }
@@ -149,10 +155,10 @@ body {
 .b5 { grid-column: span 4; }
 .bc {
   background: var(--light); border-radius: 20px;
-  border: 1px solid var(--border); padding: 36px; overflow: hidden;
+  border: 1px solid var(--border); padding: 40px; overflow: hidden;
   position: relative; transition: all .4s cubic-bezier(.23,1,.32,1);
 }
-.bc:hover { border-color: rgba(0,0,0,0.16); transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.06); }
+.bc:hover { border-color: var(--border-gold); transform: translateY(-4px); box-shadow: 0 20px 50px rgba(184,147,90,0.12); }
 .bc-highlight { background: var(--lighter); border-color: var(--border); }
 .bc-num { font-size: .62rem; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; margin-bottom: 28px; }
 .bc-icon { font-size: 2.2rem; margin-bottom: 16px; }
@@ -174,7 +180,7 @@ body {
 .ip-gold { border-color: var(--border-gold); background: var(--gold-pale); }
 
 /* === PORTFOLIO TIMELINE — 연도별 그룹 === */
-.tl-group { display: flex; align-items: flex-start; gap: 20px; padding: 14px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
+.tl-group { display: flex; align-items: flex-start; gap: 24px; padding: 18px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
 .tl-group:last-child { border-bottom: none; }
 .tl-group-year {
   min-width: 58px; flex-shrink: 0; padding-top: 4px;
@@ -188,14 +194,14 @@ body {
   font-size: .78rem; color: var(--dark2); line-height: 1.4;
   transition: all .25s; cursor: default;
 }
-.tl-chip:hover { border-color: rgba(0,0,0,0.25); background: #fff; color: var(--dark); }
+.tl-chip:hover { border-color: var(--border-gold); background: #fff; color: var(--dark); }
 .tl-chip-milestone {
   background: var(--gold-pale); border-color: rgba(184,147,90,0.25);
   color: var(--gold); font-weight: 700;
 }
 
 /* === PARTNER BRANDS === */
-.brand-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 12px; }
+.brand-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 16px; }
 .brand-chip {
   padding: 12px 26px; border-radius: 100px;
   background: #fff; border: 1px solid var(--border);
@@ -203,12 +209,12 @@ body {
   color: var(--dark2);
   transition: all .3s; cursor: default;
 }
-.brand-chip:hover { border-color: rgba(0,0,0,0.25); color: var(--dark); box-shadow: 0 6px 20px rgba(0,0,0,0.08); transform: translateY(-2px); }
+.brand-chip:hover { border-color: var(--border-gold); color: var(--dark); box-shadow: 0 6px 20px rgba(184,147,90,0.18); transform: translateY(-2px); }
 
 /* === ORGANIZATION === */
-.org-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+.org-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; }
 .org-card {
-  padding: 16px 18px; border-radius: 12px;
+  padding: 18px 20px; border-radius: 12px;
   background: var(--light); border: 1px solid var(--border);
   transition: border-color .3s;
 }
@@ -216,10 +222,10 @@ body {
 
 /* === CONTACT CARDS === */
 .cc-card {
-  display: flex; gap: 16px; align-items: flex-start; padding: 20px;
+  display: flex; gap: 18px; align-items: flex-start; padding: 22px;
   border-radius: 14px; background: var(--light); border: 1px solid var(--border); transition: all .3s;
 }
-.cc-card:hover { border-color: rgba(0,0,0,0.2); transform: translateX(4px); }
+.cc-card:hover { border-color: var(--border-gold); transform: translateX(4px); }
 .cc-icon {
   width: 44px; height: 44px; border-radius: 12px; background: #fff;
   border: 1px solid var(--border); display: flex; align-items: center;
