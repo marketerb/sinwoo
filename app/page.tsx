@@ -53,6 +53,9 @@ export default function Home() {
   const [company, setCompany] = useState<{ phone?: string; email?: string; address?: string; kakao_channel?: string } | null>(null);
   /* 히어로 배경영상 — 모바일은 경량 SD, 데스크톱은 HD (마운트 후 선택해 불필요 다운로드 방지) */
   const [heroVideo, setHeroVideo] = useState<string | null>(null);
+  /* 상담 신청 폼 상태 */
+  const [formState, setFormState] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [formError, setFormError] = useState("");
 
   useEffect(() => { fetchCompany(); }, []);
 
@@ -104,6 +107,41 @@ export default function Home() {
       const res = await fetch("/api/company");
       if (res.ok) setCompany(await res.json());
     } catch { }
+  }
+
+  /* 상담 신청 → /api/contact 로 전송 (담당자 이메일 발송) */
+  async function submitContact(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (formState === "sending") return;
+
+    const fd = new FormData(e.currentTarget);
+    const payload = {
+      name: String(fd.get("name") || ""),
+      phone: String(fd.get("phone") || ""),
+      email: String(fd.get("email") || ""),
+      subject: String(fd.get("subject") || ""),
+      message: String(fd.get("message") || ""),
+    };
+
+    setFormState("sending");
+    setFormError("");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        setFormState("success");
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setFormError(data.error || "신청 접수에 실패했습니다.");
+        setFormState("error");
+      }
+    } catch {
+      setFormError("네트워크 오류로 신청을 보내지 못했습니다.");
+      setFormState("error");
+    }
   }
 
   /* 지명원(회사소개서) 기준 진행 현장 — 최신 연도 우선 · 총 32개 현장 */
@@ -654,23 +692,44 @@ export default function Home() {
             <div className="fade-in-on-scroll" style={{ transitionDelay: "150ms" }}>
               <h3 style={{ fontSize: "1.2rem", fontWeight: 700, color: G.dark, marginBottom: "24px" }}>무료 상담 신청</h3>
               <div style={{ background: "#fff", border: `1px solid ${G.border}`, borderRadius: "20px", padding: "clamp(24px,5vw,40px)" }}>
-                <form className="space-y-4" onSubmit={e => { e.preventDefault(); alert("상담 신청이 완료되었습니다.\n담당자가 24시간 내 연락드리겠습니다.\n\n감사합니다. — 신우아이앤씨"); }}>
-                  <div><label className="form-label">성함 / 회사명</label><input type="text" className="form-input" placeholder="예) ○○건설 홍길동 부장" required /></div>
-                  <div><label className="form-label">연락처</label><input type="tel" className="form-input" placeholder="010-0000-0000" required /></div>
-                  <div><label className="form-label">이메일</label><input type="email" className="form-input" placeholder="example@company.com" /></div>
+                {formState === "success" ? (
+                  <div style={{ textAlign: "center", padding: "32px 8px" }}>
+                    <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: G.goldPale, border: `1px solid ${G.borderGold}`, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px", color: G.gold }}>
+                      <svg width="26" height="26" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" /></svg>
+                    </div>
+                    <p style={{ fontSize: "1.05rem", fontWeight: 700, color: G.dark, marginBottom: "8px" }}>상담 신청이 접수되었습니다</p>
+                    <p style={{ fontSize: ".85rem", color: G.muted, lineHeight: "1.8" }}>담당자가 확인 후 24시간 내 연락드리겠습니다.<br />감사합니다. — 신우아이앤씨</p>
+                    <button type="button" onClick={() => setFormState("idle")} className="btn-line" style={{ marginTop: "24px" }}>추가 문의하기</button>
+                  </div>
+                ) : (
+                <form className="space-y-4" onSubmit={submitContact}>
+                  <div><label className="form-label">성함 / 회사명</label><input name="name" type="text" className="form-input" placeholder="예) ○○건설 홍길동 부장" required /></div>
+                  <div><label className="form-label">연락처</label><input name="phone" type="tel" className="form-input" placeholder="010-0000-0000" required /></div>
+                  <div><label className="form-label">이메일</label><input name="email" type="email" className="form-input" placeholder="example@company.com" /></div>
                   <div>
                     <label className="form-label">관심 서비스</label>
-                    <select className="form-input" style={{ appearance: "none" }}>
+                    <select name="subject" className="form-input" style={{ appearance: "none" }}>
                       <option value="">서비스를 선택해주세요</option>
                       <option>분양대행</option><option>부동산 개발 컨설팅</option>
                       <option>부동산 투자자문</option><option>부동산 개발 PM</option>
                       <option>기타 문의</option>
                     </select>
                   </div>
-                  <div><label className="form-label">프로젝트 내용</label><textarea className="form-input" placeholder="사업지 위치, 규모, 유형 등 간략한 내용을 적어주세요." rows={4} style={{ resize: "vertical" }} /></div>
-                  <button type="submit" className="form-submit">상담 신청하기</button>
+                  <div><label className="form-label">프로젝트 내용</label><textarea name="message" className="form-input" placeholder="사업지 위치, 규모, 유형 등 간략한 내용을 적어주세요." rows={4} style={{ resize: "vertical" }} /></div>
+
+                  {formState === "error" && (
+                    <div style={{ padding: "14px 16px", borderRadius: "12px", background: "#fdf2f2", border: "1px solid #f3d6d6", fontSize: ".8rem", color: "#8c3a3a", lineHeight: "1.7" }}>
+                      {formError}<br />
+                      번거로우시면 <a href={`tel:${DEFAULT_PHONE.replace(/[^0-9]/g, "")}`} style={{ fontWeight: 700, textDecoration: "underline" }}>{DEFAULT_PHONE}</a> 로 연락 주시면 바로 상담 도와드리겠습니다.
+                    </div>
+                  )}
+
+                  <button type="submit" className="form-submit" disabled={formState === "sending"} style={formState === "sending" ? { opacity: .6, cursor: "wait" } : undefined}>
+                    {formState === "sending" ? "전송 중…" : "상담 신청하기"}
+                  </button>
                   <p style={{ textAlign: "center", marginTop: "12px", fontSize: ".68rem", color: G.muted }}>* 상담 내용은 비밀이 보장되며, 24시간 내 회신 드립니다.</p>
                 </form>
+                )}
               </div>
 
               {/* 카카오톡 채널 버튼 (설정된 경우) */}
