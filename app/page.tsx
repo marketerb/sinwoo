@@ -1,6 +1,7 @@
 "use client";
 
 import Navigation from "./components/Navigation";
+import { COMPANY_PROFILE_PDF, DEFAULT_PHONE } from "./config";
 import { useState, useEffect, useRef } from "react";
 
 /* 모노크롬 미니멀 — 골드는 극소량 액센트로만 사용 */
@@ -87,7 +88,7 @@ export default function Home() {
 
   function animateCounts() {
     /* 지명원 기준: 2015~2026 진행 프로젝트 32건, 확인 가능 분양 세대·실 11,000+ */
-    const targets = { y: 10, p: 30, u: 11000, s: 100, b: 6 };
+    const targets = { y: 11, p: 32, u: 11000, s: 100, b: 6 };
     const dur = 1500, start = Date.now();
     const tick = () => {
       const p = Math.min((Date.now() - start) / dur, 1);
@@ -105,21 +106,41 @@ export default function Home() {
     } catch { }
   }
 
-  /* 지명원(회사소개서) 기준 현장명 — 최신 연도 우선, ★ = 회사 연혁 마일스톤 */
-  const timelineGroups: { year: string; items: { name: string; milestone?: boolean }[] }[] = [
+  /* 지명원(회사소개서) 기준 진행 현장 — 최신 연도 우선 · 총 32개 현장 */
+  const timelineGroups: { year: string; items: { name: string }[] }[] = [
     { year: "2026", items: [{ name: "힐스테이트 회룡역파크뷰" }] },
     { year: "2025", items: [{ name: "동작구 보라매 파르크힐" }, { name: "이문 아이파크자이 3단지" }, { name: "천안 힐스테이트 두정역" }] },
     { year: "2024", items: [{ name: "이수 헤리드" }, { name: "신광교 클라우드시티" }, { name: "신길 AK 푸르지오" }] },
     { year: "2023", items: [{ name: "상도 푸르지오 클라베뉴" }, { name: "한화 포레나 인천학익" }, { name: "오산 세마 현대프리미어 캠퍼스" }] },
     { year: "2022", items: [{ name: "지축 아쿠아테라스몰" }, { name: "포항 아이파크" }] },
-    { year: "2021", items: [{ name: "마곡 르웨스트" }, { name: "마곡 그랑시엘" }, { name: "신우아이앤씨 설립", milestone: true }] },
+    { year: "2021", items: [{ name: "마곡 르웨스트" }, { name: "마곡 그랑시엘" }] },
     { year: "2020", items: [{ name: "블루원 주차타워" }] },
     { year: "2019", items: [{ name: "김포 상미공단 센트럴 팩토리움" }, { name: "송림센트럴타워" }] },
     { year: "2018", items: [{ name: "마곡지구 매그넘793" }, { name: "마곡 M타워" }] },
-    { year: "2017", items: [{ name: "해운대 뷰띠크테라스 호텔" }, { name: "인하대 헤리움 메트로타워" }, { name: "영종도 스카이파크리움" }, { name: "하이앤드컴퍼니 법인변경", milestone: true }] },
+    { year: "2017", items: [{ name: "해운대 뷰띠크테라스 호텔" }, { name: "인하대 헤리움 메트로타워" }, { name: "영종도 스카이파크리움" }] },
     { year: "2016", items: [{ name: "가산 경우 유미어스" }, { name: "에이스네스트빌" }, { name: "충북혁신도시 밀라움" }, { name: "마곡 문영퀸즈파크10" }, { name: "마곡 문영퀸즈파크9" }, { name: "배곧 힘찬헤리움2" }] },
-    { year: "2015", items: [{ name: "배곧 힘찬헤리움1" }, { name: "마곡 프라이빗 타워2" }, { name: "동탄마크폴리스" }, { name: "안강프라이빗타워" }, { name: "하이앤드컴퍼니 설립", milestone: true }] },
+    { year: "2015", items: [{ name: "배곧 힘찬헤리움1" }, { name: "마곡 프라이빗 타워2" }, { name: "동탄마크폴리스" }, { name: "안강프라이빗타워" }] },
   ];
+
+  /* 회사 연혁 — 지명원 기준 법인 이력 */
+  const milestones = [
+    { year: "2015", month: "04", title: "하이앤드컴퍼니 설립", desc: "부동산 개발·분양대행 사업 개시" },
+    { year: "2017", month: "02", title: "하이앤드컴퍼니 법인변경", desc: "사업 영역 확장 및 조직 재편" },
+    { year: "2021", month: "06", title: "주식회사 신우아이앤씨 설립", desc: "현 법인 출범 · 마곡 본사" },
+    { year: "현재", month: "",   title: "누적 32개 현장 수행", desc: "전국 7개 시·도 · 11,000세대·실" },
+  ];
+
+  /* 지역별 실적 분포 — 지명원 32개 현장 집계 (x·y는 지도 SVG 좌표) */
+  const regions = [
+    { name: "서울", count: 14, x: 133, y: 100, detail: "강서 · 동작 · 영등포 · 동대문 · 금천" },
+    { name: "경기", count: 9,  x: 162, y: 142, detail: "시흥 · 화성 · 김포 · 고양 · 오산 · 용인 · 의정부" },
+    { name: "인천", count: 5,  x: 92,  y: 126, detail: "미추홀 · 남동 · 동구 · 중구(영종)" },
+    { name: "충남", count: 1,  x: 145, y: 190, detail: "천안" },
+    { name: "충북", count: 1,  x: 200, y: 175, detail: "음성 혁신도시" },
+    { name: "경북", count: 1,  x: 348, y: 274, detail: "포항" },
+    { name: "부산", count: 1,  x: 322, y: 372, detail: "해운대" },
+  ];
+  const maxRegion = Math.max(...regions.map(r => r.count));
 
   return (
     <div style={{ background: "#fff" }}>
@@ -190,8 +211,11 @@ export default function Home() {
             </p>
             {/* White primary + outlined-white secondary (영상 위 대비) */}
             <div className="flex gap-3 flex-wrap">
-              <a href="#portfolio" className="btn-hero-primary">포트폴리오 보기 →</a>
-              <a href="#contact" className="btn-hero-line">문의하기</a>
+              <a href="#portfolio" className="btn-hero-primary">실적 32건 보기 →</a>
+              <a href="#contact" className="btn-hero-line">사업 문의하기</a>
+              {COMPANY_PROFILE_PDF && (
+                <a href={COMPANY_PROFILE_PDF} download className="btn-hero-line">지명원 다운로드 ↓</a>
+              )}
             </div>
           </div>
         </div>
@@ -203,7 +227,7 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-5">
             {[
               { num: `${counts.y}`, unit: "+", label: "경력 (Years)" },
-              { num: `${counts.p}`, unit: "+", label: "프로젝트 실적" },
+              { num: `${counts.p}`, unit: "건", label: "프로젝트 실적" },
               { num: counts.u.toLocaleString(), unit: "+", label: "누적 분양 세대·실" },
               { num: `${counts.s}`, unit: "%", label: "성공 분양 목표" },
               { num: `${counts.b}`, unit: "개", label: "전문 영업본부" },
@@ -256,7 +280,7 @@ export default function Home() {
               <div className="grid grid-cols-2 gap-3 mb-5">
                 {[
                   { icon: icons.layers, title: "맞춤형 전략", desc: "프로젝트별 최적 전략과 이용기획" },
-                  { icon: icons.award,  title: "풍부한 경험", desc: "10년 30건+ 성공 프로젝트 노하우" },
+                  { icon: icons.award,  title: "풍부한 경험", desc: "11년 32건 성공 프로젝트 노하우" },
                   { icon: icons.share,  title: "전문 네트워크", desc: "건설사·시행사 전문 협력 네트워크" },
                   { icon: icons.chat,   title: "커뮤니케이션", desc: "신속한 소통으로 프로젝트 가속화" },
                 ].map((item, i) => (
@@ -274,13 +298,31 @@ export default function Home() {
               <div style={{ padding: "24px", background: G.lighter, borderRadius: "14px", border: `1px solid ${G.border}` }}>
                 <div style={{ fontSize: ".72rem", letterSpacing: "2px", color: G.gold, textTransform: "uppercase", fontWeight: 700, marginBottom: "10px" }}>Why SINWOO?</div>
                 <div style={{ fontSize: ".82rem", color: G.dark2, lineHeight: "1.8" }}>
-                  ✓ 10년+ 분양대행 전문 경험<br />
-                  ✓ 30건+ 성공 프로젝트 실적<br />
+                  ✓ 11년 분양대행 전문 경험<br />
+                  ✓ 32건 성공 프로젝트 실적<br />
                   ✓ 6개 전문 영업본부 보유<br />
                   ✓ 대형 건설 브랜드 협력 이력<br />
                   ✓ 성공 분양 100% 목표의식
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* ── 회사 연혁 ── */}
+          <div className="history-block fade-in-on-scroll">
+            <div style={{ fontSize: ".65rem", letterSpacing: "3px", color: G.gold, textTransform: "uppercase", fontWeight: 700, marginBottom: "6px" }}>History</div>
+            <p style={{ fontSize: "1.05rem", fontWeight: 700, color: G.dark, marginBottom: "28px" }}>2015년부터 이어온 발자취</p>
+            <div className="history-grid">
+              {milestones.map((m, i) => (
+                <div key={i} className={`history-item${i === milestones.length - 1 ? " history-item-now" : ""}`}>
+                  <div className="history-dot" />
+                  <div className="history-year">
+                    {m.year}{m.month && <span>.{m.month}</span>}
+                  </div>
+                  <div className="history-title">{m.title}</div>
+                  <div className="history-desc">{m.desc}</div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -419,9 +461,66 @@ export default function Home() {
               <h2 className="s-title">사업 <span style={gradText}>실적</span></h2>
             </div>
             <div style={{ fontSize: "clamp(50px,7vw,90px)", fontWeight: 900, letterSpacing: "-4px", lineHeight: 1, ...gradText }}>
-              30<span style={{ fontSize: "1rem", color: G.gold, letterSpacing: 0, fontWeight: 400 }}>+ Projects</span>
+              32<span style={{ fontSize: "1rem", color: G.gold, letterSpacing: 0, fontWeight: 400 }}> Projects</span>
             </div>
           </div>
+
+          {/* ── 전국 현장 분포 지도 ── */}
+          <div style={{ background: "#fff", borderRadius: "20px", border: `1px solid ${G.border}`, padding: "clamp(24px,4.5vw,40px)", marginBottom: "24px" }} className="fade-in-on-scroll">
+            <div style={{ fontSize: ".65rem", letterSpacing: "3px", color: G.gold, textTransform: "uppercase", marginBottom: "6px", fontWeight: 700 }}>Nationwide Coverage</div>
+            <div className="map-head">
+              <p style={{ fontSize: "1.05rem", fontWeight: 700, color: G.dark }}>전국 7개 시·도, 32개 현장</p>
+              <p style={{ fontSize: ".78rem", color: G.muted }}>원이 클수록 수행 현장이 많은 지역입니다</p>
+            </div>
+
+            <div className="map-wrap">
+              {/* 지도 */}
+              <div className="map-canvas">
+                <svg viewBox="0 0 380 500" style={{ width: "100%", height: "auto", display: "block" }} role="img" aria-label="신우아이앤씨 전국 현장 분포 지도">
+                  {/* 대한민국 윤곽 (단순화) */}
+                  <path
+                    d="M101 22 Q84 60 75 100 Q80 135 88 167 Q70 178 57 194 Q74 218 88 239
+                       Q94 262 97 283 Q86 320 79 355 Q75 385 75 411 Q86 440 97 461
+                       Q128 455 158 444 Q179 434 198 422 Q209 416 220 411 Q240 411 260 411
+                       Q267 408 273 405 Q298 393 321 378 Q334 354 343 328 Q349 300 352 272
+                       Q350 247 348 222 Q346 197 343 172 Q334 145 326 117 Q317 100 308 83
+                       Q291 58 273 33 Q264 20 255 6 Q178 14 101 22 Z"
+                    fill="#f2efe9" stroke={G.gold} strokeWidth="1" strokeOpacity="0.35" strokeLinejoin="round"
+                  />
+                  {/* 제주 */}
+                  <ellipse cx="93" cy="482" rx="22" ry="10" fill="#f2efe9" stroke={G.gold} strokeWidth="1" strokeOpacity="0.25" />
+
+                  {/* 지역 마커 */}
+                  {regions.map((r) => {
+                    const rad = 6 + Math.sqrt(r.count) * 5;
+                    const strong = r.count / maxRegion;
+                    return (
+                      <g key={r.name} className="map-marker">
+                        <circle cx={r.x} cy={r.y} r={rad} fill={G.gold} fillOpacity={0.14 + strong * 0.5} stroke={G.gold} strokeWidth="1.5" />
+                        <text x={r.x} y={r.y + 4} textAnchor="middle" style={{ fontSize: "13px", fontWeight: 800, fill: strong > 0.4 ? "#fff" : G.gold }}>{r.count}</text>
+                        <text x={r.x} y={r.y + rad + 15} textAnchor="middle" style={{ fontSize: "12px", fontWeight: 700, fill: G.dark2 }}>{r.name}</text>
+                      </g>
+                    );
+                  })}
+                </svg>
+              </div>
+
+              {/* 지역별 목록 */}
+              <div className="map-list">
+                {regions.map((r) => (
+                  <div key={r.name} className="map-row">
+                    <div className="map-row-top">
+                      <span className="map-row-name">{r.name}</span>
+                      <span className="map-row-count">{r.count}<em>건</em></span>
+                    </div>
+                    <div className="map-bar"><span style={{ width: `${(r.count / maxRegion) * 100}%` }} /></div>
+                    <p className="map-row-detail">{r.detail}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
           <div style={{ background: "#fff", borderRadius: "20px", border: `1px solid ${G.border}`, padding: "clamp(24px,4.5vw,40px)", marginBottom: "48px" }}>
             <div style={{ fontSize: ".65rem", letterSpacing: "3px", color: G.gold, textTransform: "uppercase", marginBottom: "24px", fontWeight: 700 }}>▸ 2015 → 2026 전체 진행 프로젝트</div>
             {timelineGroups.map((group) => (
@@ -429,9 +528,7 @@ export default function Home() {
                 <div className="tl-group-year">{group.year}</div>
                 <div className="tl-group-items">
                   {group.items.map((item, i) => (
-                    <span key={i} className={item.milestone ? "tl-chip tl-chip-milestone" : "tl-chip"}>
-                      {item.milestone && "◆ "}{item.name}
-                    </span>
+                    <span key={i} className="tl-chip">{item.name}</span>
                   ))}
                 </div>
               </div>
@@ -479,7 +576,7 @@ export default function Home() {
                   </div>
                   <div>
                     <div className="cc-label">대표전화</div>
-                    <a href={`tel:${(company?.phone || "1877-8489").replace(/[^0-9]/g,"")}`} className="cc-val" style={{ textDecoration: "none", fontWeight: 700 }}>{company?.phone || "1877-8489"}</a>
+                    <a href={`tel:${(company?.phone || DEFAULT_PHONE).replace(/[^0-9]/g,"")}`} className="cc-val" style={{ textDecoration: "none", fontWeight: 700 }}>{company?.phone || DEFAULT_PHONE}</a>
                   </div>
                 </div>
                 <div className="cc-card">
@@ -609,7 +706,7 @@ export default function Home() {
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "16px", fontSize: ".68rem", color: "rgba(255,255,255,0.25)" }}>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
-              <span>대표전화 1877-8489</span>
+              <span>대표전화 {DEFAULT_PHONE}</span>
               <span>사업자등록번호 192-88-02038</span>
               <span>법인등록번호 110111-7898799</span>
               <span>대표 임중용</span>
@@ -623,7 +720,7 @@ export default function Home() {
       {/* ─── 모바일 전화 바로걸기 ─── */}
       {(
         <a
-          href={`tel:${(company?.phone || "1877-8489").replace(/[^0-9]/g, "")}`}
+          href={`tel:${(company?.phone || DEFAULT_PHONE).replace(/[^0-9]/g, "")}`}
           className="md:hidden"
           style={{
             position: "fixed", bottom: "88px", right: "28px", zIndex: 99,

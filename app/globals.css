@@ -195,10 +195,54 @@ body {
   transition: all .25s; cursor: default;
 }
 .tl-chip:hover { border-color: var(--border-gold); background: #fff; color: var(--dark); }
-.tl-chip-milestone {
-  background: var(--gold-pale); border-color: rgba(184,147,90,0.25);
-  color: var(--gold); font-weight: 700;
+
+/* === COMPANY HISTORY === */
+.history-block {
+  margin-top: 64px; padding-top: 48px;
+  border-top: 1px solid var(--border);
 }
+.history-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; position: relative; }
+/* 연결선 — 각 항목 점을 잇는 가로선 */
+.history-grid::before {
+  content: ''; position: absolute; top: 5px; left: 6%; right: 6%; height: 1px;
+  background: linear-gradient(90deg, var(--gold-pale), var(--gold2), var(--gold-pale));
+}
+.history-item { position: relative; padding-top: 26px; }
+.history-dot {
+  position: absolute; top: 0; left: 0;
+  width: 11px; height: 11px; border-radius: 50%;
+  background: #fff; border: 2px solid var(--gold2);
+}
+.history-item-now .history-dot { background: var(--gold); border-color: var(--gold); }
+.history-year {
+  font-size: .95rem; font-weight: 900; color: var(--gold);
+  letter-spacing: -0.3px; margin-bottom: 6px;
+}
+.history-year span { font-size: .72rem; font-weight: 600; color: var(--muted); }
+.history-title { font-size: .88rem; font-weight: 700; color: var(--dark); margin-bottom: 4px; line-height: 1.4; }
+.history-desc { font-size: .74rem; color: var(--muted); line-height: 1.6; }
+
+/* === NATIONWIDE MAP === */
+.map-head {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  flex-wrap: wrap; gap: 10px; margin-bottom: 28px;
+}
+.map-wrap { display: grid; grid-template-columns: minmax(0,0.85fr) minmax(0,1.15fr); gap: 40px; align-items: center; }
+.map-canvas { max-width: 340px; margin: 0 auto; width: 100%; }
+.map-marker circle { transition: fill-opacity .3s, r .3s; }
+.map-marker:hover circle { fill-opacity: .85; }
+
+.map-list { display: flex; flex-direction: column; gap: 18px; }
+.map-row-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px; }
+.map-row-name { font-size: .95rem; font-weight: 700; color: var(--dark); }
+.map-row-count { font-size: 1.05rem; font-weight: 900; color: var(--gold); letter-spacing: -0.5px; }
+.map-row-count em { font-size: .72rem; font-weight: 500; font-style: normal; color: var(--muted); margin-left: 2px; }
+.map-bar { height: 4px; border-radius: 4px; background: rgba(0,0,0,0.06); overflow: hidden; }
+.map-bar span {
+  display: block; height: 100%; border-radius: 4px;
+  background: linear-gradient(90deg, var(--gold), var(--gold2));
+}
+.map-row-detail { font-size: .72rem; color: var(--muted); margin-top: 7px; line-height: 1.5; }
 
 /* === PARTNER BRANDS === */
 .brand-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 16px; }
@@ -299,6 +343,23 @@ html { scroll-behavior: smooth; }
   .tl-chip { font-size: .9rem; padding: 9px 16px; }
 
   .brand-chip { font-size: .9rem; padding: 12px 22px; }
+
+  /* 연혁 — 모바일: 2열, 세로 연결선 제거 */
+  .history-block { margin-top: 48px; padding-top: 36px; }
+  .history-grid { grid-template-columns: 1fr 1fr; gap: 26px 18px; }
+  .history-grid::before { display: none; }
+  .history-item { padding-top: 24px; }
+  .history-year { font-size: 1rem; }
+  .history-title { font-size: .92rem; }
+  .history-desc { font-size: .8rem; }
+
+  /* 전국 지도 — 모바일: 지도 위, 목록 아래 */
+  .map-wrap { grid-template-columns: 1fr; gap: 32px; }
+  .map-canvas { max-width: 290px; }
+  .map-list { gap: 20px; }
+  .map-row-name { font-size: 1rem; }
+  .map-row-count { font-size: 1.15rem; }
+  .map-row-detail { font-size: .78rem; }
 
   .org-grid { grid-template-columns: 1fr 1fr; }
   .org-card:last-child { grid-column: span 2; }
