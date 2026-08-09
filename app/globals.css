@@ -232,17 +232,21 @@ body {
 .map-marker circle { transition: fill-opacity .3s, r .3s; }
 .map-marker:hover circle { fill-opacity: .85; }
 
-.map-list { display: flex; flex-direction: column; gap: 18px; }
-.map-row-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px; }
-.map-row-name { font-size: .95rem; font-weight: 700; color: var(--dark); }
-.map-row-count { font-size: 1.05rem; font-weight: 900; color: var(--gold); letter-spacing: -0.5px; }
-.map-row-count em { font-size: .72rem; font-weight: 500; font-style: normal; color: var(--muted); margin-left: 2px; }
-.map-bar { height: 4px; border-radius: 4px; background: rgba(0,0,0,0.06); overflow: hidden; }
-.map-bar span {
-  display: block; height: 100%; border-radius: 4px;
-  background: linear-gradient(90deg, var(--gold), var(--gold2));
+.map-list { display: flex; flex-direction: column; }
+.map-row { padding: 15px 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
+.map-row:first-child { padding-top: 0; }
+.map-row:last-child { border-bottom: none; padding-bottom: 0; }
+.map-row-top { display: flex; align-items: baseline; gap: 10px; margin-bottom: 5px; }
+.map-row-name { font-size: 1rem; font-weight: 800; color: var(--dark); letter-spacing: -0.3px; }
+.map-row-count {
+  font-size: .72rem; font-weight: 800; color: var(--gold);
+  background: var(--gold-pale); border: 1px solid rgba(184,147,90,0.22);
+  border-radius: 100px; padding: 2px 9px; line-height: 1.5;
 }
-.map-row-detail { font-size: .72rem; color: var(--muted); margin-top: 7px; line-height: 1.5; }
+.map-row-count em { font-style: normal; font-weight: 600; }
+.map-row-areas { font-size: .7rem; color: var(--gold); letter-spacing: .3px; margin-bottom: 5px; }
+.map-row-sites { font-size: .8rem; color: var(--dark2); line-height: 1.65; word-break: keep-all; }
+.map-row-rest { color: var(--muted); font-size: .74rem; }
 
 /* === PARTNER BRANDS === */
 .brand-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 16px; }
@@ -356,10 +360,12 @@ html { scroll-behavior: smooth; }
   /* 전국 지도 — 모바일: 지도 위, 목록 아래 */
   .map-wrap { grid-template-columns: 1fr; gap: 32px; }
   .map-canvas { max-width: 290px; }
-  .map-list { gap: 20px; }
-  .map-row-name { font-size: 1rem; }
-  .map-row-count { font-size: 1.15rem; }
-  .map-row-detail { font-size: .78rem; }
+  .map-row { padding: 17px 0; }
+  .map-row-name { font-size: 1.05rem; }
+  .map-row-count { font-size: .78rem; }
+  .map-row-areas { font-size: .76rem; }
+  .map-row-sites { font-size: .86rem; }
+  .map-row-rest { font-size: .8rem; }
 
   .org-grid { grid-template-columns: 1fr 1fr; }
   .org-card:last-child { grid-column: span 2; }

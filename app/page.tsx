@@ -169,14 +169,26 @@ export default function Home() {
   ];
 
   /* 지역별 실적 분포 — 지명원 32개 현장 집계 (x·y는 지도 SVG 좌표) */
-  const regions = [
-    { name: "서울", count: 14, x: 133, y: 100, detail: "강서 · 동작 · 영등포 · 동대문 · 금천" },
-    { name: "경기", count: 9,  x: 162, y: 142, detail: "시흥 · 화성 · 김포 · 고양 · 오산 · 용인 · 의정부" },
-    { name: "인천", count: 5,  x: 92,  y: 126, detail: "미추홀 · 남동 · 동구 · 중구(영종)" },
-    { name: "충남", count: 1,  x: 145, y: 190, detail: "천안" },
-    { name: "충북", count: 1,  x: 200, y: 175, detail: "음성 혁신도시" },
-    { name: "경북", count: 1,  x: 348, y: 274, detail: "포항" },
-    { name: "부산", count: 1,  x: 322, y: 372, detail: "해운대" },
+  const regions: { name: string; count: number; x: number; y: number; areas?: string; sites: string[] }[] = [
+    {
+      name: "서울", count: 14, x: 133, y: 100,
+      areas: "강서 · 동작 · 영등포 · 동대문 · 금천",
+      sites: ["마곡 르웨스트", "상도 푸르지오 클라베뉴", "이문 아이파크자이 3단지"],
+    },
+    {
+      name: "경기", count: 9, x: 162, y: 142,
+      areas: "시흥 · 화성 · 김포 · 고양 · 오산 · 용인 · 의정부",
+      sites: ["신광교 클라우드시티", "오산 세마 현대프리미어 캠퍼스", "지축 아쿠아테라스몰"],
+    },
+    {
+      name: "인천", count: 5, x: 92, y: 126,
+      areas: "미추홀 · 남동 · 동구 · 중구(영종)",
+      sites: ["한화 포레나 인천학익", "인하대 헤리움 메트로타워", "송림센트럴타워"],
+    },
+    { name: "충남", count: 1, x: 145, y: 190, sites: ["천안 힐스테이트 두정역"] },
+    { name: "충북", count: 1, x: 200, y: 175, sites: ["충북혁신도시 밀라움"] },
+    { name: "경북", count: 1, x: 348, y: 274, sites: ["포항 아이파크"] },
+    { name: "부산", count: 1, x: 322, y: 372, sites: ["해운대 뷰띠크테라스 호텔"] },
   ];
   const maxRegion = Math.max(...regions.map(r => r.count));
 
@@ -543,18 +555,24 @@ export default function Home() {
                 </svg>
               </div>
 
-              {/* 지역별 목록 */}
+              {/* 지역별 대표 현장 */}
               <div className="map-list">
-                {regions.map((r) => (
-                  <div key={r.name} className="map-row">
-                    <div className="map-row-top">
-                      <span className="map-row-name">{r.name}</span>
-                      <span className="map-row-count">{r.count}<em>건</em></span>
+                {regions.map((r) => {
+                  const rest = r.count - r.sites.length;
+                  return (
+                    <div key={r.name} className="map-row">
+                      <div className="map-row-top">
+                        <span className="map-row-name">{r.name}</span>
+                        <span className="map-row-count">{r.count}<em>건</em></span>
+                      </div>
+                      {r.areas && <p className="map-row-areas">{r.areas}</p>}
+                      <p className="map-row-sites">
+                        {r.sites.join(" · ")}
+                        {rest > 0 && <span className="map-row-rest"> 외 {rest}건</span>}
+                      </p>
                     </div>
-                    <div className="map-bar"><span style={{ width: `${(r.count / maxRegion) * 100}%` }} /></div>
-                    <p className="map-row-detail">{r.detail}</p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
