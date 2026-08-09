@@ -54,8 +54,10 @@ export async function POST(request: NextRequest) {
       ["접수 일시", received],
     ];
 
-    const html = `
-      <div style="font-family:-apple-system,'Malgun Gothic',sans-serif;max-width:600px;margin:0 auto;color:#111">
+    const html = `<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:24px 16px;background:#f6f6f6">
+      <div style="font-family:-apple-system,'Malgun Gothic','Apple SD Gothic Neo',sans-serif;max-width:600px;margin:0 auto;color:#111;background:#fff;padding:28px;border-radius:12px">
         <div style="border-bottom:3px solid #b8935a;padding-bottom:12px;margin-bottom:24px">
           <p style="font-size:12px;letter-spacing:2px;color:#b8935a;margin:0 0 4px;font-weight:700">SINWOO INC.</p>
           <h2 style="margin:0;font-size:20px">홈페이지 상담 신청</h2>
@@ -76,7 +78,8 @@ export async function POST(request: NextRequest) {
           <div style="padding:14px;background:#fafafa;border:1px solid #eee;border-radius:8px;font-size:14px;line-height:1.7;white-space:pre-wrap">${esc(message) || "-"}</div>
         </div>
         ${email ? `<p style="font-size:12px;color:#888;margin-top:20px">이 메일에 그대로 회신하면 신청자(${esc(email)})에게 전달됩니다.</p>` : ""}
-      </div>`;
+      </div>
+</body></html>`;
 
     const resend = new Resend(apiKey);
     const { data, error } = await resend.emails.send({
