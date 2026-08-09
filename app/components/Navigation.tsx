@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { COMPANY_PROFILE_PDF } from "../config";
+import { COMPANY_PROFILE_PDF, COMPANY_PROFILE_FILENAME } from "../config";
 
 const CREAM = "#F5F5F5";
 const DARK  = "#111111";
@@ -80,7 +80,7 @@ export default function Navigation() {
         <div style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
           {/* 지명원 PDF — 파일이 등록된 경우에만 노출 */}
           {COMPANY_PROFILE_PDF && (
-            <a href={COMPANY_PROFILE_PDF} download
+            <a href={COMPANY_PROFILE_PDF} download={COMPANY_PROFILE_FILENAME}
               className="hidden md:inline-flex"
               style={{ fontSize: ".8rem", fontWeight: 500, color: "#262627", padding: "9px 14px", whiteSpace: "nowrap", transition: "color .2s" }}
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = GOLD}
@@ -172,7 +172,7 @@ export default function Navigation() {
             onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = DARK}
           >지금 문의하기 →</a>
           {COMPANY_PROFILE_PDF && (
-            <a href={COMPANY_PROFILE_PDF} download onClick={closeMenu}
+            <a href={COMPANY_PROFILE_PDF} download={COMPANY_PROFILE_FILENAME} onClick={closeMenu}
               style={{ display: "block", marginTop: "8px", padding: "13px", borderRadius: "999px", border: "1.5px solid rgba(0,0,0,0.14)", color: "#262627", fontWeight: 600, fontSize: ".88rem", textAlign: "center", textDecoration: "none" }}
             >지명원 다운로드 ↓</a>
           )}

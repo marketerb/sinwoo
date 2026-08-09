@@ -1,7 +1,7 @@
 "use client";
 
 import Navigation from "./components/Navigation";
-import { COMPANY_PROFILE_PDF, DEFAULT_PHONE } from "./config";
+import { COMPANY_PROFILE_PDF, COMPANY_PROFILE_FILENAME, DEFAULT_PHONE } from "./config";
 import { useState, useEffect, useRef } from "react";
 
 /* 모노크롬 미니멀 — 골드는 극소량 액센트로만 사용 */
@@ -252,7 +252,7 @@ export default function Home() {
               <a href="#portfolio" className="btn-hero-primary">실적 32건 보기 →</a>
               <a href="#contact" className="btn-hero-line">사업 문의하기</a>
               {COMPANY_PROFILE_PDF && (
-                <a href={COMPANY_PROFILE_PDF} download className="btn-hero-line">지명원 다운로드 ↓</a>
+                <a href={COMPANY_PROFILE_PDF} download={COMPANY_PROFILE_FILENAME} className="btn-hero-line">지명원 다운로드 ↓</a>
               )}
             </div>
           </div>
